@@ -10,6 +10,7 @@ void sl_generate_lodor_loot(object creature)
     if (race == RACIAL_TYPE_ANIMAL ||
         race == RACIAL_TYPE_BEAST ||
         race == RACIAL_TYPE_INVALID ||
+        race == RACIAL_TYPE_VERMIN ||
         d100(1) > loot_cap)
     {
         return;

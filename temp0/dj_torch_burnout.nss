@@ -59,7 +59,7 @@ void main()
             SetLocalString(oInfo, "iamherea", sPlace);
 
             // If dead, pop up a GUI
-            if (GetIsDead(oPC)){PopUpGUIPanel(oPC, GUI_PANEL_PLAYER_DEATH);}
+            // sl: if (GetIsDead(oPC)){PopUpGUIPanel(oPC, GUI_PANEL_PLAYER_DEATH);}
 
             // See if day/night penalties apply for surface world
             object oArea = GetArea(oPC);

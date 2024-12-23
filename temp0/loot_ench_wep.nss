@@ -3,13 +3,21 @@
 void main()
 {
 object oPC = GetLastOpenedBy();
+
+// sl: add lodor loot for creatures
+if (GetLocalInt(OBJECT_SELF, "sl_loot_level") != 0)
+{
+    // Loot in creature
+    oPC = OBJECT_SELF;
+}
+
 int nLevel = GetHitDice(oPC);
 
 // sl: DEBUG:
-object sl_item = OBJECT_SELF;
-if (GetName(sl_item) == "Test chest ls") {
-    SendMessageToPC( GetFirstPC(), GetName(sl_item) );
-    int sl_random = GetLocalInt(sl_item, "sl_random");
+object sl_obj = OBJECT_SELF;
+if (GetName(sl_obj) == "Test chest ls") {
+    //SendMessageToPC( GetFirstPC(), GetName(sl_obj) );
+    int sl_random = GetLocalInt(sl_obj, "sl_random");
     sl_random = sl_random + 1;
     if (sl_random > 42) {
         sl_random = 3;
@@ -17,7 +25,7 @@ if (GetName(sl_item) == "Test chest ls") {
     if (sl_random < 3) {
         sl_random = 3;
     }
-    SetLocalInt(sl_item, "sl_random", sl_random);
+    SetLocalInt(sl_obj, "sl_random", sl_random);
 }
 
 

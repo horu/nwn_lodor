@@ -3,6 +3,14 @@
 void main()
 {
 object oPC = GetLastOpenedBy();
+
+// sl: add lodor loot for creatures
+if (GetLocalInt(OBJECT_SELF, "sl_loot_level") != 0)
+{
+    // Loot in creature
+    oPC = OBJECT_SELF;
+}
+
 int nLevel = GetHitDice(oPC);
 int nHalf = nLevel / 2;
 int nModify1 = nLevel / 3;

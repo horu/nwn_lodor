@@ -1,7 +1,34 @@
 // Loot script for creatures
 #include "x0_i0_treasure"
+
+void sl_generate_lodor_loot(object creature)
+{
+    int race = GetRacialType(creature);
+    int loot_cap = 1;
+
+    if (race == RACIAL_TYPE_ANIMAL ||
+        race == RACIAL_TYPE_BEAST ||
+        race == RACIAL_TYPE_INVALID ||
+        d100(1) > loot_cap)
+    {
+        return;
+    }
+
+    int level = GetHitDice(creature);
+    SetLocalInt(creature, "sl_loot_level", level);
+
+    if (d2(1) == 1)
+        {ExecuteScript("loot_ench_arm", creature);}
+    else
+        {ExecuteScript("loot_ench_wep", creature);}
+}
+
+
 void main()
 {
+// sl: add lodor loot for creatures
+sl_generate_lodor_loot(OBJECT_SELF);
+
 int nMinotaur = d10(1);
 
     // Maybe a reagent will spawn

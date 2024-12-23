@@ -4,7 +4,8 @@
 void sl_generate_lodor_loot(object creature)
 {
     int race = GetRacialType(creature);
-    int loot_cap = 5;
+    int level = GetHitDice(creature);
+    int loot_cap = 25 - level/2;
 
     if (race == RACIAL_TYPE_ANIMAL ||
         race == RACIAL_TYPE_BEAST ||
@@ -14,7 +15,6 @@ void sl_generate_lodor_loot(object creature)
         return;
     }
 
-    int level = GetHitDice(creature);
     SetLocalInt(creature, "sl_loot_level", level);
 
     if (d2(1) == 1)

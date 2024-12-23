@@ -20,7 +20,7 @@ if ((oMonster != OBJECT_INVALID) && (nDistance < 6) && (GetIsPC(oMonster) == FAL
 DelayCommand(890.0, ExecuteScript("treasure_cleanup", OBJECT_SELF));
 
     // Set respawntime float to the number of seconds.
-    float respawntime = 1.00;
+    float respawntime = 0.1;
     if (GetLocalInt(OBJECT_SELF,"NW_DO_ONCE") != 0)
     {
        return;
@@ -35,9 +35,9 @@ DelayCommand(890.0, ExecuteScript("treasure_cleanup", OBJECT_SELF));
         SetLocalInt(OBJECT_SELF, "newloot2", 1);     //Select a Reagent From
         ExecuteScript("loot_new_list", OBJECT_SELF);}//Lodor Specific Items
     // sl:
-    int loot_cap = 20 - GetHitDice(oPC)*10/26;
+    int loot_cap = 101;
     if (d100(1) < loot_cap){ExecuteScript("loot_ench_arm", OBJECT_SELF);}
-    if (d100(1) < loot_cap){ExecuteScript("sl_loot_ench_wep", OBJECT_SELF);}
+    if (d100(1) < loot_cap){ExecuteScript("loot_ench_wep", OBJECT_SELF);}
 
     if (GetTag(OBJECT_SELF) == "lodor_barrel_low"){
         GenerateLowTreasure(oLastOpener, OBJECT_SELF);}

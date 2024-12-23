@@ -35,9 +35,9 @@ DelayCommand(890.0, ExecuteScript("treasure_cleanup", OBJECT_SELF));
         SetLocalInt(OBJECT_SELF, "newloot2", 1);     //Select a Reagent From
         ExecuteScript("loot_new_list", OBJECT_SELF);}//Lodor Specific Items
     // sl:
-    int loot_cap = 20 - GetHitDice(oPC)*10/26;
-    if (d100(1) < loot_cap){ExecuteScript("loot_ench_arm", OBJECT_SELF);}
-    if (d100(1) < loot_cap){ExecuteScript("loot_ench_wep", OBJECT_SELF);}
+    int loot_cap = 10 - GetHitDice(oPC)/5;
+    if (d100(1) <= loot_cap){ExecuteScript("loot_ench_arm", OBJECT_SELF);}
+    if (d100(1) <= loot_cap){ExecuteScript("loot_ench_wep", OBJECT_SELF);}
 
     if (GetTag(OBJECT_SELF) == "lodor_barrel_low"){
         GenerateLowTreasure(oLastOpener, OBJECT_SELF);}

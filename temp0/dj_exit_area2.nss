@@ -38,11 +38,11 @@ if (nPCinArea == FALSE)
 //      {
 //        SetLocked(oTreasure,TRUE);
 //      }
-    // if encounter creature delete it
-    if (GetIsEncounterCreature(oTreasure) == TRUE)
-      {
-        DestroyObject(oTreasure);
-      }
+    // sl: if encounter creature delete it
+    // if (GetIsEncounterCreature(oTreasure) == TRUE)
+    //  {
+    //    DestroyObject(oTreasure);
+    //  }
     // sl: if is encounter reset spawn counter
     //if (GetObjectType(oTreasure) == OBJECT_TYPE_ENCOUNTER)
      // {
@@ -66,10 +66,10 @@ if (nPCinArea == FALSE)
       {
         DestroyObject(oTreasure);
       }
-    // Have other mobs rest
-    if (GetObjectType(oTreasure) == OBJECT_TYPE_CREATURE){
-        if (GetLocalInt(oTreasure, "dontkill") == 1){}
-        else {DestroyObject(oTreasure);}}
+    // sl: Have other mobs rest
+    //if (GetObjectType(oTreasure) == OBJECT_TYPE_CREATURE){
+    //    if (GetLocalInt(oTreasure, "dontkill") == 1){}
+    //    else {DestroyObject(oTreasure);}}
     oTreasure = GetNextObjectInArea(oArea);
     }
   }

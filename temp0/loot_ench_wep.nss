@@ -5,6 +5,22 @@ void main()
 object oPC = GetLastOpenedBy();
 int nLevel = GetHitDice(oPC);
 
+// sl: DEBUG:
+object sl_item = OBJECT_SELF;
+if (GetName(sl_item) == "Test chest ls") {
+    SendMessageToPC( GetFirstPC(), GetName(sl_item) );
+    int sl_random = GetLocalInt(sl_item, "sl_random");
+    sl_random = sl_random + 1;
+    if (sl_random > 42) {
+        sl_random = 3;
+    }
+    if (sl_random < 3) {
+        sl_random = 3;
+    }
+    SetLocalInt(sl_item, "sl_random", sl_random);
+}
+
+
 //Select a weapon to make///////////////////////////////////////////////////////
 {int nRandom = d20(3);
    while (nRandom > 42) { nRandom = d20(3); }
@@ -53,9 +69,9 @@ int nLevel = GetHitDice(oPC);
                      SetLocalInt(oPC, "enchantwep", 1);}
    else if (nRandom == 24){SetLocalString(oPC, "enchant", "ench_club");
                      SetLocalInt(oPC, "enchantwep", 2);}
-   else if (nRandom == 25){SetLocalString(oPC, "enchant", "ench_lflail ");
+   else if (nRandom == 25){SetLocalString(oPC, "enchant", "ench_lflail");
                      SetLocalInt(oPC, "enchantwep", 2);}
-   else if (nRandom == 26){SetLocalString(oPC, "enchant", "ench_hflail ");
+   else if (nRandom == 26){SetLocalString(oPC, "enchant", "ench_hflail");
                      SetLocalInt(oPC, "enchantwep", 2);}
    else if (nRandom == 27){SetLocalString(oPC, "enchant", "ench_hamm");
                      SetLocalInt(oPC, "enchantwep", 2);}
@@ -92,12 +108,11 @@ int nLevel = GetHitDice(oPC);
            SetLocalInt(oPC, "enchantwep", 7);
        }
        else if (nRandom == 40){
-           SetLocalString(oPC, "enchant", "ench_dwaxe");
-           SetLocalInt(oPC, "enchantwep", 3);
+           SetLocalString(oPC, "enchant", "sl_ench_gloves_2");
+           SetLocalInt(oPC, "enchantwep", 2);
        }
        else if (nRandom == 41){
-           // DEBUG
-           SetLocalString(oPC, "enchant", "ls_ench_gloves");
+           SetLocalString(oPC, "enchant", "sl_ench_gloves");
            SetLocalInt(oPC, "enchantwep", 2);
        }
        else {

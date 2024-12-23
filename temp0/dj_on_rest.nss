@@ -10,6 +10,8 @@ int nFood = GetLocalInt(oPouch, "food");
 int nNew = nFood - 1;
 int nWater = GetLocalInt(oFlask, "water");
 int nNewW = nWater - 1;
+SendMessageToPC(oResting, "You have " + IntToString(nFood) + " food in your pouch.");
+SendMessageToPC(oResting, "You have " + IntToString(nWater) + " water in your flask.");
 object oArea = GetArea(oResting);
 int iAllow = GetLocalInt(oResting,"restallow");
 

@@ -2,6 +2,9 @@ void main()
 {
 SetMaxHenchmen(1);
 
+// sl: set random time on load.
+SetTime(Random(24), 0, 0, 0);
+
 // Put the Bosses & Special Creatures on the Map.
 CreateObject(OBJECT_TYPE_CREATURE, "ld_drub", GetLocation(GetWaypointByTag("drub_spawn")));
 CreateObject(OBJECT_TYPE_CREATURE, "dracz", GetLocation(GetWaypointByTag("dracz_spawn")));

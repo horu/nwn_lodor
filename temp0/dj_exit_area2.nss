@@ -43,12 +43,12 @@ if (nPCinArea == FALSE)
       {
         DestroyObject(oTreasure);
       }
-    // if is encounter reset spawn counter
-    if (GetObjectType(oTreasure) == OBJECT_TYPE_ENCOUNTER)
-      {
-        SetEncounterSpawnsCurrent(0,oTreasure);
-        SetEncounterActive(TRUE,oTreasure);
-      }
+    // sl: if is encounter reset spawn counter
+    //if (GetObjectType(oTreasure) == OBJECT_TYPE_ENCOUNTER)
+     // {
+     //   SetEncounterSpawnsCurrent(0,oTreasure);
+     //   SetEncounterActive(TRUE,oTreasure);
+     // }
     // delete loot bags
     if (GetTag(oTreasure) == "BodyBag")
       {

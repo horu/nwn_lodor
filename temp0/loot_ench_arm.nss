@@ -58,7 +58,7 @@ else if (GetSubRace(oPC) == "Ogre"){
    else if (nRandom == 10){SetLocalString(oPC, "enchant", "eq_ogre_litm2");}}}
 
 else {
-{int nRandom = d20(1);
+{int nRandom = Random(26)+1;
    if (nRandom == 1){SetLocalString(oPC, "enchant", "ench_helm1");}
    else if (nRandom == 2){SetLocalString(oPC, "enchant", "ench_tunic");}
    else if (nRandom == 3){SetLocalString(oPC, "enchant", "ench_scale");}
@@ -78,7 +78,14 @@ else {
    else if (nRandom == 17){SetLocalString(oPC, "enchant", "ench_helm");}
    else if (nRandom == 18){SetLocalString(oPC, "enchant", "ench_tshield");}
    else if (nRandom == 19){SetLocalString(oPC, "enchant", "ench_shield");}
-   else if (nRandom == 20){SetLocalString(oPC, "enchant", "ench_lshield");}}}
+   else if (nRandom == 20){SetLocalString(oPC, "enchant", "ench_lshield");}
+   else if (nRandom == 21){SetLocalString(oPC, "enchant", "sl_ench_amulet");}
+   else if (nRandom == 22){SetLocalString(oPC, "enchant", "sl_ench_belt");}
+   else if (nRandom == 23){SetLocalString(oPC, "enchant", "sl_ench_boots");}
+   else if (nRandom == 24){SetLocalString(oPC, "enchant", "sl_ench_bracer");}
+   else if (nRandom == 25){SetLocalString(oPC, "enchant", "sl_ench_cloak");}
+   else if (nRandom == 26){SetLocalString(oPC, "enchant", "sl_ench_ring");}
+   }}
 ////////////////////////////////////////////////////////////////////////////////
 
 //Select an ability modifier////////////////////////////////////////////////////

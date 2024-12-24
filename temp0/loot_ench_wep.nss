@@ -1,5 +1,7 @@
 // This creates dynamic magical weapons
 #include "x2_inc_itemprop"
+#include "sl_loot_ench_lib"
+
 void main()
 {
 object oPC = GetLastOpenedBy();
@@ -834,7 +836,7 @@ itemproperty attackSAlign = ItemPropertyAttackBonusVsSAlign(GetLocalInt(oPC, "en
 itemproperty abilityMod = ItemPropertyAbilityBonus(GetLocalInt(oPC, "enchability"), GetLocalInt(oPC, "enchabiplus"));
 itemproperty propCast = ItemPropertyCastSpell(GetLocalInt(oPC, "enchcast"), GetLocalInt(oPC, "enchsptimes"));
 
-object oWeapon = CreateItemOnObject(GetLocalString(oPC, "enchant"), OBJECT_SELF, 1);
+object oWeapon = sl_create_ench_item(GetLocalString(oPC, "enchant"), OBJECT_SELF);
 SetItemCharges(oWeapon, 50);
 
 //Add Ability Mod

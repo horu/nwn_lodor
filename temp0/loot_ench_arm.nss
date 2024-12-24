@@ -1,5 +1,7 @@
 // This creates dynamic magical armor
 #include "x2_inc_itemprop"
+#include "sl_loot_ench_lib"
+
 void main()
 {
 object oPC = GetLastOpenedBy();
@@ -769,7 +771,8 @@ itemproperty abilityMod = ItemPropertyAbilityBonus(GetLocalInt(oPC, "enchability
 itemproperty armSoak = ItemPropertyDamageReduction(GetLocalInt(oPC, "enchdamred"), GetLocalInt(oPC, "enchdamred1"));
 itemproperty propCast = ItemPropertyCastSpell(GetLocalInt(oPC, "enchcast"), GetLocalInt(oPC, "enchsptimes"));
 
-object oArmor = CreateItemOnObject(GetLocalString(oPC, "enchant"), OBJECT_SELF, 1);
+object oArmor = sl_create_ench_item(GetLocalString(oPC, "enchant"), OBJECT_SELF);
+
 SetItemCharges(oArmor, 50);
 
 //Add Spell Bonus

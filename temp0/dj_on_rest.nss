@@ -10,8 +10,7 @@ int nFood = GetLocalInt(oPouch, "food");
 int nNew = nFood - 1;
 int nWater = GetLocalInt(oFlask, "water");
 int nNewW = nWater - 1;
-SendMessageToPC(oResting, "You have " + IntToString(nFood) + " food in your pouch.");
-SendMessageToPC(oResting, "You have " + IntToString(nWater) + " water in your flask.");
+
 object oArea = GetArea(oResting);
 int iAllow = GetLocalInt(oResting,"restallow");
 
@@ -19,6 +18,10 @@ object oPC = GetLastPCRested(), oItem1, oItem2, oItem3, oItem4, oItem5, oItem6;
 if (!(GetIsPC(oPC))) return;
 int iRestType = GetLastRestEventType();
 if (iRestType != REST_EVENTTYPE_REST_STARTED)return;
+
+SendMessageToPC(oResting, "You have " + IntToString(nFood) + " food in your pouch.");
+SendMessageToPC(oResting, "You have " + IntToString(nWater) + " water in your flask.");
+
 string sItem1, sItem2, sItem3, sItem4, sItem5, sItem6;
 sItem1 = "lodoc_fish";
 oItem1 = GetItemPossessedBy(oPC, sItem1);

@@ -97,7 +97,7 @@ object sl_modify_appr(object item)
         object new_item = CopyItemAndModify(item, appr_type, appr_model, appr);
         if (new_item != OBJECT_INVALID) {
             // Valid appr value found.
-            SendMessageToPC(GetFirstPC(),IntToString(i) + " " + IntToString(appr_type) + " " + IntToString(appr_model) +" " + IntToString(appr));
+            //SendMessageToPC(GetFirstPC(),IntToString(i) + " " + IntToString(appr_type) + " " + IntToString(appr_model) +" " + IntToString(appr));
             DestroyObject(item);
             item = new_item;
             break;

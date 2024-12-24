@@ -1,3 +1,5 @@
+// Clear loot bags and items
+
 void main()
 {
 object oArea = GetArea(OBJECT_SELF);
@@ -21,7 +23,6 @@ if (nPCinArea == FALSE)
   while (GetIsObjectValid(oTreasure) == TRUE)
     {
 
-    PrintString(GetTag(oTreasure));
 
     // If has inventory reset do once
 //    if (GetHasInventory(oTreasure) == TRUE)

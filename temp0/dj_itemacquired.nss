@@ -1,8 +1,41 @@
 #include "x2_inc_itemprop"
+
+void sl_add_food_to_pouch(object oItem, object oPC)
+{
+    object oPouch = GetItemPossessedBy(oPC, "food_pouch");
+    if (oPouch == OBJECT_INVALID) {
+        return;
+    }
+
+    if (GetTag(oItem) != "lodoc_meat2" && GetTag(oItem) != "lodoc_fish") {
+        return;
+    }
+
+    object oFood = oItem;
+    if (GetLocalInt(oFood, "sl_take_out")) {
+        return;
+    }
+
+    int nFood = GetLocalInt(oPouch, "food");
+    int nNew = nFood + 1;
+    if (nFood < 10) {
+        DestroyObject(oFood);
+        SetLocalInt(oPouch, "food", nNew);
+        FloatingTextStringOnCreature(
+            "You put the food in your pouch. Now " + IntToString(nNew), oPC, FALSE);
+    }
+    else {
+        FloatingTextStringOnCreature("Your pouch is full of food.", oPC, FALSE);
+    }
+}
+
 void main()
 {
     object oItem = GetModuleItemAcquired();
     object oPC = GetModuleItemAcquiredBy();
+
+    // Add food to puch
+    sl_add_food_to_pouch(oItem, oPC);
 
     if (GetRacialType(oPC) == IP_CONST_RACIALTYPE_FEY){
     if ((GetBaseItemType(oItem) == BASE_ITEM_ARMOR) ||

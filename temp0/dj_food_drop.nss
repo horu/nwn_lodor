@@ -12,7 +12,8 @@ int nWaterN = nWater - 1;
 {
 if (nFood > 0){
    SetLocalInt(oPouch, "food", nFoodN);
-   CreateItemOnObject("lodoc_meat2", oPC, 1);
+   object food = CreateItemOnObject("lodoc_meat2", oPC, 1);
+   SetLocalInt(food, "sl_take_out", 1);
    FloatingTextStringOnCreature("You take some food from your pouch.", oPC, FALSE);}
 else {
    FloatingTextStringOnCreature("There is no food in your pouch.", oPC, FALSE);}}

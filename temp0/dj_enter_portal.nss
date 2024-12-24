@@ -58,9 +58,6 @@ if ((GetRacialType(oPC) == RACIAL_TYPE_HUMANOID_REPTILIAN) ||
         GiveGoldToCreature(oPC, 20);}
 else {GiveGoldToCreature(oPC, 100);}
 
-// DEBUG
-//GiveGoldToCreature(oPC, 1000000);
-//SetXP(oPC,1000000);
 
 //Dress the PC into the appropriate clothing for their class
 {

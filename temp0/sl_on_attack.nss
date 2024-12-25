@@ -2,9 +2,16 @@
 
 int sl_is_hit(struct NWNX_Damage_AttackEventData attack_data)
 {
+    if (attack_data.iToHitRoll == 20)
+    {
+        // Maybe critical success
+        return FALSE;
+    }
+
     switch (attack_data.iAttackResult)
     {
         case 1: // hit
+        case 3: // critical hit
         case 5: // resisted
         //case 7: // automatic hit
             return TRUE;
@@ -14,7 +21,7 @@ int sl_is_hit(struct NWNX_Damage_AttackEventData attack_data)
 
 int sl_is_miss(struct NWNX_Damage_AttackEventData attack_data)
 {
-    return attack_data.iAttackResult == 4;
+    return attack_data.iAttackResult == 4 && attack_data.iToHitRoll != 1;
 }
 
 void sl_print_info(object npc, object pc)
@@ -26,12 +33,9 @@ void sl_print_info(object npc, object pc)
     SendMessageToPC(pc, msg);
 }
 
-void main()
+void sl_calculate_ab_ac(object attacker, struct NWNX_Damage_AttackEventData attack_data)
 {
-    struct NWNX_Damage_AttackEventData attack_data = NWNX_Damage_GetAttackEventData();
-
     object target = attack_data.oTarget;
-    object attacker = OBJECT_SELF;
     int attack_value = attack_data.iToHitRoll + attack_data.iToHitModifier;
     int attack_mod = attack_data.iToHitModifier;
 
@@ -44,9 +48,8 @@ void main()
         {
             SetLocalInt(npc, local_name, attack_mod);
             sl_print_info(npc, pc);
+            return;
         }
-
-        //SendMessageToPC(GetFirstPC(), local_name);
     }
     else if (GetIsPC(attacker))
     {
@@ -62,6 +65,7 @@ void main()
             {
                 SetLocalInt(npc, local_max, attack_value);
                 sl_print_info(npc, pc);
+                return;
             }
         }
         else if (sl_is_miss(attack_data))
@@ -70,18 +74,22 @@ void main()
             {
                 SetLocalInt(npc, local_min, attack_value + 1);
                 sl_print_info(npc, pc);
+                return;
             }
         }
 
-        //SendMessageToPC(GetFirstPC(), GetName(attacker) + " " + GetName(target));
+        // Print every round
+        if (attack_data.iAttackNumber == 1)
+        {
+            sl_print_info(npc, pc);
+        }
     }
+}
 
+void main()
+{
+    struct NWNX_Damage_AttackEventData attack_data = NWNX_Damage_GetAttackEventData();
 
-    //if (attack_data.oTarget
-
-    //object oBook = GetItemPossessedBy(oKiller, "faction_report");
-    //SetLocalInt(oBook, "nilas", iNilas);
-
-    //SendMessageToPC(GetFirstPC(), IntToString(attack_data.iToHitRoll));
-    //SendMessageToPC(GetFirstPC(), IntToString(attack_data.iToHitModifier));
+    object attacker = OBJECT_SELF;
+    sl_calculate_ab_ac(attacker, attack_data);
 }

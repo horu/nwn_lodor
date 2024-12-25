@@ -2,8 +2,10 @@
 #include "x0_i0_anims"
 #include "x0_i0_treasure"
 #include "x2_inc_switches"
+#include "nwnx_creature"
 void main()
 {
+
     if (GetCreatureFlag(OBJECT_SELF, CREATURE_VAR_USE_SPAWN_STEALTH) == TRUE)
     {
         SetSpawnInCondition(NW_FLAG_STEALTH);
@@ -26,6 +28,8 @@ void main()
 
     SetListeningPatterns();
     ActionRandomWalk();
+
+    NWNX_Creature_SetCorpseDecayTime(OBJECT_SELF, 100);
 
     // Treasure Section for the NPC
     // Runs the appropriate treasure script for the NPC

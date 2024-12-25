@@ -48,6 +48,10 @@ int sl_get_random_appr_model(object item)
     {
         return 0;
     }
+    if (base_type == BASE_ITEM_WHIP)
+    {
+        return ITEM_APPR_WEAPON_MODEL_MIDDLE;
+    }
     // weapon
     return Random(3);
 }

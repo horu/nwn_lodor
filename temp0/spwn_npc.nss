@@ -29,7 +29,7 @@ void main()
     SetListeningPatterns();
     ActionRandomWalk();
 
-    NWNX_Creature_SetCorpseDecayTime(OBJECT_SELF, 100);
+    NWNX_Creature_SetCorpseDecayTime(OBJECT_SELF, 500);
 
     // Treasure Section for the NPC
     // Runs the appropriate treasure script for the NPC

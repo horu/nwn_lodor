@@ -1,9 +1,13 @@
+#include "nwnx_damage"
+
 void main()
 {
 SetMaxHenchmen(1);
 
 // sl: set random time on load.
 SetTime(Random(24), 0, 0, 0);
+
+NWNX_Damage_SetAttackEventScript("sl_on_attack");
 
 // Put the Bosses & Special Creatures on the Map.
 CreateObject(OBJECT_TYPE_CREATURE, "ld_drub", GetLocation(GetWaypointByTag("drub_spawn")));

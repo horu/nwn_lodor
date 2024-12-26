@@ -26,10 +26,30 @@ int sl_is_miss(struct NWNX_Damage_AttackEventData attack_data)
 
 void sl_print_info(object npc, object pc)
 {
+    string ab_msg = "";
+    int i;
+    for (i = 1; i <= 10; i++)
+    {
+        int ab = GetLocalInt(npc, "sl_ab_" + IntToString(i) + GetName(pc));
+        if (!ab)
+        {
+            if (ab_msg == "")
+            {
+                ab_msg = "0";
+            }
+            break;
+        }
+        if (ab_msg != "")
+        {
+            ab_msg += "/";
+        }
+        ab_msg += IntToString(ab);
+    }
+
     string msg = GetName(npc) + ": AB: " +
-        IntToString(GetLocalInt(npc, "sl_target_" + GetName(pc))) + " AC: " +
-        IntToString(GetLocalInt(npc, "sl_attacker_min_" + GetName(pc))) + " - " +
-        IntToString(GetLocalInt(npc, "sl_attacker_max_" + GetName(pc)));
+        ab_msg + "   AC: " +
+        IntToString(GetLocalInt(npc, "sl_ac_min_" + GetName(pc))) + "-" +
+        IntToString(GetLocalInt(npc, "sl_ac_max_" + GetName(pc)));
     SendMessageToPC(pc, msg);
 }
 
@@ -38,13 +58,15 @@ void sl_calculate_ab_ac(object attacker, struct NWNX_Damage_AttackEventData atta
     object target = attack_data.oTarget;
     int attack_value = attack_data.iToHitRoll + attack_data.iToHitModifier;
     int attack_mod = attack_data.iToHitModifier;
+    int attack_num = attack_data.iAttackNumber;
 
     if (GetIsPC(target))
     {
         object pc = target;
         object npc = attacker;
-        string local_name = "sl_target_" + GetName(pc);
-        if (GetLocalInt(npc, local_name) < attack_mod)
+        string local_name = "sl_ab_" + IntToString(attack_num) + GetName(pc);
+        int ab = GetLocalInt(npc, local_name);
+        if (!ab || ab < attack_mod)
         {
             SetLocalInt(npc, local_name, attack_mod);
             sl_print_info(npc, pc);
@@ -55,8 +77,8 @@ void sl_calculate_ab_ac(object attacker, struct NWNX_Damage_AttackEventData atta
     {
         object pc = attacker;
         object npc = target;
-        string local_min = "sl_attacker_min_" + GetName(pc);
-        string local_max = "sl_attacker_max_" + GetName(pc);
+        string local_min = "sl_ac_min_" + GetName(pc);
+        string local_max = "sl_ac_max_" + GetName(pc);
 
         if (sl_is_hit(attack_data))
         {
@@ -79,7 +101,7 @@ void sl_calculate_ab_ac(object attacker, struct NWNX_Damage_AttackEventData atta
         }
 
         // Print every round
-        if (attack_data.iAttackNumber == 1)
+        if (attack_num == 1)
         {
             sl_print_info(npc, pc);
         }

@@ -15,22 +15,6 @@ if (GetLocalInt(OBJECT_SELF, "sl_loot_level") != 0)
 
 int nLevel = GetHitDice(oPC);
 
-// sl: DEBUG:
-object sl_obj = OBJECT_SELF;
-if (GetName(sl_obj) == "Test chest ls") {
-    //SendMessageToPC( GetFirstPC(), GetName(sl_obj) );
-    int sl_random = GetLocalInt(sl_obj, "sl_random");
-    sl_random = sl_random + 1;
-    if (sl_random > 42) {
-        sl_random = 3;
-    }
-    if (sl_random < 3) {
-        sl_random = 3;
-    }
-    SetLocalInt(sl_obj, "sl_random", sl_random);
-}
-
-
 //Select a weapon to make///////////////////////////////////////////////////////
 {int nRandom = d20(3);
    while (nRandom > 42) { nRandom = d20(3); }

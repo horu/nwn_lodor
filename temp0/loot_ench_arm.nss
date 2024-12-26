@@ -33,7 +33,7 @@ else if (nLevel > 30){
    SetLocalInt(oPC, "whatspell", nSpell);}
 
 //Select armor to make//////////////////////////////////////////////////////////
-if (GetSubRace(oPC) == "Minotaur"){
+if (GetIsPC(oPC) && GetSubRace(oPC) == "Minotaur"){
 {int nRandom = d10(1);
    if (nRandom == 1){SetLocalString(oPC, "enchant", "eq_mino_medm");}
    else if (nRandom == 2){SetLocalString(oPC, "enchant", "eq_mino_litm1");}
@@ -46,7 +46,7 @@ if (GetSubRace(oPC) == "Minotaur"){
    else if (nRandom == 9){SetLocalString(oPC, "enchant", "eq_mino_hevm");}
    else if (nRandom == 10){SetLocalString(oPC, "enchant", "eq_mino_litm2");}}}
 
-else if (GetSubRace(oPC) == "Ogre"){
+else if (GetIsPC(oPC) && GetSubRace(oPC) == "Ogre"){
 {int nRandom = d10(1);
    if (nRandom == 1){SetLocalString(oPC, "enchant", "eq_ogre_medm");}
    else if (nRandom == 2){SetLocalString(oPC, "enchant", "eq_ogre_litm1");}

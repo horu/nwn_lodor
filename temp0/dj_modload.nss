@@ -1,4 +1,5 @@
 #include "nwnx_damage"
+#include "nwnx_events"
 
 void main()
 {
@@ -8,6 +9,7 @@ SetMaxHenchmen(1);
 SetTime(Random(24), 0, 0, 0);
 
 NWNX_Damage_SetAttackEventScript("sl_on_attack");
+NWNX_Events_SubscribeEvent(NWNX_ON_PLACEABLE_CLOSE_AFTER, "sl_on_plac_close");
 
 // Put the Bosses & Special Creatures on the Map.
 CreateObject(OBJECT_TYPE_CREATURE, "ld_drub", GetLocation(GetWaypointByTag("drub_spawn")));

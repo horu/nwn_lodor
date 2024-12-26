@@ -55,6 +55,11 @@ void sl_print_info(object npc, object pc)
 
 void sl_calculate_ab_ac(object attacker, struct NWNX_Damage_AttackEventData attack_data)
 {
+    if (attack_data.iAttackType == 65002) //Attack of Opportunity
+    {
+        return;
+    }
+
     object target = attack_data.oTarget;
     int attack_value = attack_data.iToHitRoll + attack_data.iToHitModifier;
     int attack_mod = attack_data.iToHitModifier;
@@ -66,7 +71,7 @@ void sl_calculate_ab_ac(object attacker, struct NWNX_Damage_AttackEventData atta
         object npc = attacker;
         string local_name = "sl_ab_" + IntToString(attack_num) + GetName(pc);
         int ab = GetLocalInt(npc, local_name);
-        //if (!ab || ab < attack_mod)
+        if (ab != attack_mod)
         {
             SetLocalInt(npc, local_name, attack_mod);
             sl_print_info(npc, pc);

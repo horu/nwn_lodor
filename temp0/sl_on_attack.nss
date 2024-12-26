@@ -66,7 +66,7 @@ void sl_calculate_ab_ac(object attacker, struct NWNX_Damage_AttackEventData atta
         object npc = attacker;
         string local_name = "sl_ab_" + IntToString(attack_num) + GetName(pc);
         int ab = GetLocalInt(npc, local_name);
-        if (!ab || ab < attack_mod)
+        //if (!ab || ab < attack_mod)
         {
             SetLocalInt(npc, local_name, attack_mod);
             sl_print_info(npc, pc);

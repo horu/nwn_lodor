@@ -55,49 +55,49 @@ if (GetIsObjectValid(oItem1)){DestroyObject(oItem1);}
 else if (GetIsObjectValid(oItem2)){DestroyObject(oItem2);}
 else {SetLocalInt(oPouch, "food", nNew);}
 
-SendMessageToPC(oResting, "You have " + IntToString(nNew) + " food in your pouch.");
-SendMessageToPC(oResting, "You have " + IntToString(nNewW) + " water in your flask.");
+    SendMessageToPC(oResting, "You have " + IntToString(GetLocalInt(oPouch, "food")) + " food in your pouch.");
 
-if (GetIsObjectValid(oItem3)){
+    if (GetIsObjectValid(oItem3))
+    {
         DestroyObject(oItem3);
-        DelayCommand(2.0, ExecuteScript("dj_bad_rest", OBJECT_SELF));
-        ActionRest();
-        return;}
-else if (GetIsObjectValid(oItem4)){
+    }
+    else if (GetIsObjectValid(oItem4))
+    {
         int nCount = GetItemStackSize(oItem4);
         int nNewR = nCount - 1;
         if (nCount > 1){
             SetItemStackSize(oItem4, nNewR);}
         else {
             DestroyObject(oItem4);}
-        DelayCommand(2.0, ExecuteScript("dj_bad_rest", OBJECT_SELF));
-        ActionRest();
-        return;}
-else if (GetIsObjectValid(oItem5)){
+    }
+    else if (GetIsObjectValid(oItem5))
+    {
         int nCount = GetItemStackSize(oItem5);
         int nNewR = nCount - 1;
         if (nCount > 1){
             SetItemStackSize(oItem5, nNewR);}
         else {
             DestroyObject(oItem5);}
-        DelayCommand(2.0, ExecuteScript("dj_bad_rest", OBJECT_SELF));
-        ActionRest();
-        return;}
-else if (GetIsObjectValid(oItem6)){
+    }
+    else if (GetIsObjectValid(oItem6))
+    {
         int nCount = GetItemStackSize(oItem6);
         int nNewR = nCount - 1;
         if (nCount > 1){
             SetItemStackSize(oItem6, nNewR);}
         else {
             DestroyObject(oItem6);}
-        DelayCommand(2.0, ExecuteScript("dj_bad_rest", OBJECT_SELF));
-        ActionRest();
-        return;}
-else{
+    }
+    else
+    {
         SetLocalInt(oFlask, "water", nNewW);
-        DelayCommand(2.0, ExecuteScript("dj_bad_rest", OBJECT_SELF));
-        ActionRest();
-        return;}}}
+
+    }
+    DelayCommand(2.0, ExecuteScript("dj_bad_rest", OBJECT_SELF));
+    ActionRest();
+    SendMessageToPC(oResting, "You have " + IntToString(GetLocalInt(oFlask, "water")) + " water in your flask.");
+    return;
+}}
 
 // THIS IS RESTING FOR VAMPIRES //
 else {

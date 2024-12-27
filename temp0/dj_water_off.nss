@@ -1,10 +1,10 @@
 // Makes it so you have to fill flasks next to rivers and wells.
 void main()
 {
-object oPC = GetEnteringObject();
+    object oPC = GetEnteringObject();
 
-if ( GetIsPC(oPC) )
+    if (GetIsPC(oPC))
     {
-    SetLocalInt(oPC,"wetallow",0);
+        SetLocalInt(oPC, "wetallow", 0);
     }
 }

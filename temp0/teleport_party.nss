@@ -16,7 +16,13 @@
 //                      3 - Effect BEFORE & AFTER Teleport
 // nVisID:              VFX_ Constant
 // fVisDelay:           Delay before teleporting, usually based on the duration of the Visual Effect
-void TeleportIndividual(object oTarget, location lDestination, float fHeightFallen = 0.0, int nVis = 0, int nVisID = VFX_NONE, float fVisDelay = 0.0);
+void TeleportIndividual(
+    object oTarget,
+    location lDestination,
+    float fHeightFallen = 0.0,
+    int nVis = 0,
+    int nVisID = VFX_NONE,
+    float fVisDelay = 0.0);
 
 // oTarget:             Party Member to teleport (should be a PC, but not 100% necessary)
 // lDestination:        The destination to teleport to (location-type)
@@ -31,10 +37,16 @@ void TeleportIndividual(object oTarget, location lDestination, float fHeightFall
 // nVisID:              VFX_ Constant
 // fVisDelay:           Delay before teleporting, usually based on the duration of the Visual Effect
 // Ignores dead allies
-void TeleportParty(object oTarget, location lDestination, int bAssociates = TRUE, int bParty = TRUE, float fHeightFallen = 0.0, float fAllowedDistance = 10.0, int nVis = 0, int nVisID = VFX_NONE, float fVisDelay = 0.0);
-
-
-
+void TeleportParty(
+    object oTarget,
+    location lDestination,
+    int bAssociates = TRUE,
+    int bParty = TRUE,
+    float fHeightFallen = 0.0,
+    float fAllowedDistance = 10.0,
+    int nVis = 0,
+    int nVisID = VFX_NONE,
+    float fVisDelay = 0.0);
 
 
 /*****************************************/
@@ -52,7 +64,13 @@ void TeleportParty(object oTarget, location lDestination, int bAssociates = TRUE
  *       2 - Effect AFTER Teleport
  *       3 - Effect BEFORE & AFTER Teleport
  *****************************************************************************/
-void TeleportIndividual(object oTarget, location lDestination, float fHeightFallen = 0.0, int nVis = 0, int nVisID = VFX_NONE, float fVisDelay = 0.0)
+void TeleportIndividual(
+    object oTarget,
+    location lDestination,
+    float fHeightFallen = 0.0,
+    int nVis = 0,
+    int nVisID = VFX_NONE,
+    float fVisDelay = 0.0)
 {
     int nLevel;
     int nDamageDice, nDamage;
@@ -61,7 +79,7 @@ void TeleportIndividual(object oTarget, location lDestination, float fHeightFall
 
     effect eVis = EffectVisualEffect(nVisID);
 
-    if(nVis == 1 || nVis == 3)  // Effect BEFORE Teleport
+    if (nVis == 1 || nVis == 3) // Effect BEFORE Teleport
     {
         ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eVis, oTarget, fVisDelay);
         fDelay = fDelay + 1.0;
@@ -69,7 +87,7 @@ void TeleportIndividual(object oTarget, location lDestination, float fHeightFall
 
     DelayCommand(fDelay, AssignCommand(oTarget, JumpToLocation(lDestination)));
 
-    if(nVis == 2 || nVis == 3)  // Effect AFTER Teleport
+    if (nVis == 2 || nVis == 3) // Effect AFTER Teleport
     {
         DelayCommand(fDelay + 0.1, ApplyEffectToObject(DURATION_TYPE_INSTANT, eVis, oTarget));
     }
@@ -82,22 +100,22 @@ void TeleportIndividual(object oTarget, location lDestination, float fHeightFall
         GetClassByPosition(3, oTarget) == CLASS_TYPE_MONK)
     {
         nLevel = GetLevelByClass(CLASS_TYPE_MONK, oTarget);
-        if(nLevel >= 8)
+        if (nLevel >= 8)
             fHeightFallen -= 15.0;
-        else if(nLevel >= 6)
+        else if (nLevel >= 6)
             fHeightFallen -= 10.0;
-        else if(nLevel >= 4)
+        else if (nLevel >= 4)
             fHeightFallen -= 6.0;
     }
 
-    if(fHeightFallen < 3.0)
+    if (fHeightFallen < 3.0)
         return;
 
     nDamageDice = FloatToInt(fHeightFallen / 3.0);
-    if(ReflexSave(oTarget, 15))
+    if (ReflexSave(oTarget, 15))
         nDamageDice -= 1;
 
-    if(nDamageDice <= 0)
+    if (nDamageDice <= 0)
         return;
 
     nDamage = d6(nDamageDice);
@@ -119,7 +137,16 @@ void TeleportIndividual(object oTarget, location lDestination, float fHeightFall
  *
  * Ignores dead allies
  *****************************************************************************************************************************/
-void TeleportParty(object oTarget, location lDestination, int bAssociates = TRUE, int bParty = TRUE, float fHeightFallen = 0.0, float fAllowedDistance = 10.0, int nVis = 0, int nVisID = VFX_NONE, float fVisDelay = 0.0)
+void TeleportParty(
+    object oTarget,
+    location lDestination,
+    int bAssociates = TRUE,
+    int bParty = TRUE,
+    float fHeightFallen = 0.0,
+    float fAllowedDistance = 10.0,
+    int nVis = 0,
+    int nVisID = VFX_NONE,
+    float fVisDelay = 0.0)
 {
     // Variable Declarations
     object oPC;
@@ -131,15 +158,15 @@ void TeleportParty(object oTarget, location lDestination, int bAssociates = TRUE
     {
         // Check distance between party members
         oPC = GetFirstFactionMember(oTarget, TRUE);
-        while(GetIsObjectValid(oPC))
+        while (GetIsObjectValid(oPC))
         {
             // Ignore dead party members
-            if(GetIsDead(oPC))
+            if (GetIsDead(oPC))
                 continue;
 
             // Exit if any party member is > 10.0 m away from oTarget
             fPartyMemberDistance = GetDistanceBetween(oTarget, oPC);
-            if(fPartyMemberDistance > fAllowedDistance)
+            if (fPartyMemberDistance > fAllowedDistance)
             {
                 AssignCommand(oTarget, SpeakString("You must gather your party before venturing forth"));
                 return;
@@ -151,19 +178,19 @@ void TeleportParty(object oTarget, location lDestination, int bAssociates = TRUE
         oPC = GetFirstFactionMember(oTarget, TRUE);
         while (GetIsObjectValid(oPC))
         {
-            if(bAssociates == TRUE)
+            if (bAssociates == TRUE)
             {
-                oHenchman   = GetHenchman(oPC);
-                oFamiliar   = GetAssociate(ASSOCIATE_TYPE_FAMILIAR, oPC);
-                oSummoned   = GetAssociate(ASSOCIATE_TYPE_SUMMONED, oPC);
-                oAnimal     = GetAssociate(ASSOCIATE_TYPE_ANIMALCOMPANION, oPC);
-                oDominated  = GetAssociate(ASSOCIATE_TYPE_DOMINATED, oPC);
+                oHenchman = GetHenchman(oPC);
+                oFamiliar = GetAssociate(ASSOCIATE_TYPE_FAMILIAR, oPC);
+                oSummoned = GetAssociate(ASSOCIATE_TYPE_SUMMONED, oPC);
+                oAnimal = GetAssociate(ASSOCIATE_TYPE_ANIMALCOMPANION, oPC);
+                oDominated = GetAssociate(ASSOCIATE_TYPE_DOMINATED, oPC);
 
-                fHenchman   = GetDistanceBetween(oPC, oHenchman);
-                fFamiliar   = GetDistanceBetween(oPC, oFamiliar);
-                fSummoned   = GetDistanceBetween(oPC, oSummoned);
-                fAnimal     = GetDistanceBetween(oPC, oAnimal);
-                fDominated  = GetDistanceBetween(oPC, oDominated);
+                fHenchman = GetDistanceBetween(oPC, oHenchman);
+                fFamiliar = GetDistanceBetween(oPC, oFamiliar);
+                fSummoned = GetDistanceBetween(oPC, oSummoned);
+                fAnimal = GetDistanceBetween(oPC, oAnimal);
+                fDominated = GetDistanceBetween(oPC, oDominated);
 
                 if (fHenchman < fAllowedDistance && !GetIsDead(oHenchman))
                     TeleportIndividual(oHenchman, lDestination, fHeightFallen, nVis, nVisID, fVisDelay);
@@ -181,22 +208,22 @@ void TeleportParty(object oTarget, location lDestination, int bAssociates = TRUE
             oPC = GetNextFactionMember(oTarget, TRUE);
         }
     }
-    else    // bParty == FALSE
+    else // bParty == FALSE
     {
         oPC = oTarget;
-        if(bAssociates == TRUE)
+        if (bAssociates == TRUE)
         {
-            oHenchman   = GetHenchman(oPC);
-            oFamiliar   = GetAssociate(ASSOCIATE_TYPE_FAMILIAR, oPC);
-            oSummoned   = GetAssociate(ASSOCIATE_TYPE_SUMMONED, oPC);
-            oAnimal     = GetAssociate(ASSOCIATE_TYPE_ANIMALCOMPANION, oPC);
-            oDominated  = GetAssociate(ASSOCIATE_TYPE_DOMINATED, oPC);
+            oHenchman = GetHenchman(oPC);
+            oFamiliar = GetAssociate(ASSOCIATE_TYPE_FAMILIAR, oPC);
+            oSummoned = GetAssociate(ASSOCIATE_TYPE_SUMMONED, oPC);
+            oAnimal = GetAssociate(ASSOCIATE_TYPE_ANIMALCOMPANION, oPC);
+            oDominated = GetAssociate(ASSOCIATE_TYPE_DOMINATED, oPC);
 
-            fHenchman   = GetDistanceBetween(oPC, oHenchman);
-            fFamiliar   = GetDistanceBetween(oPC, oFamiliar);
-            fSummoned   = GetDistanceBetween(oPC, oSummoned);
-            fAnimal     = GetDistanceBetween(oPC, oAnimal);
-            fDominated  = GetDistanceBetween(oPC, oDominated);
+            fHenchman = GetDistanceBetween(oPC, oHenchman);
+            fFamiliar = GetDistanceBetween(oPC, oFamiliar);
+            fSummoned = GetDistanceBetween(oPC, oSummoned);
+            fAnimal = GetDistanceBetween(oPC, oAnimal);
+            fDominated = GetDistanceBetween(oPC, oDominated);
 
             if (fHenchman < fAllowedDistance && !GetIsDead(oHenchman))
                 TeleportIndividual(oHenchman, lDestination, fHeightFallen, nVis, nVisID, fVisDelay);
@@ -213,4 +240,3 @@ void TeleportParty(object oTarget, location lDestination, int bAssociates = TRUE
         TeleportIndividual(oPC, lDestination, fHeightFallen, nVis, nVisID, fVisDelay);
     }
 }
-

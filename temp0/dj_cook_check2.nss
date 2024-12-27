@@ -9,9 +9,8 @@
 
 int StartingConditional()
 {
-
     // Make sure the PC speaker has these items in their inventory
-    if(!HasItem(GetPCSpeaker(), "lodoc_fishr"))
+    if (!HasItem(GetPCSpeaker(), "lodoc_fishr"))
         return FALSE;
 
     return TRUE;

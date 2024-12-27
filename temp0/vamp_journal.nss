@@ -2,9 +2,8 @@
 
 int StartingConditional()
 {
-
     // Make sure the PC speaker has these items in their inventory
-    if(!HasItem(GetPCSpeaker(), "food_pouch"))
+    if (!HasItem(GetPCSpeaker(), "food_pouch"))
         return FALSE;
 
     return TRUE;

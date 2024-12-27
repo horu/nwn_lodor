@@ -55,65 +55,65 @@ void GZSetUpHealer(object oModule);
 
 int GZHasNegativeEffects(object oPC)
 {
-    int bNeg = (GZGetHasAbilityDamage(oPC) ||GZGetIsBlindOrDeaf(oPC) || GZGetIsCursed (oPC) || GZGetIsDamaged(oPC) || GZGetIsDiseased(oPC)|| GZGetIsPoisoned(oPC) || GZGetIsPolymorphed(oPC) || GZHasNegativeLevels(oPC));
+    int bNeg = (GZGetHasAbilityDamage(oPC) || GZGetIsBlindOrDeaf(oPC) || GZGetIsCursed(oPC) || GZGetIsDamaged(oPC) ||
+        GZGetIsDiseased(oPC) || GZGetIsPoisoned(oPC) || GZGetIsPolymorphed(oPC) || GZHasNegativeLevels(oPC));
     return bNeg;
 }
 
 int GZGetIsBlindOrDeaf(object oPC)
 {
-    int bBlind = ((GetHasEffect(EFFECT_TYPE_BLINDNESS,oPC) == TRUE) || (GetHasEffect(EFFECT_TYPE_DEAF,oPC)==TRUE));
+    int bBlind = ((GetHasEffect(EFFECT_TYPE_BLINDNESS, oPC) == TRUE) || (GetHasEffect(EFFECT_TYPE_DEAF, oPC) == TRUE));
     return bBlind;
 }
 
 int GZGetIsDamaged(object oPC)
 {
-    int bDamaged = (GetPercentageHPLoss(oPC) <100);
+    int bDamaged = (GetPercentageHPLoss(oPC) < 100);
     return bDamaged;
 }
 
 int GZGetHasAbilityDamage(object oPC)
 {
-    int bAbilityDmg = (GetHasEffect(EFFECT_TYPE_ABILITY_DECREASE,oPC) == TRUE);
+    int bAbilityDmg = (GetHasEffect(EFFECT_TYPE_ABILITY_DECREASE, oPC) == TRUE);
     return bAbilityDmg;
 }
 
 int GZGetIsPoisoned(object oPC)
 {
-    int bPoisoned = (GetHasEffect(EFFECT_TYPE_POISON,oPC) == TRUE);
+    int bPoisoned = (GetHasEffect(EFFECT_TYPE_POISON, oPC) == TRUE);
     return bPoisoned;
 }
 
 int GZGetIsDiseased(object oPC)
 {
-    int bDiseased = (GetHasEffect(EFFECT_TYPE_DISEASE,oPC) == TRUE);
+    int bDiseased = (GetHasEffect(EFFECT_TYPE_DISEASE, oPC) == TRUE);
     return bDiseased;
 }
 
 int GZGetIsCursed(object oPC)
 {
-    int bCursed = (GetHasEffect(EFFECT_TYPE_CURSE,oPC) == TRUE);
+    int bCursed = (GetHasEffect(EFFECT_TYPE_CURSE, oPC) == TRUE);
     return bCursed;
 }
 
 int GZGetIsPolymorphed(object oPC)
 {
-    int bPoly = (GetHasEffect(EFFECT_TYPE_POLYMORPH,oPC) == TRUE);
+    int bPoly = (GetHasEffect(EFFECT_TYPE_POLYMORPH, oPC) == TRUE);
     return bPoly;
 }
 
 int GZHasNegativeLevels(object oPC)
 {
-    int bLvl = (GetHasEffect(EFFECT_TYPE_NEGATIVELEVEL,oPC) == TRUE);
+    int bLvl = (GetHasEffect(EFFECT_TYPE_NEGATIVELEVEL, oPC) == TRUE);
     return bLvl;
 }
-
 
 
 /* --== Effect Removal Functions ==-- */
 
 void GZRemovePhysicalDamage(object oPC)
 {
-    ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectHeal(GetMaxHitPoints(oPC)), oPC);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(GetMaxHitPoints(oPC)), oPC);
 }
 
 void GZRemoveDisease(object oPC)
@@ -121,17 +121,15 @@ void GZRemoveDisease(object oPC)
     if (GZGetIsDiseased(oPC)) // safety check
     {
         effect eBad = GetFirstEffect(oPC);
-        while(GetIsEffectValid(eBad))
+        while (GetIsEffectValid(eBad))
         {
             if (GetEffectType(eBad) == EFFECT_TYPE_DISEASE)
-                {
-                    //Remove effect if it is negative.
-                    RemoveEffect(oPC, eBad);
-                }
+            {
+                //Remove effect if it is negative.
+                RemoveEffect(oPC, eBad);
+            }
             eBad = GetNextEffect(oPC);
         }
-
-
     }
 }
 
@@ -140,14 +138,14 @@ void GZRemoveBlindOrDeafness(object oPC)
     if (GZGetIsBlindOrDeaf(oPC)) // safety check
     {
         effect eBad = GetFirstEffect(oPC);
-        while(GetIsEffectValid(eBad))
+        while (GetIsEffectValid(eBad))
         {
             if (GetEffectType(eBad) == EFFECT_TYPE_DEAF ||
-                GetEffectType(eBad) == EFFECT_TYPE_BLINDNESS )
-                {
-                    //Remove effect if it is negative.
-                    RemoveEffect(oPC, eBad);
-                }
+                GetEffectType(eBad) == EFFECT_TYPE_BLINDNESS)
+            {
+                //Remove effect if it is negative.
+                RemoveEffect(oPC, eBad);
+            }
             eBad = GetNextEffect(oPC);
         }
     }
@@ -159,13 +157,13 @@ void GZRemovePoison(object oPC)
     if (GZGetIsPoisoned(oPC)) // safety check
     {
         effect eBad = GetFirstEffect(oPC);
-        while(GetIsEffectValid(eBad))
+        while (GetIsEffectValid(eBad))
         {
             if (GetEffectType(eBad) == EFFECT_TYPE_POISON)
-                {
-                    //Remove effect if it is negative.
-                    RemoveEffect(oPC, eBad);
-                }
+            {
+                //Remove effect if it is negative.
+                RemoveEffect(oPC, eBad);
+            }
             eBad = GetNextEffect(oPC);
         }
     }
@@ -176,13 +174,13 @@ void GZRemoveCurse(object oPC)
     if (GZGetIsCursed(oPC)) // safety check
     {
         effect eBad = GetFirstEffect(oPC);
-        while(GetIsEffectValid(eBad))
+        while (GetIsEffectValid(eBad))
         {
             if (GetEffectType(eBad) == EFFECT_TYPE_CURSE)
-                {
-                    //Remove effect if it is negative.
-                    RemoveEffect(oPC, eBad);
-                }
+            {
+                //Remove effect if it is negative.
+                RemoveEffect(oPC, eBad);
+            }
             eBad = GetNextEffect(oPC);
         }
     }
@@ -193,13 +191,13 @@ void GZRemoveAbilityDamage(object oPC)
     if (GZGetHasAbilityDamage(oPC)) // safety check
     {
         effect eBad = GetFirstEffect(oPC);
-        while(GetIsEffectValid(eBad))
+        while (GetIsEffectValid(eBad))
         {
             if (GetEffectType(eBad) == EFFECT_TYPE_ABILITY_DECREASE)
-                {
-                    //Remove effect if it is negative.
-                    RemoveEffect(oPC, eBad);
-                }
+            {
+                //Remove effect if it is negative.
+                RemoveEffect(oPC, eBad);
+            }
             eBad = GetNextEffect(oPC);
         }
     }
@@ -210,66 +208,63 @@ void GZRemoveNegativeLevels(object oPC)
     if (GZHasNegativeLevels(oPC)) // safety check
     {
         effect eBad = GetFirstEffect(oPC);
-        while(GetIsEffectValid(eBad))
+        while (GetIsEffectValid(eBad))
         {
             if (GetEffectType(eBad) == EFFECT_TYPE_NEGATIVELEVEL)
-                {
-                    //Remove effect if it is negative.
-                    RemoveEffect(oPC, eBad);
-                }
+            {
+                //Remove effect if it is negative.
+                RemoveEffect(oPC, eBad);
+            }
             eBad = GetNextEffect(oPC);
         }
     }
-
 }
+
 /*
     Negative Effect Overkill
     Uses Code from nw_o0_death
 */
 void GZRemoveAllNegativeEffects(object oPC)
 {
-        effect eBad = GetFirstEffect(oPC);
-        ApplyEffectToObject(DURATION_TYPE_INSTANT,EffectHeal(GetMaxHitPoints(oPC)), oPC);
+    effect eBad = GetFirstEffect(oPC);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(GetMaxHitPoints(oPC)), oPC);
 
-        //Search for negative effects
-        while(GetIsEffectValid(eBad))
+    //Search for negative effects
+    while (GetIsEffectValid(eBad))
+    {
+        if (GetEffectType(eBad) == EFFECT_TYPE_ABILITY_DECREASE ||
+            GetEffectType(eBad) == EFFECT_TYPE_AC_DECREASE ||
+            GetEffectType(eBad) == EFFECT_TYPE_ATTACK_DECREASE ||
+            GetEffectType(eBad) == EFFECT_TYPE_DAMAGE_DECREASE ||
+            GetEffectType(eBad) == EFFECT_TYPE_DAMAGE_IMMUNITY_DECREASE ||
+            GetEffectType(eBad) == EFFECT_TYPE_SAVING_THROW_DECREASE ||
+            GetEffectType(eBad) == EFFECT_TYPE_SPELL_RESISTANCE_DECREASE ||
+            GetEffectType(eBad) == EFFECT_TYPE_SKILL_DECREASE ||
+            GetEffectType(eBad) == EFFECT_TYPE_BLINDNESS ||
+            GetEffectType(eBad) == EFFECT_TYPE_DEAF ||
+            GetEffectType(eBad) == EFFECT_TYPE_PARALYZE ||
+            GetEffectType(eBad) == EFFECT_TYPE_NEGATIVELEVEL)
         {
-            if (GetEffectType(eBad) == EFFECT_TYPE_ABILITY_DECREASE ||
-                GetEffectType(eBad) == EFFECT_TYPE_AC_DECREASE ||
-                GetEffectType(eBad) == EFFECT_TYPE_ATTACK_DECREASE ||
-                GetEffectType(eBad) == EFFECT_TYPE_DAMAGE_DECREASE ||
-                GetEffectType(eBad) == EFFECT_TYPE_DAMAGE_IMMUNITY_DECREASE ||
-                GetEffectType(eBad) == EFFECT_TYPE_SAVING_THROW_DECREASE ||
-                GetEffectType(eBad) == EFFECT_TYPE_SPELL_RESISTANCE_DECREASE ||
-                GetEffectType(eBad) == EFFECT_TYPE_SKILL_DECREASE ||
-                GetEffectType(eBad) == EFFECT_TYPE_BLINDNESS ||
-                GetEffectType(eBad) == EFFECT_TYPE_DEAF ||
-                GetEffectType(eBad) == EFFECT_TYPE_PARALYZE ||
-                GetEffectType(eBad) == EFFECT_TYPE_NEGATIVELEVEL)
-                {
-                    //Remove effect if it is negative.
-                    RemoveEffect(oPC, eBad);
-                }
-            eBad = GetNextEffect(oPC);
+            //Remove effect if it is negative.
+            RemoveEffect(oPC, eBad);
         }
-
+        eBad = GetNextEffect(oPC);
+    }
 }
 
 // This function sets the cost of my custom healer services
 void GZSetUpHealer(object oModule)
 {
-    if (GetLocalInt(oModule,"T1_MODULE_HEALERSETUP") == 0)
+    if (GetLocalInt(oModule, "T1_MODULE_HEALERSETUP") == 0)
     {
-        SetLocalInt(oModule,"T1_MODULE_HEALER_FULLCHECK",300);
-        SetLocalInt(oModule,"T1_MODULE_HEALER_HEAL",100);
-        SetLocalInt(oModule,"T1_MODULE_HEALER_RESLVL",300);
-        SetLocalInt(oModule,"T1_MODULE_HEALER_RESAB",200);
-        SetLocalInt(oModule,"T1_MODULE_HEALER_DISEASE",100);
-        SetLocalInt(oModule,"T1_MODULE_HEALER_BLIND",100);
-        SetLocalInt(oModule,"T1_MODULE_HEALER_POISON",100);
-        SetLocalInt(oModule,"T1_MODULE_HEALER_CURSE",100);
-        SetLocalInt(oModule,"T1_MODULE_HEALERSETUP",TRUE);
+        SetLocalInt(oModule, "T1_MODULE_HEALER_FULLCHECK", 300);
+        SetLocalInt(oModule, "T1_MODULE_HEALER_HEAL", 100);
+        SetLocalInt(oModule, "T1_MODULE_HEALER_RESLVL", 300);
+        SetLocalInt(oModule, "T1_MODULE_HEALER_RESAB", 200);
+        SetLocalInt(oModule, "T1_MODULE_HEALER_DISEASE", 100);
+        SetLocalInt(oModule, "T1_MODULE_HEALER_BLIND", 100);
+        SetLocalInt(oModule, "T1_MODULE_HEALER_POISON", 100);
+        SetLocalInt(oModule, "T1_MODULE_HEALER_CURSE", 100);
+        SetLocalInt(oModule, "T1_MODULE_HEALERSETUP", TRUE);
     }
 }
-
-

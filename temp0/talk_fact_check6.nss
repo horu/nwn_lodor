@@ -1,7 +1,6 @@
 int StartingConditional()
 {
-
-object oPC = GetPCSpeaker();
+    object oPC = GetPCSpeaker();
 
     if (GetReputation(OBJECT_SELF, oPC) > 34)
         return TRUE;

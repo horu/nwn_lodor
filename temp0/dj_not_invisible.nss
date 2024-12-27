@@ -1,12 +1,16 @@
 // Remove the Invisible Effect
 void main()
 {
-object oPC = OBJECT_SELF;
+    object oPC = OBJECT_SELF;
 
-effect eBad = GetFirstEffect(oPC);
-   while(GetIsEffectValid(eBad)){
-      if (GetEffectType(eBad) == EFFECT_TYPE_IMPROVEDINVISIBILITY ||
-         GetEffectType(eBad) == EFFECT_TYPE_INVISIBILITY){
-            RemoveEffect(oPC, eBad);}
-eBad = GetNextEffect(oPC);}
+    effect eBad = GetFirstEffect(oPC);
+    while (GetIsEffectValid(eBad))
+    {
+        if (GetEffectType(eBad) == EFFECT_TYPE_IMPROVEDINVISIBILITY ||
+            GetEffectType(eBad) == EFFECT_TYPE_INVISIBILITY)
+        {
+            RemoveEffect(oPC, eBad);
+        }
+        eBad = GetNextEffect(oPC);
+    }
 }

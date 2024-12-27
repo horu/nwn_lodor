@@ -7,10 +7,9 @@
 //:://////////////////////////////////////////////
 int StartingConditional()
 {
+    // Restrict based on the player's alignment
+    if (GetAlignmentGoodEvil(GetPCSpeaker()) != ALIGNMENT_NEUTRAL)
+        return FALSE;
 
-	// Restrict based on the player's alignment
-	if(GetAlignmentGoodEvil(GetPCSpeaker()) != ALIGNMENT_NEUTRAL)
-		return FALSE;
-
-	return TRUE;
+    return TRUE;
 }

@@ -23,7 +23,7 @@ void main()
 
     // If we're a good/neutral commoner,
     // adjust the killer's alignment evil
-    if(nClass > 0 && (nAlign == ALIGNMENT_GOOD || nAlign == ALIGNMENT_NEUTRAL))
+    if (nClass > 0 && (nAlign == ALIGNMENT_GOOD || nAlign == ALIGNMENT_NEUTRAL))
     {
         AdjustAlignment(oKiller, ALIGNMENT_EVIL, 5);
     }
@@ -36,9 +36,9 @@ void main()
 
     // NOTE: the OnDeath user-defined event does not
     // trigger reliably and should probably be removed
-    if(GetSpawnInCondition(NW_FLAG_DEATH_EVENT))
+    if (GetSpawnInCondition(NW_FLAG_DEATH_EVENT))
     {
-         SignalEvent(OBJECT_SELF, EventUserDefined(1007));
+        SignalEvent(OBJECT_SELF, EventUserDefined(1007));
     }
     craft_drop_items(oKiller);
 
@@ -53,6 +53,8 @@ void main()
         (GetRacialType(OBJECT_SELF) == RACIAL_TYPE_UNDEAD) ||
         (GetRacialType(OBJECT_SELF) == RACIAL_TYPE_ABERRATION) ||
         (GetRacialType(OBJECT_SELF) == RACIAL_TYPE_OOZE) ||
-        (GetRacialType(OBJECT_SELF) == RACIAL_TYPE_VERMIN)){}
-    else{SetLocalInt(oBottle, "blood", nNewB);}
+        (GetRacialType(OBJECT_SELF) == RACIAL_TYPE_VERMIN))
+    {
+    }
+    else { SetLocalInt(oBottle, "blood", nNewB); }
 }

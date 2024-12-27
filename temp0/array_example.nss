@@ -4,14 +4,13 @@
 // nwnx_data also includes inc_array, so don't double dip.
 #include "nwnx_data"
 
-void Log(string msg) 
+void Log(string msg)
 {
     WriteTimestampedLogEntry(msg);
 }
 
-void TestArrayOnModule() 
+void TestArrayOnModule()
 {
-
     string array = "test";
 
     // By default, temporary arrays are created on the module.
@@ -43,18 +42,18 @@ void TestArrayOnModule()
     Array_Shuffle(array);
     Array_Debug_Dump(array, "After shuffle");
 
-    Log( (Array_Contains_Str(array, "NItem3")) ? "Passed.. found it"  : "Failed.. should have found it" );
-    Log( (Array_Contains_Str(array, "KItem2")) ? "Passed.. found it"  : "Failed.. should have found it" );
-    Log( (Array_Contains_Str(array, "xxxxxx")) ? "Failed.. not found" : "Passed.. should not exist" );
+    Log((Array_Contains_Str(array, "NItem3")) ? "Passed.. found it" : "Failed.. should have found it");
+    Log((Array_Contains_Str(array, "KItem2")) ? "Passed.. found it" : "Failed.. should have found it");
+    Log((Array_Contains_Str(array, "xxxxxx")) ? "Failed.. not found" : "Passed.. should not exist");
 
     Array_Clear(array);
     // Load up the array with 100 entries
     int i;
-	
+
     struct NWNX_Time_HighResTimestamp b;
     b = NWNX_Time_GetHighResTimeStamp();
     Log("Start Time: " + IntToString(b.seconds) + "." + IntToString(b.microseconds));
-    for (i=0; i<1000; i++) 
+    for (i = 0; i < 1000; i++)
     {
         Array_PushBack_Str(array, IntToString(d100()) + " xxx " + IntToString(i));
     }
@@ -63,7 +62,7 @@ void TestArrayOnModule()
     Array_Shuffle(array);
     b = NWNX_Time_GetHighResTimeStamp();
     Log("Shuffled 1000: " + IntToString(b.seconds) + "." + IntToString(b.microseconds));
-    for (i=5; i<995; i++) 
+    for (i = 5; i < 995; i++)
     {
         // Delete the third entry a bunch of times
         Array_Erase(array, 3);
@@ -71,12 +70,11 @@ void TestArrayOnModule()
     b = NWNX_Time_GetHighResTimeStamp();
     Log("Delete ~990: " + IntToString(b.seconds) + "." + IntToString(b.microseconds));
     Array_Debug_Dump(array, "After mass insert/delete");
-
 }
 
-void TestArrayOnChicken() 
+void TestArrayOnChicken()
 {
-    string array="chicken";
+    string array = "chicken";
     // Let's create an array "on" our favorite creature: the deadly nw_chicken
     // Note - arrays aren't really attached to the item, but the module, and they
     // are tagged with the objects string representation.
@@ -92,10 +90,9 @@ void TestArrayOnChicken()
     Array_PushBack_Str(array, "AItem3", oCreature);
     Array_PushBack_Str(array, "BItem2", oCreature);
     Array_Debug_Dump(array, "After Chicken array load", oCreature);
-
 }
 
-void TestNWNXArray() 
+void TestNWNXArray()
 {
     Log("");
     Log("Start NWNX_Data test.");
@@ -125,12 +122,11 @@ void TestNWNXArray()
     NWNX_Data_Array_SortAscending(NWNX_DATA_TYPE_STRING, GetModule(), array);
 
     Array_Debug_Dump(array, "After sort");
-
 }
 
 // Uncomment and assign to some event click.
 /* */
-void main() 
+void main()
 {
     Log("Start");
 
@@ -140,4 +136,5 @@ void main()
 
     TestNWNXArray();
 }
+
 /* */

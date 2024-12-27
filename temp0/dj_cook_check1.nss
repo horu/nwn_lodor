@@ -9,10 +9,9 @@
 
 int StartingConditional()
 {
+    // Make sure the PC speaker has these items in their inventory
+    if (!HasItem(GetPCSpeaker(), "lodoc_meat"))
+        return FALSE;
 
-	// Make sure the PC speaker has these items in their inventory
-	if(!HasItem(GetPCSpeaker(), "lodoc_meat"))
-		return FALSE;
-
-	return TRUE;
+    return TRUE;
 }

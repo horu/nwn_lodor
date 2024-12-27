@@ -2,6 +2,7 @@
 #include "x0_i0_anims"
 #include "x0_i0_treasure"
 #include "x2_inc_switches"
+
 void main()
 {
     if (GetCreatureFlag(OBJECT_SELF, CREATURE_VAR_USE_SPAWN_STEALTH) == TRUE)

@@ -10,11 +10,11 @@ int sl_is_hit(struct NWNX_Damage_AttackEventData attack_data)
 
     switch (attack_data.iAttackResult)
     {
-        case 1: // hit
-        case 3: // critical hit
-        case 5: // resisted
+    case 1: // hit
+    case 3: // critical hit
+    case 5: // resisted
         //case 7: // automatic hit
-            return TRUE;
+        return TRUE;
     }
     return FALSE;
 }

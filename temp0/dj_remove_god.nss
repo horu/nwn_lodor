@@ -1,27 +1,33 @@
 // Removes any god granted powers if the PC is not worthy.
 #include "nw_i0_plot"
+
 void main()
 {
-object oPC = GetEnteringObject();
-object oInfo = GetItemPossessedBy(oPC, "faction_report");
+    object oPC = GetEnteringObject();
+    object oInfo = GetItemPossessedBy(oPC, "faction_report");
 
-SetLocalInt(oInfo, "godlove", 0);
-SetLocalInt(oInfo, "preserve", 0);
+    SetLocalInt(oInfo, "godlove", 0);
+    SetLocalInt(oInfo, "preserve", 0);
 
-object oItem2 = GetFirstItemInInventory(oPC);
-object oRingL = GetItemInSlot(INVENTORY_SLOT_LEFTRING, oPC);
-object oRingR = GetItemInSlot(INVENTORY_SLOT_RIGHTRING, oPC);
+    object oItem2 = GetFirstItemInInventory(oPC);
+    object oRingL = GetItemInSlot(INVENTORY_SLOT_LEFTRING, oPC);
+    object oRingR = GetItemInSlot(INVENTORY_SLOT_RIGHTRING, oPC);
 
-  while(GetIsObjectValid(oItem2)) {
-    if(GetStringLeft(GetTag(oItem2),8)=="POW_ring"){
-       DestroyObject(oItem2,0.05);}
-    oItem2=GetNextItemInInventory(oPC);
-  }
+    while (GetIsObjectValid(oItem2))
+    {
+        if (GetStringLeft(GetTag(oItem2), 8) == "POW_ring")
+        {
+            DestroyObject(oItem2, 0.05);
+        }
+        oItem2 = GetNextItemInInventory(oPC);
+    }
 
-if(GetStringLeft(GetTag(oRingL),8)=="POW_ring"){
-DestroyObject(oRingL);
-}
-if(GetStringLeft(GetTag(oRingR),8)=="POW_ring"){
-DestroyObject(oRingR);
-}
+    if (GetStringLeft(GetTag(oRingL), 8) == "POW_ring")
+    {
+        DestroyObject(oRingL);
+    }
+    if (GetStringLeft(GetTag(oRingR), 8) == "POW_ring")
+    {
+        DestroyObject(oRingR);
+    }
 }

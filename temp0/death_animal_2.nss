@@ -3,16 +3,20 @@
 
 void main()
 {
-object oMurder = GetLastKiller();
-object oMaster = GetMaster(oMurder);
+    object oMurder = GetLastKiller();
+    object oMaster = GetMaster(oMurder);
 
-if (oMaster != OBJECT_INVALID){
-    SetLocalObject(oMurder, "killer", oMaster);}
-else {
-    SetLocalObject(oMurder, "killer", oMurder);}
+    if (oMaster != OBJECT_INVALID)
+    {
+        SetLocalObject(oMurder, "killer", oMaster);
+    }
+    else
+    {
+        SetLocalObject(oMurder, "killer", oMurder);
+    }
 
-object oKiller = GetLocalObject(oMurder, "killer");
-object oBook = GetItemPossessedBy(oKiller, "faction_report");
+    object oKiller = GetLocalObject(oMurder, "killer");
+    object oBook = GetItemPossessedBy(oKiller, "faction_report");
 
     // Vampire Blood Letting
     object oBottle = GetItemPossessedBy(oKiller, "vampire_bottle");
@@ -24,8 +28,10 @@ object oBook = GetItemPossessedBy(oKiller, "faction_report");
         (GetRacialType(OBJECT_SELF) == RACIAL_TYPE_UNDEAD) ||
         (GetRacialType(OBJECT_SELF) == RACIAL_TYPE_ABERRATION) ||
         (GetRacialType(OBJECT_SELF) == RACIAL_TYPE_OOZE) ||
-        (GetRacialType(OBJECT_SELF) == RACIAL_TYPE_VERMIN)){}
-    else{SetLocalInt(oBottle, "blood", nNewB);}
+        (GetRacialType(OBJECT_SELF) == RACIAL_TYPE_VERMIN))
+    {
+    }
+    else { SetLocalInt(oBottle, "blood", nNewB); }
 
     // Call to allies to let them know we're dead
     SpeakString("NW_I_AM_DEAD", TALKVOLUME_SILENT_TALK);
@@ -35,29 +41,40 @@ object oBook = GetItemPossessedBy(oKiller, "faction_report");
 
     // NOTE: the OnDeath user-defined event does not
     // trigger reliably and should probably be removed
-    if(GetSpawnInCondition(NW_FLAG_DEATH_EVENT))
+    if (GetSpawnInCondition(NW_FLAG_DEATH_EVENT))
     {
-         SignalEvent(OBJECT_SELF, EventUserDefined(1007));
+        SignalEvent(OBJECT_SELF, EventUserDefined(1007));
     }
 
-{
-if (GetLevelByClass(CLASS_TYPE_DRUID, oKiller) > 0){
-AdjustReputation(oKiller, OBJECT_SELF, 100);
-AdjustReputation(oKiller, OBJECT_SELF, -50);}
-else if (GetLevelByClass(CLASS_TYPE_RANGER, oKiller) > 0){
-AdjustReputation(oKiller, OBJECT_SELF, 100);
-AdjustReputation(oKiller, OBJECT_SELF, -50);}
-else if (GetSubRace(oKiller) == "Sylvan"){
-AdjustReputation(oKiller, OBJECT_SELF, 100);
-AdjustReputation(oKiller, OBJECT_SELF, -50);
-  SendMessageToPC(oKiller,"Your faction with the Wood Elves is worse.");
-  int iSylvan = GetLocalInt(oBook, "sylvan");
-  int iAdjust = iSylvan - 5;
-  SetLocalInt(oBook, "sylvan", iAdjust);
-  AdjustReputation(oKiller, GetObjectByTag("fac_sylvan"), -100);
-  AdjustReputation(oKiller, GetObjectByTag("fac_sylvan"), iAdjust);}
-else if (GetSubRace(oKiller) == "Sprite"){
-AdjustReputation(oKiller, OBJECT_SELF, 100);
-AdjustReputation(oKiller, OBJECT_SELF, -50);}
-else{}}
+    {
+        if (GetLevelByClass(CLASS_TYPE_DRUID, oKiller) > 0)
+        {
+            AdjustReputation(oKiller, OBJECT_SELF, 100);
+            AdjustReputation(oKiller, OBJECT_SELF, -50);
+        }
+        else if (GetLevelByClass(CLASS_TYPE_RANGER, oKiller) > 0)
+        {
+            AdjustReputation(oKiller, OBJECT_SELF, 100);
+            AdjustReputation(oKiller, OBJECT_SELF, -50);
+        }
+        else if (GetSubRace(oKiller) == "Sylvan")
+        {
+            AdjustReputation(oKiller, OBJECT_SELF, 100);
+            AdjustReputation(oKiller, OBJECT_SELF, -50);
+            SendMessageToPC(oKiller, "Your faction with the Wood Elves is worse.");
+            int iSylvan = GetLocalInt(oBook, "sylvan");
+            int iAdjust = iSylvan - 5;
+            SetLocalInt(oBook, "sylvan", iAdjust);
+            AdjustReputation(oKiller, GetObjectByTag("fac_sylvan"), -100);
+            AdjustReputation(oKiller, GetObjectByTag("fac_sylvan"), iAdjust);
+        }
+        else if (GetSubRace(oKiller) == "Sprite")
+        {
+            AdjustReputation(oKiller, OBJECT_SELF, 100);
+            AdjustReputation(oKiller, OBJECT_SELF, -50);
+        }
+        else
+        {
+        }
+    }
 }

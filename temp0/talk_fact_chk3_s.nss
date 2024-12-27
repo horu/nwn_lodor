@@ -1,10 +1,11 @@
 // If the NPC likes the PC.
 int StartingConditional()
 {
+    object oPC = GetPCSpeaker();
 
-object oPC = GetPCSpeaker();
-
-    if ((GetReputation(OBJECT_SELF, oPC) < 80) && (GetReputation(OBJECT_SELF, oPC) > 49) && (GetAbilityScore(oPC, ABILITY_INTELLIGENCE) > 8))
+    if ((GetReputation(OBJECT_SELF, oPC) < 80) && (GetReputation(OBJECT_SELF, oPC) > 49) && (GetAbilityScore(
+        oPC,
+        ABILITY_INTELLIGENCE) > 8))
         return TRUE;
 
     return FALSE;

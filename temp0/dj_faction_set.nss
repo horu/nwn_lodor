@@ -1,12 +1,12 @@
 // This sets their faction when they re-enter Lodoc
 void main()
 {
-// DEBUG
-//ExecuteScript("dj_faction", OBJECT_SELF);
-//
+    // DEBUG
+    //ExecuteScript("dj_faction", OBJECT_SELF);
+    //
 
-object oPC = GetEnteringObject();
-object oFaction = GetItemPossessedBy(oPC, "faction_report");
+    object oPC = GetEnteringObject();
+    object oFaction = GetItemPossessedBy(oPC, "faction_report");
 
     object obrown = GetObjectByTag("fac_brown");
     object oquick = GetObjectByTag("fac_quick");

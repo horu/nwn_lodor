@@ -2,226 +2,225 @@
 
 void main()
 {
-object oItem = GetItemActivated();
-object oPC = GetItemActivator();
-string sItem = GetTag(oItem);
-int iSkill = GetSkillRank(SKILL_PERFORM, oPC); //Skill Modifier for ranks in perform
-int iRoll = d20(); //Skill Roll
-int iTotal = iRoll + iSkill; //DC Check
-string sTotal = IntToString(iTotal);
-effect eSong = EffectVisualEffect(VFX_DUR_BARD_SONG);
+    object oItem = GetItemActivated();
+    object oPC = GetItemActivator();
+    string sItem = GetTag(oItem);
+    int iSkill = GetSkillRank(SKILL_PERFORM, oPC); //Skill Modifier for ranks in perform
+    int iRoll = d20(); //Skill Roll
+    int iTotal = iRoll + iSkill; //DC Check
+    string sTotal = IntToString(iTotal);
+    effect eSong = EffectVisualEffect(VFX_DUR_BARD_SONG);
 
-if (sItem == "Drum")
+    if (sItem == "Drum")
     {
-    int iBard = GetLevelByClass(CLASS_TYPE_BARD, oPC);
-    if (iBard >0)
+        int iBard = GetLevelByClass(CLASS_TYPE_BARD, oPC);
+        if (iBard > 0)
         {
-        if (iTotal >= 15) //DC for using a Drum is 15
+            if (iTotal >= 15) //DC for using a Drum is 15
             {
-            int i;
-            int done;
-            effect eHaste;
-            object oGroup;
-            effect eCast = EffectVisualEffect(VFX_IMP_HASTE);
-            FloatingTextStringOnCreature("*Bard Song Success*", oPC, TRUE);
-            SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 15");
-            eHaste = EffectHaste();
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSong, oPC, 18.0);
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eCast, oPC);
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHaste, oPC, 18.0);
-            for (i = 0; i < 6 && !done; i++)    //Apply Bardsong to up to 6 faction members (PCs) within 30 meters
+                int i;
+                int done;
+                effect eHaste;
+                object oGroup;
+                effect eCast = EffectVisualEffect(VFX_IMP_HASTE);
+                FloatingTextStringOnCreature("*Bard Song Success*", oPC, TRUE);
+                SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 15");
+                eHaste = EffectHaste();
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSong, oPC, 18.0);
+                ApplyEffectToObject(DURATION_TYPE_INSTANT, eCast, oPC);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHaste, oPC, 18.0);
+                for (i = 0; i < 6 && !done; i++) //Apply Bardsong to up to 6 faction members (PCs) within 30 meters
                 {
-                oGroup = GetNearestCreature(CREATURE_TYPE_REPUTATION, REPUTATION_TYPE_FRIEND, oPC, i);
-                if ( oGroup != OBJECT_INVALID && (GetDistanceBetween(oPC, oGroup) <= 30.0) )
+                    oGroup = GetNearestCreature(CREATURE_TYPE_REPUTATION, REPUTATION_TYPE_FRIEND, oPC, i);
+                    if (oGroup != OBJECT_INVALID && (GetDistanceBetween(oPC, oGroup) <= 30.0))
                     {
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHaste, oGroup, 18.0);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eCast, oGroup);
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eHaste, oGroup, 18.0);
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eCast, oGroup);
                     }
-                else
+                    else
                     {
-                    done = TRUE;
+                        done = TRUE;
                     }
                 }
             }
-        else
+            else
             {
-            FloatingTextStringOnCreature("*Bard Song Failure*", oPC, TRUE);
-            SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 15");
+                FloatingTextStringOnCreature("*Bard Song Failure*", oPC, TRUE);
+                SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 15");
             }
         }
-    else
+        else
         {
-        AssignCommand(oPC, ActionSpeakString("Only a bard has the experience to use this item properly."));
+            AssignCommand(oPC, ActionSpeakString("Only a bard has the experience to use this item properly."));
         }
     }
 
-if (sItem == "Mandolin")
+    if (sItem == "Mandolin")
     {
-    int iBard = GetLevelByClass(CLASS_TYPE_BARD, oPC);
-    if (iBard > 0)
+        int iBard = GetLevelByClass(CLASS_TYPE_BARD, oPC);
+        if (iBard > 0)
         {
-        if (iTotal >= 15)  //DC for using a Mandolin is 15
+            if (iTotal >= 15) //DC for using a Mandolin is 15
             {
-            int i;
-            int done;
-            effect eRegen;
-            object oGroup;
-            effect eCast = EffectVisualEffect(VFX_IMP_HEALING_G);
-            FloatingTextStringOnCreature("*Bard Song Success*", oPC, TRUE);
-            SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 15");
-            eRegen = EffectRegenerate(1, 3.0);
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSong, oPC, 18.0);
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRegen, oPC, 18.0);
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eCast, oPC);
-            for (i = 0; i < 6 && !done; i++)    //Apply Bardsong to up to 6 faction members (PCs) within 30 meters
+                int i;
+                int done;
+                effect eRegen;
+                object oGroup;
+                effect eCast = EffectVisualEffect(VFX_IMP_HEALING_G);
+                FloatingTextStringOnCreature("*Bard Song Success*", oPC, TRUE);
+                SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 15");
+                eRegen = EffectRegenerate(1, 3.0);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSong, oPC, 18.0);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRegen, oPC, 18.0);
+                ApplyEffectToObject(DURATION_TYPE_INSTANT, eCast, oPC);
+                for (i = 0; i < 6 && !done; i++) //Apply Bardsong to up to 6 faction members (PCs) within 30 meters
                 {
-                oGroup = GetNearestCreature(CREATURE_TYPE_REPUTATION, REPUTATION_TYPE_FRIEND, oPC, i);
-                if ( oGroup != OBJECT_INVALID && (GetDistanceBetween(oPC, oGroup) <= 30.0) )
+                    oGroup = GetNearestCreature(CREATURE_TYPE_REPUTATION, REPUTATION_TYPE_FRIEND, oPC, i);
+                    if (oGroup != OBJECT_INVALID && (GetDistanceBetween(oPC, oGroup) <= 30.0))
                     {
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRegen, oGroup, 18.0);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eCast, oGroup);
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eRegen, oGroup, 18.0);
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eCast, oGroup);
                     }
-                else
+                    else
                     {
-                    done = TRUE;
+                        done = TRUE;
                     }
                 }
-
             }
-        else
+            else
             {
-            FloatingTextStringOnCreature("*Bard Song Failure*", oPC, TRUE);
-            SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 15");
+                FloatingTextStringOnCreature("*Bard Song Failure*", oPC, TRUE);
+                SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 15");
             }
         }
-    else
+        else
         {
-        AssignCommand(oPC, ActionSpeakString("Only a bard has the experience to use this item properly."));
+            AssignCommand(oPC, ActionSpeakString("Only a bard has the experience to use this item properly."));
         }
     }
 
-if (sItem == "Pipes")
+    if (sItem == "Pipes")
     {
-    int iBard = GetLevelByClass(CLASS_TYPE_BARD, oPC);
-    if (iBard > 0)
+        int iBard = GetLevelByClass(CLASS_TYPE_BARD, oPC);
+        if (iBard > 0)
         {
-        if (iTotal >=18) //DC for using Pipes is 18
+            if (iTotal >= 18) //DC for using Pipes is 18
             {
-            int i;
-            int done;
-            effect eInvis;
-            object oGroup;
-            FloatingTextStringOnCreature("*Bard Song Success*", oPC, TRUE);
-            SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 18");
-            eInvis = EffectInvisibility(INVISIBILITY_TYPE_NORMAL);
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSong, oPC, 18.0);
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eInvis, oPC, 18.0);
-            for (i = 0; i < 6 && !done; i++)    //Apply Bardsong to up to 6 faction members (PCs) within 30 meters
+                int i;
+                int done;
+                effect eInvis;
+                object oGroup;
+                FloatingTextStringOnCreature("*Bard Song Success*", oPC, TRUE);
+                SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 18");
+                eInvis = EffectInvisibility(INVISIBILITY_TYPE_NORMAL);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSong, oPC, 18.0);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eInvis, oPC, 18.0);
+                for (i = 0; i < 6 && !done; i++) //Apply Bardsong to up to 6 faction members (PCs) within 30 meters
                 {
-                oGroup = GetNearestCreature(CREATURE_TYPE_REPUTATION, REPUTATION_TYPE_FRIEND, oPC, i);
-                if ( oGroup != OBJECT_INVALID && (GetDistanceBetween(oPC, oGroup) <= 30.0) )
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eInvis, oGroup, 18.0);
-                else
-                    done = TRUE;
+                    oGroup = GetNearestCreature(CREATURE_TYPE_REPUTATION, REPUTATION_TYPE_FRIEND, oPC, i);
+                    if (oGroup != OBJECT_INVALID && (GetDistanceBetween(oPC, oGroup) <= 30.0))
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eInvis, oGroup, 18.0);
+                    else
+                        done = TRUE;
                 }
             }
-        else
+            else
             {
-            FloatingTextStringOnCreature("*Bard Song Failure*", oPC, TRUE);
-            SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 18");
+                FloatingTextStringOnCreature("*Bard Song Failure*", oPC, TRUE);
+                SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 18");
             }
         }
-    else
+        else
         {
-        AssignCommand(oPC, ActionSpeakString("Only a bard has the experience to use this item properly."));
+            AssignCommand(oPC, ActionSpeakString("Only a bard has the experience to use this item properly."));
         }
     }
 
-if (sItem == "Horn")
+    if (sItem == "Horn")
     {
-    int iBard = GetLevelByClass(CLASS_TYPE_BARD, oPC);
-    if (iBard > 0)
+        int iBard = GetLevelByClass(CLASS_TYPE_BARD, oPC);
+        if (iBard > 0)
         {
-        if (iTotal >=18) //DC for using a Horn is 18
+            if (iTotal >= 18) //DC for using a Horn is 18
             {
-            int i;
-            int done;
-            effect eShield;
-            object oGroup;
-            effect eCast = EffectVisualEffect(VFX_IMP_AC_BONUS);
-            FloatingTextStringOnCreature("*Bard Song Success*", oPC, TRUE);
-            SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 18");
-            eShield = EffectDamageShield(1, DAMAGE_BONUS_1d10, DAMAGE_TYPE_SONIC);
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSong, oPC, 18.0);
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield, oPC, 18.0);
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eCast, oPC);
-            for (i = 0; i < 6 && !done; i++)    //Apply Bardsong to up to 6 faction members (PCs) within 30 meters
+                int i;
+                int done;
+                effect eShield;
+                object oGroup;
+                effect eCast = EffectVisualEffect(VFX_IMP_AC_BONUS);
+                FloatingTextStringOnCreature("*Bard Song Success*", oPC, TRUE);
+                SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 18");
+                eShield = EffectDamageShield(1, DAMAGE_BONUS_1d10, DAMAGE_TYPE_SONIC);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSong, oPC, 18.0);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield, oPC, 18.0);
+                ApplyEffectToObject(DURATION_TYPE_INSTANT, eCast, oPC);
+                for (i = 0; i < 6 && !done; i++) //Apply Bardsong to up to 6 faction members (PCs) within 30 meters
                 {
-                oGroup = GetNearestCreature(CREATURE_TYPE_REPUTATION, REPUTATION_TYPE_FRIEND, oPC, i);
-                if ( oGroup != OBJECT_INVALID && (GetDistanceBetween(oPC, oGroup) <= 30.0) )
+                    oGroup = GetNearestCreature(CREATURE_TYPE_REPUTATION, REPUTATION_TYPE_FRIEND, oPC, i);
+                    if (oGroup != OBJECT_INVALID && (GetDistanceBetween(oPC, oGroup) <= 30.0))
                     {
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield, oGroup, 18.0);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eCast, oGroup);
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eShield, oGroup, 18.0);
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eCast, oGroup);
                     }
-                else
+                    else
                     {
-                    done = TRUE;
+                        done = TRUE;
                     }
                 }
             }
-        else
+            else
             {
-            FloatingTextStringOnCreature("*Bard Song Failure*", oPC, TRUE);
-            SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 18");
+                FloatingTextStringOnCreature("*Bard Song Failure*", oPC, TRUE);
+                SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 18");
             }
         }
-    else
+        else
         {
-        AssignCommand(oPC, ActionSpeakString("Only a bard has the experience to use this item properly."));
+            AssignCommand(oPC, ActionSpeakString("Only a bard has the experience to use this item properly."));
         }
     }
 
-if (sItem == "Harp")
+    if (sItem == "Harp")
     {
-    int iBard = GetLevelByClass(CLASS_TYPE_BARD, oPC);
-    if (iBard > 0)
+        int iBard = GetLevelByClass(CLASS_TYPE_BARD, oPC);
+        if (iBard > 0)
         {
-        if (iTotal >=21) //DC for using a Harp is 21
+            if (iTotal >= 21) //DC for using a Harp is 21
             {
-            int i;
-            int done;
-            effect eSpell;
-            object oGroup;
-            effect eCast = EffectVisualEffect(VFX_IMP_GLOBE_USE);
-            FloatingTextStringOnCreature("*Bard Song Success*", oPC, TRUE);
-            SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 21");
-            eSpell = EffectSpellImmunity(SPELL_ALL_SPELLS);
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSong, oPC, 18.0);
-            ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSpell, oPC, 18.0);
-            ApplyEffectToObject(DURATION_TYPE_INSTANT, eCast, oPC);
-            for (i = 0; i < 6 && !done; i++)    //Apply Bardsong to up to 6 faction members (PCs) within 30 meters
+                int i;
+                int done;
+                effect eSpell;
+                object oGroup;
+                effect eCast = EffectVisualEffect(VFX_IMP_GLOBE_USE);
+                FloatingTextStringOnCreature("*Bard Song Success*", oPC, TRUE);
+                SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 21");
+                eSpell = EffectSpellImmunity(SPELL_ALL_SPELLS);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSong, oPC, 18.0);
+                ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSpell, oPC, 18.0);
+                ApplyEffectToObject(DURATION_TYPE_INSTANT, eCast, oPC);
+                for (i = 0; i < 6 && !done; i++) //Apply Bardsong to up to 6 faction members (PCs) within 30 meters
                 {
-                oGroup = GetNearestCreature(CREATURE_TYPE_REPUTATION, REPUTATION_TYPE_FRIEND, oPC, i);
-                if ( oGroup != OBJECT_INVALID && (GetDistanceBetween(oPC, oGroup) <= 30.0) )
+                    oGroup = GetNearestCreature(CREATURE_TYPE_REPUTATION, REPUTATION_TYPE_FRIEND, oPC, i);
+                    if (oGroup != OBJECT_INVALID && (GetDistanceBetween(oPC, oGroup) <= 30.0))
                     {
-                    ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSpell, oGroup, 18.0);
-                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eCast, oGroup);
+                        ApplyEffectToObject(DURATION_TYPE_TEMPORARY, eSpell, oGroup, 18.0);
+                        ApplyEffectToObject(DURATION_TYPE_INSTANT, eCast, oGroup);
                     }
-                else
+                    else
                     {
-                    done = TRUE;
+                        done = TRUE;
                     }
                 }
             }
-        else
+            else
             {
-            FloatingTextStringOnCreature("*Bard Song Failure*", oPC, TRUE);
-            SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 21");
+                FloatingTextStringOnCreature("*Bard Song Failure*", oPC, TRUE);
+                SendMessageToPC(oPC, "Skill Roll: " + sTotal + ". Target DC 21");
             }
         }
-    else
+        else
         {
-        AssignCommand(oPC, ActionSpeakString("Only a bard has the experience to use this item properly."));
+            AssignCommand(oPC, ActionSpeakString("Only a bard has the experience to use this item properly."));
         }
     }
 }

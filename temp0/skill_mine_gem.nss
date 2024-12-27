@@ -1,8 +1,10 @@
 // Let's the PC mine if they have a shovel
 void main()
 {
-object oPC = GetEnteringObject();
+    object oPC = GetEnteringObject();
 
-if (GetIsPC(oPC)){
-    SetLocalInt(oPC,"digging",4);}
+    if (GetIsPC(oPC))
+    {
+        SetLocalInt(oPC, "digging", 4);
+    }
 }

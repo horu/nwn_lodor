@@ -1,4 +1,12 @@
-void DoGrenadeLD(int nDirectDamage, int nSplashDamage, int vSmallHit, int vRingHit, int nDamageType, float fExplosionRadius , int nObjectFilter, string sSubRace="Vampire");
+void DoGrenadeLD(
+    int nDirectDamage,
+    int nSplashDamage,
+    int vSmallHit,
+    int vRingHit,
+    int nDamageType,
+    float fExplosionRadius,
+    int nObjectFilter,
+    string sSubRace = "Vampire");
 //::///////////////////////////////////////////////
 //:: Holy Water
 //:: x0_s3_holy
@@ -24,13 +32,38 @@ void DoGrenadeLD(int nDirectDamage, int nSplashDamage, int vSmallHit, int vRingH
 //:://////////////////////////////////////////////
 
 #include "X0_I0_SPELLS"
+
 void main()
 {
-    DoGrenade(d4(2),1, VFX_IMP_HEAD_HOLY, VFX_FNF_LOS_NORMAL_20, DAMAGE_TYPE_DIVINE, RADIUS_SIZE_HUGE, OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE, RACIAL_TYPE_UNDEAD);
-    DoGrenadeLD(d4(2),1, VFX_IMP_HEAD_HOLY, VFX_FNF_LOS_NORMAL_20, DAMAGE_TYPE_DIVINE, RADIUS_SIZE_HUGE, OBJECT_TYPE_CREATURE, "Vampire");
+    DoGrenade(
+        d4(2),
+        1,
+        VFX_IMP_HEAD_HOLY,
+        VFX_FNF_LOS_NORMAL_20,
+        DAMAGE_TYPE_DIVINE,
+        RADIUS_SIZE_HUGE,
+        OBJECT_TYPE_CREATURE | OBJECT_TYPE_DOOR | OBJECT_TYPE_PLACEABLE,
+        RACIAL_TYPE_UNDEAD);
+    DoGrenadeLD(
+        d4(2),
+        1,
+        VFX_IMP_HEAD_HOLY,
+        VFX_FNF_LOS_NORMAL_20,
+        DAMAGE_TYPE_DIVINE,
+        RADIUS_SIZE_HUGE,
+        OBJECT_TYPE_CREATURE,
+        "Vampire");
 }
 
-void DoGrenadeLD(int nDirectDamage, int nSplashDamage, int vSmallHit, int vRingHit, int nDamageType, float fExplosionRadius , int nObjectFilter, string sSubRace="Vampire")
+void DoGrenadeLD(
+    int nDirectDamage,
+    int nSplashDamage,
+    int vSmallHit,
+    int vRingHit,
+    int nDamageType,
+    float fExplosionRadius,
+    int nObjectFilter,
+    string sSubRace = "Vampire")
 {
     object oTarget = GetSpellTargetObject();
     int nCasterLvl = GetCasterLevel(OBJECT_SELF);
@@ -44,32 +77,50 @@ void DoGrenadeLD(int nDirectDamage, int nSplashDamage, int vSmallHit, int vRingH
     float fDist = GetDistanceBetween(OBJECT_SELF, oTarget);
     int nTouch;
 
-    if (GetIsObjectValid(oTarget) == TRUE){
-        nTouch = TouchAttackRanged(oTarget);}
-    else{
-        nTouch = -1;}
-    if (nTouch >= 1){
+    if (GetIsObjectValid(oTarget) == TRUE)
+    {
+        nTouch = TouchAttackRanged(oTarget);
+    }
+    else
+    {
+        nTouch = -1;
+    }
+    if (nTouch >= 1)
+    {
         int nDam = nDirectDamage;
-        if(nTouch == 2){
-            nDam *= 2;}
+        if (nTouch == 2)
+        {
+            nDam *= 2;
+        }
 
         effect eDam = EffectDamage(nDam, nDamageType);
 
-            if (GetSubRace(oTarget) == "Vampire"){
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-                SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));}}
+        if (GetSubRace(oTarget) == "Vampire")
+        {
+            ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+            SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
+        }
+    }
 
     {
         effect eExplode = EffectVisualEffect(vRingHit);
 
-       ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eExplode, lTarget);
-    object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, fExplosionRadius, lTarget, TRUE, nObjectFilter);
-    while (GetIsObjectValid(oTarget)){
-            float fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget))/20;
+        ApplyEffectAtLocation(DURATION_TYPE_INSTANT, eExplode, lTarget);
+        object oTarget = GetFirstObjectInShape(SHAPE_SPHERE, fExplosionRadius, lTarget, TRUE, nObjectFilter);
+        while (GetIsObjectValid(oTarget))
+        {
+            float fDelay = GetDistanceBetweenLocations(lTarget, GetLocation(oTarget)) / 20;
             nDamage = nSplashDamage;
             effect eDam = EffectDamage(nDamage, nDamageType);
-            if(nDamage > 0){
-            if (GetSubRace(oTarget) == "Vampire"){
-                ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
-                SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));}}
-       oTarget = GetNextObjectInShape(SHAPE_SPHERE, fExplosionRadius, lTarget, TRUE, nObjectFilter);}}}
+            if (nDamage > 0)
+            {
+                if (GetSubRace(oTarget) == "Vampire")
+                {
+                    ApplyEffectToObject(DURATION_TYPE_INSTANT, eDam, oTarget);
+                    SignalEvent(oTarget, EventSpellCastAt(OBJECT_SELF, GetSpellId()));
+                }
+            }
+            oTarget = GetNextObjectInShape(SHAPE_SPHERE, fExplosionRadius, lTarget, TRUE, nObjectFilter);
+        }
+    }
+}

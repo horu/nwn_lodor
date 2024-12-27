@@ -1,8 +1,7 @@
 // If the NPC does not like the PC.
 int StartingConditional()
 {
-
-object oPC = GetPCSpeaker();
+    object oPC = GetPCSpeaker();
 
     if ((GetReputation(OBJECT_SELF, oPC) < 35) && (GetReputation(OBJECT_SELF, oPC) > 9))
         return TRUE;

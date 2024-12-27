@@ -66,8 +66,8 @@ int sl_get_random_appr(object item)
     if (base_type == BASE_ITEM_SMALLSHIELD) { return Random(90); }
     if (base_type == BASE_ITEM_LARGESHIELD) { return Random(200); }
     if (base_type == BASE_ITEM_TOWERSHIELD) { return Random(200); }
-    if (base_type == BASE_ITEM_BRACER ) { return Random(61); }
-    if (base_type == BASE_ITEM_RING ) { return Random(131); }
+    if (base_type == BASE_ITEM_BRACER) { return Random(61); }
+    if (base_type == BASE_ITEM_RING) { return Random(131); }
     if (base_type == BASE_ITEM_BELT) { return Random(60); }
     if (base_type == BASE_ITEM_BOOTS) { return Random(45); }
     if (base_type == BASE_ITEM_GLOVES) { return Random(63); }
@@ -94,12 +94,14 @@ object sl_modify_appr(object item)
     int appr_model = sl_get_random_appr_model(item);
 
     int i = 0;
-    while (i < 50) {
+    while (i < 50)
+    {
         i++;
         // Try set random appr for item and check supporting for this value
         int appr = sl_get_random_appr(item);
         object new_item = CopyItemAndModify(item, appr_type, appr_model, appr);
-        if (new_item != OBJECT_INVALID) {
+        if (new_item != OBJECT_INVALID)
+        {
             // Valid appr value found.
             //SendMessageToPC(GetFirstPC(),IntToString(i) + " " + IntToString(appr_type) + " " + IntToString(appr_model) +" " + IntToString(appr));
             DestroyObject(item);
@@ -111,10 +113,10 @@ object sl_modify_appr(object item)
 }
 
 // Creaute Enchanted Item with modificated appearance.
-object sl_create_ench_item(string template, object holder)
+object sl_create_ench_item(string templ, object holder)
 {
     object temp_storage = GetObjectByTag("sl_ench_loot_storage");
-    object item = CreateItemOnObject(template, temp_storage, 1);
+    object item = CreateItemOnObject(templ, temp_storage, 1);
     item = sl_modify_appr(item);
     object new_item = CopyItem(item, holder);
     DestroyObject(item);

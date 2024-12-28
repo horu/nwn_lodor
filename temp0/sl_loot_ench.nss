@@ -131,32 +131,32 @@ void sl_print_to_log(object holder)
 
     if (item != OBJECT_INVALID)
     {
-        msg += "Create ench item";
+        msg += "1 ench";
     }
     else
     {
-        msg += "Pass ench item";
+        msg += "0 ench";
     }
 
-    msg += ": holder_tag " + GetTag(holder);
-    msg += ", item_tag " + GetTag(item);
+    msg += ": ho " + GetTag(holder);
+    msg += ", it " + GetTag(item);
     //msg += ", item_wep_type " + IntToString(GetLocalInt(holder, "enchantwep"));
-    msg += ", level " + IntToString(GetLocalInt(holder, "sl_loot_level"));
-    msg += ", chance " + IntToString(GetLocalInt(holder, "sl_loot_chance_roll"));
+    msg += ", lvl " + IntToString(GetLocalInt(holder, "sl_loot_level"));
+    msg += ", ch " + IntToString(GetLocalInt(holder, "sl_loot_chance_roll"));
     msg += "/" + IntToString(GetLocalInt(holder, "sl_loot_chance"));
-    msg += ", type " + IntToString(GetLocalInt(holder, "sl_loot_type"));
-    msg += ", boss " + IntToString(GetLocalInt(holder, "sl_loot_boss"));
+    msg += ", t " + IntToString(GetLocalInt(holder, "sl_loot_type"));
+    msg += ", b " + IntToString(GetLocalInt(holder, "sl_loot_boss"));
     if (GetLocalObject(holder, "sl_loot_opener") != OBJECT_INVALID)
     {
         string name = GetName(GetLocalObject(holder, "sl_loot_opener"));
-        msg += ", opener " + name;
+        msg += ", o " + name;
     }
     else
     {
-        msg += ", opener OBJECT_INVALID";
+        msg += ", o OI";
     }
 
-    msg += ", props:";
+    msg += ", pr:";
 
     itemproperty prop = GetFirstItemProperty(item);
     while (GetIsItemPropertyValid(prop))

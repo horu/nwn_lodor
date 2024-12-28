@@ -437,12 +437,31 @@ void main()
     object opener = GetLocalObject(holder, "sl_loot_opener");
     if (opener == OBJECT_INVALID)
     {
+        int level = GetHitDice(holder);
+
         // holder is creature, not container.
-        SetLocalInt(holder, "sl_loot_level", GetHitDice(holder));
+        SetLocalInt(holder, "sl_loot_level", level);
+
+        // Set level for loot area.
+        object area = GetArea(holder);
+        if (GetLocalInt(area, "sl_loot_level") < level)
+        {
+            SetLocalInt(area, "sl_loot_level", level);
+        }
     }
     else
     {
-        SetLocalInt(holder, "sl_loot_level", GetHitDice(opener));
+        // Container. Set max level by mobs.
+        object area = GetArea(holder);
+        int level = GetLocalInt(area, "sl_loot_level");
+        if (level)
+        {
+            SetLocalInt(holder, "sl_loot_level", level);
+        }
+        else
+        {
+            SetLocalInt(holder, "sl_loot_level", GetHitDice(opener));
+        }
     }
 
     SetLocalInt(holder, "sl_loot_chance", sl_get_chance(holder));

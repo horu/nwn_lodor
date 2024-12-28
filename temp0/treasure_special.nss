@@ -46,6 +46,8 @@ void main()
         SetLocalInt(OBJECT_SELF, "sl_loot_chance", 100);
         SetLocalInt(OBJECT_SELF, "sl_loot_type", 1); // wep only
         ExecuteScript("sl_loot_ench", OBJECT_SELF);
+        SetLocalObject(OBJECT_SELF, "sl_loot_opener", oPC);
+        SetLocalInt(OBJECT_SELF, "sl_loot_chance", 100);
         SetLocalInt(OBJECT_SELF, "sl_loot_type", 2); // arm only
         ExecuteScript("sl_loot_ench", OBJECT_SELF);
     }

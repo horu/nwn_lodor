@@ -48,10 +48,10 @@ void main()
     SetLocalInt(OBJECT_SELF, "sl_loot_chance", sl_chance);
     SetLocalInt(OBJECT_SELF, "sl_loot_type", 1); // wep only
     ExecuteScript("sl_loot_ench", OBJECT_SELF);
-    SetIdentified(GetLocalObject(OBJECT_SELF, "sl_loot_item"), TRUE);
+    SetLocalObject(OBJECT_SELF, "sl_loot_opener", oPC);
+    SetLocalInt(OBJECT_SELF, "sl_loot_chance", sl_chance);
     SetLocalInt(OBJECT_SELF, "sl_loot_type", 2); // arm only
     ExecuteScript("sl_loot_ench", OBJECT_SELF);
-    SetIdentified(GetLocalObject(OBJECT_SELF, "sl_loot_item"), TRUE);
 
     if (GetTag(OBJECT_SELF) == "lodor_barrel_low")
     {

@@ -127,16 +127,7 @@ object sl_create_ench_item(object holder, string templ)
 void sl_print_to_log(object holder)
 {
     object item = GetLocalObject(holder, "sl_loot_item");
-    string msg;
-
-    if (item != OBJECT_INVALID)
-    {
-        msg += "1 ench";
-    }
-    else
-    {
-        msg += "0 ench";
-    }
+    string msg = "ench " + IntToString(item != OBJECT_INVALID);
 
     msg += ": ho " + GetTag(holder);
     msg += ", it " + GetTag(item);

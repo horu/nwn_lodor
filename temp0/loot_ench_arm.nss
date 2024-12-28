@@ -48,19 +48,15 @@ void main()
     else { SetLocalInt(oPC, "enchabiplus", nModify1); }
     ////////////////////////////////////////////////////////////////////////////////
 
-    //Select an armor bonus/////////////////////////////////////////////////////////
-    int nModify2 = nLevel / 2;
-    if (nModify2 < 1)
+    //Select half bonus/////////////////////////////////////////////////////////
+    int bonus_2 = nLevel / 2;
+    if (bonus_2 < 1)
     {
-        SetLocalInt(oPC, "enchatmod", 1);
+        bonus_2 = 1;
     }
-    else if (nModify2 > 20)
+    else if (bonus_2 > 20)
     {
-        SetLocalInt(oPC, "enchatmod", 20);
-    }
-    else
-    {
-        SetLocalInt(oPC, "enchatmod", nModify2);
+        bonus_2 = 20;
     }
 
     {
@@ -729,11 +725,9 @@ void main()
 
     itemproperty propImmuMis = ItemPropertyImmunityMisc(GetLocalInt(oPC, "enchimmisc"));
     itemproperty propImmun = ItemPropertyDamageImmunity(GetLocalInt(oPC, "enchdamtyp"), GetLocalInt(oPC, "enchimmun"));
-    itemproperty propSave = ItemPropertyBonusSavingThrow(GetLocalInt(oPC, "enchsave"), GetLocalInt(oPC, "enchatmod"));
-    itemproperty propSavS = ItemPropertyBonusSavingThrowVsX(
-        GetLocalInt(oPC, "enchsaves"),
-        GetLocalInt(oPC, "enchatmod"));
-    itemproperty propRegen = ItemPropertyRegeneration(GetLocalInt(oPC, "enchatmod"));
+    itemproperty propSave = ItemPropertyBonusSavingThrow(GetLocalInt(oPC, "enchsave"), bonus_2);
+    itemproperty propSavS = ItemPropertyBonusSavingThrowVsX(GetLocalInt(oPC, "enchsaves"), bonus_2);
+    itemproperty propRegen = ItemPropertyRegeneration(bonus_2);
     itemproperty propLight = ItemPropertyLight(GetLocalInt(oPC, "enchbright"), GetLocalInt(oPC, "enchcolor"));
     itemproperty propHaste = ItemPropertyHaste();
     itemproperty propFreed = ItemPropertyFreeAction();
@@ -744,19 +738,13 @@ void main()
     itemproperty propResit = ItemPropertyBonusSpellResistance(GetLocalInt(oPC, "enchsplres"));
     itemproperty featMod1 = ItemPropertyBonusFeat(GetLocalInt(oPC, "enchfeat"));
     itemproperty featMod2 = ItemPropertyBonusFeat(GetLocalInt(oPC, "enchfeat1"));
-    itemproperty propACBon = ItemPropertyACBonus(GetLocalInt(oPC, "enchatmod"));
-    itemproperty propACAln = ItemPropertyACBonusVsAlign(GetLocalInt(oPC, "enchalign"), GetLocalInt(oPC, "enchatmod"));
-    itemproperty propACRce = ItemPropertyACBonusVsRace(GetLocalInt(oPC, "enchrace"), GetLocalInt(oPC, "enchatmod"));
-    itemproperty propACSAl = ItemPropertyACBonusVsSAlign(GetLocalInt(oPC, "enchsalign"), GetLocalInt(oPC, "enchatmod"));
-    itemproperty propACTyp = ItemPropertyACBonusVsDmgType(
-        GetLocalInt(oPC, "enchdamtyp"),
-        GetLocalInt(oPC, "enchatmod"));
-    itemproperty propArRes = ItemPropertyDamageResistance(
-        GetLocalInt(oPC, "enchdamtyp"),
-        GetLocalInt(oPC, "enchdamres"));
-    itemproperty abilityMod = ItemPropertyAbilityBonus(
-        GetLocalInt(oPC, "enchability"),
-        GetLocalInt(oPC, "enchabiplus"));
+    itemproperty propACBon = ItemPropertyACBonus(bonus_2);
+    itemproperty propACAln = ItemPropertyACBonusVsAlign(GetLocalInt(oPC, "enchalign"), bonus_2);
+    itemproperty propACRce = ItemPropertyACBonusVsRace(GetLocalInt(oPC, "enchrace"), bonus_2);
+    itemproperty propACSAl = ItemPropertyACBonusVsSAlign(GetLocalInt(oPC, "enchsalign"), bonus_2);
+    itemproperty propACTyp = ItemPropertyACBonusVsDmgType(GetLocalInt(oPC, "enchdamtyp"), bonus_2);
+    itemproperty propArRes = ItemPropertyDamageResistance(GetLocalInt(oPC, "enchdamtyp"), GetLocalInt(oPC, "enchdamres"));
+    itemproperty abilityMod = ItemPropertyAbilityBonus(GetLocalInt(oPC, "enchability"), GetLocalInt(oPC, "enchabiplus"));
     itemproperty armSoak = ItemPropertyDamageReduction(GetLocalInt(oPC, "enchdamred"), GetLocalInt(oPC, "enchdamred1"));
     itemproperty propCast = ItemPropertyCastSpell(GetLocalInt(oPC, "enchcast"), GetLocalInt(oPC, "enchsptimes"));
 
@@ -808,8 +796,9 @@ void main()
     {
         int nRandom = d100(1);
         if (nRandom > 98) { IPSafeAddItemProperty(oArmor, propImmuMis); }
-        else if ((nRandom > 95) && (nRandom < 99)) { IPSafeAddItemProperty(oArmor, propSave); }
-        else if ((nRandom > 92) && (nRandom < 96)) { IPSafeAddItemProperty(oArmor, propSavS); }
+        else if ((nRandom > 92) && (nRandom < 99)) { IPSafeAddItemProperty(oArmor, propSave); }
+        // else if ((nRandom > 95) && (nRandom < 99)) { IPSafeAddItemProperty(oArmor, propSave); }
+        // else if ((nRandom > 92) && (nRandom < 96)) { IPSafeAddItemProperty(oArmor, propSavS); }
         else if ((nRandom > 89) && (nRandom < 93)) { IPSafeAddItemProperty(oArmor, armSoak); }
         else if ((nRandom > 86) && (nRandom < 90)) { IPSafeAddItemProperty(oArmor, propArRes); }
         else if ((nRandom > 83) && (nRandom < 87)) { IPSafeAddItemProperty(oArmor, propResit); }
@@ -819,11 +808,12 @@ void main()
     //Add AC Bonus
     {
         int nRandom = d100(1);
-        if (nRandom > 95) { IPSafeAddItemProperty(oArmor, propACTyp); }
-        else if ((nRandom > 91) && (nRandom < 96)) { IPSafeAddItemProperty(oArmor, propACSAl); }
-        else if ((nRandom > 87) && (nRandom < 92)) { IPSafeAddItemProperty(oArmor, propACRce); }
-        else if ((nRandom > 83) && (nRandom < 88)) { IPSafeAddItemProperty(oArmor, propACAln); }
-        else if ((nRandom > 79) && (nRandom < 84)) { IPSafeAddItemProperty(oArmor, propACBon); }
+        if (nRandom > 89) { IPSafeAddItemProperty(oArmor, propACBon); }
+        // if (nRandom > 95) { IPSafeAddItemProperty(oArmor, propACTyp); }
+        // else if ((nRandom > 91) && (nRandom < 96)) { IPSafeAddItemProperty(oArmor, propACSAl); }
+        // else if ((nRandom > 87) && (nRandom < 92)) { IPSafeAddItemProperty(oArmor, propACRce); }
+        // else if ((nRandom > 83) && (nRandom < 88)) { IPSafeAddItemProperty(oArmor, propACAln); }
+        // else if ((nRandom > 79) && (nRandom < 84)) { IPSafeAddItemProperty(oArmor, propACBon); }
     }
 
     //Add Special

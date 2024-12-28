@@ -822,25 +822,13 @@ void main()
     }
 
     //Add Attack Modifier
-    if (nMelee != 5)
     {
-        {
-            int nRandom = d100(1);
-            if (nRandom > 95) { IPSafeAddItemProperty(oWeapon, attackSAlign); }
-            else if ((nRandom > 90) && (nRandom < 96)) { IPSafeAddItemProperty(oWeapon, attackAlign); }
-            else if ((nRandom > 85) && (nRandom < 91)) { IPSafeAddItemProperty(oWeapon, attackRace); }
-            else if ((nRandom > 80) && (nRandom < 86)) { IPSafeAddItemProperty(oWeapon, attackMod); }
-        }
-    }
-    else
-    {
-        {
-            int nRandom = d100(1);
-            if (nRandom > 95) { IPSafeAddItemProperty(oWeapon, attackSAlign); }
-            else if ((nRandom > 90) && (nRandom < 96)) { IPSafeAddItemProperty(oWeapon, attackAlign); }
-            else if ((nRandom > 85) && (nRandom < 91)) { IPSafeAddItemProperty(oWeapon, attackRace); }
-            else if ((nRandom > 0) && (nRandom < 86)) { IPSafeAddItemProperty(oWeapon, attackMod); }
-        }
+        int nRandom = d100(1);
+        if (nRandom > 90) { IPSafeAddItemProperty(oWeapon, attackMod); }
+        // if (nRandom > 95) { IPSafeAddItemProperty(oWeapon, attackMod); }
+        // else if ((nRandom > 90) && (nRandom < 96)) { IPSafeAddItemProperty(oWeapon, attackAlign); }
+        // else if ((nRandom > 85) && (nRandom < 91)) { IPSafeAddItemProperty(oWeapon, attackRace); }
+        // else if ((nRandom > 80) && (nRandom < 86)) { IPSafeAddItemProperty(oWeapon, attackSAlign); }
     }
 
 
@@ -909,19 +897,21 @@ void main()
         //Add Enchancement Bonus
         {
             int nRandom = d100(1);
-            if (nRandom > 95) { IPSafeAddItemProperty(oWeapon, enhanceBon); }
-            else if ((nRandom > 90) && (nRandom < 96)) { IPSafeAddItemProperty(oWeapon, enhanceAln); }
-            else if ((nRandom > 85) && (nRandom < 91)) { IPSafeAddItemProperty(oWeapon, enhanceRac); }
-            else if ((nRandom > 80) && (nRandom < 86)) { IPSafeAddItemProperty(oWeapon, enhanceSAl); }
+            if (nRandom > 90) { IPSafeAddItemProperty(oWeapon, enhanceBon); }
+            // if (nRandom > 95) { IPSafeAddItemProperty(oWeapon, enhanceBon); }
+            // else if ((nRandom > 90) && (nRandom < 96)) { IPSafeAddItemProperty(oWeapon, enhanceAln); }
+            // else if ((nRandom > 85) && (nRandom < 91)) { IPSafeAddItemProperty(oWeapon, enhanceRac); }
+            // else if ((nRandom > 80) && (nRandom < 86)) { IPSafeAddItemProperty(oWeapon, enhanceSAl); }
         }
 
         //Add Damage Modifier
         {
             int nRandom = d100(1);
-            if (nRandom > 95) { IPSafeAddItemProperty(oWeapon, damageMod); }
-            else if ((nRandom > 90) && (nRandom < 96)) { IPSafeAddItemProperty(oWeapon, damageModA); }
-            else if ((nRandom > 85) && (nRandom < 91)) { IPSafeAddItemProperty(oWeapon, damageModRace); }
-            else if ((nRandom > 80) && (nRandom < 86)) { IPSafeAddItemProperty(oWeapon, damageModSA); }
+            if (nRandom > 90) { IPSafeAddItemProperty(oWeapon, damageMod); }
+            // if (nRandom > 95) { IPSafeAddItemProperty(oWeapon, damageMod); }
+            // else if ((nRandom > 90) && (nRandom < 96)) { IPSafeAddItemProperty(oWeapon, damageModA); }
+            // else if ((nRandom > 85) && (nRandom < 91)) { IPSafeAddItemProperty(oWeapon, damageModRace); }
+            // else if ((nRandom > 80) && (nRandom < 86)) { IPSafeAddItemProperty(oWeapon, damageModSA); }
         }
 
         //Add Special

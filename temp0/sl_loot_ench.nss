@@ -126,9 +126,20 @@ object sl_create_ench_item(object holder, string templ)
 
 void sl_print_to_log(object holder)
 {
-    string msg = "Create ench item";
+    object item = GetLocalObject(holder, "sl_loot_item");
+    string msg;
+
+    if (item != OBJECT_INVALID)
+    {
+        msg += "Create ench item";
+    }
+    else
+    {
+        msg += "Pass ench item";
+    }
+
     msg += ": holder_tag " + GetTag(holder);
-    msg += ", item_tag " + GetLocalString(holder, "enchant");
+    msg += ", item_tag " + GetTag(item);
     //msg += ", item_wep_type " + IntToString(GetLocalInt(holder, "enchantwep"));
     msg += ", level " + IntToString(GetLocalInt(holder, "sl_loot_level"));
     msg += ", chance " + IntToString(GetLocalInt(holder, "sl_loot_chance_roll"));
@@ -146,7 +157,6 @@ void sl_print_to_log(object holder)
     }
 
     msg += ", props:";
-    object item = GetLocalObject(holder, "sl_loot_item");
 
     itemproperty prop = GetFirstItemProperty(item);
     while (GetIsItemPropertyValid(prop))
@@ -435,6 +445,7 @@ void main()
     SetLocalInt(holder, "sl_loot_chance_roll", d100(1));
     if (GetLocalInt(holder, "sl_loot_chance_roll") > GetLocalInt(holder, "sl_loot_chance"))
     {
+        sl_print_to_log(holder);
         return;
     }
 

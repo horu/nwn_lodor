@@ -846,7 +846,7 @@ void main()
 
     //Delete all the variable used
     DeleteLocalInt(oPC, "whatspell");
-    DeleteLocalInt(oPC, "enchant");
+    DeleteLocalString(oPC, "enchant");
     DeleteLocalInt(oPC, "enchability");
     DeleteLocalInt(oPC, "enchabiplus");
     DeleteLocalInt(oPC, "enchatmod");

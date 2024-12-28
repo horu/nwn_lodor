@@ -935,7 +935,7 @@ void main()
     }
 
     //Delete all the variable used
-    DeleteLocalInt(oPC, "enchant");
+    DeleteLocalString(oPC, "enchant");
     DeleteLocalInt(oPC, "enchability");
     DeleteLocalInt(oPC, "enchalign");
     DeleteLocalInt(oPC, "enchrace");

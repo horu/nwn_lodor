@@ -35,6 +35,9 @@ void main()
     object oLastOpener = GetLastOpener();
     SetLocalInt(OBJECT_SELF, "opened", 1);
 
+    SetLocalObject(OBJECT_SELF, "sl_loot_opener", oPC);
+    ExecuteScript("sl_loot_ench", OBJECT_SELF);
+
     if (GetTag(OBJECT_SELF) == "chest_goodies")
     {
         GenerateHighTreasure(oLastOpener, OBJECT_SELF);
@@ -51,7 +54,6 @@ void main()
         SetLocalInt(OBJECT_SELF, "sl_loot_type", 2); // arm only
         ExecuteScript("sl_loot_ench", OBJECT_SELF);
     }
-
     else if (GetTag(OBJECT_SELF) == "qs1j_chest")
     {
         if ((GetLocalInt(oQuest, "qs1jpart8") != 1) && (GetLocalInt(oQuest, "qs1j") > 0))
@@ -92,9 +94,10 @@ void main()
             GenerateLowTreasure(oLastOpener, OBJECT_SELF);
         }
     }
-
-
-    else { CreateItemOnObject("miradir_key", OBJECT_SELF, 1); }
+    else
+    {
+        CreateItemOnObject("miradir_key", OBJECT_SELF, 1);
+    }
 
     SetLocalInt(OBJECT_SELF, "NW_DO_ONCE", 1);
     ShoutDisturbed();

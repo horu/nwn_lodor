@@ -366,6 +366,17 @@ void sl_create_ench_arm(object holder)
     SetLocalString(holder, "enchant", Array_At_Str(sl_ench_arm_list, random));
     SetLocalObject(holder, "sl_loot_item", item);
 
+    // Decrease lvl
+    int base_type = GetBaseItemType(item);
+    if (base_type != BASE_ITEM_HELMET &&
+        base_type != BASE_ITEM_ARMOR &&
+        base_type != BASE_ITEM_SMALLSHIELD &&
+        base_type != BASE_ITEM_LARGESHIELD &&
+        base_type != BASE_ITEM_TOWERSHIELD)
+    {
+        SetLocalInt(holder, "sl_loot_level", GetLocalInt(holder, "sl_loot_level") / 2);
+    }
+
     ExecuteScript("loot_ench_arm", holder);
     sl_print_to_log(holder);
 }

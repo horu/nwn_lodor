@@ -4,8 +4,8 @@
 void main()
 {
     object oPC = OBJECT_SELF;
-    int nLevel = GetLocalInt(oPC, "sl_loot_level");
     object oWeapon = GetLocalObject(oPC, "sl_loot_item");
+    int nLevel = GetLocalInt(oPC, "sl_loot_level");
 
     //
     ////////////////////////////////////////////////////////////////////////////////

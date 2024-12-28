@@ -129,9 +129,10 @@ void sl_print_to_log(object holder)
     string msg = "Create ench item";
     msg += ": holder_tag " + GetTag(holder);
     msg += ", item_tag " + GetLocalString(holder, "enchant");
-    msg += ", item_wep_type " + IntToString(GetLocalInt(holder, "enchantwep"));
+    //msg += ", item_wep_type " + IntToString(GetLocalInt(holder, "enchantwep"));
     msg += ", level " + IntToString(GetLocalInt(holder, "sl_loot_level"));
-    msg += ", chance " + IntToString(GetLocalInt(holder, "sl_loot_chance"));
+    msg += ", chance " + IntToString(GetLocalInt(holder, "sl_loot_chance_roll"));
+    msg += "/" + IntToString(GetLocalInt(holder, "sl_loot_chance"));
     msg += ", type " + IntToString(GetLocalInt(holder, "sl_loot_type"));
     msg += ", boss " + IntToString(GetLocalInt(holder, "sl_loot_boss"));
     if (GetLocalObject(holder, "sl_loot_opener") != OBJECT_INVALID)
@@ -151,7 +152,7 @@ void sl_print_to_log(object holder)
     while (GetIsItemPropertyValid(prop))
     {
         struct NWNX_IPUnpacked unpacked = NWNX_ItemProperty_UnpackIP(prop);
-        msg += ", " + unpacked.sID;
+        msg += " " + unpacked.sID;
 
         prop = GetNextItemProperty(item);
     }
@@ -290,9 +291,83 @@ void sl_create_ench_wep(object holder)
     sl_print_to_log(holder);
 }
 
+const string sl_ench_arm_list = "sl_ench_arm_list";
+
 void sl_create_ench_arm(object holder)
 {
+    // if (GetIsPC(oPC) && GetSubRace(oPC) == "Minotaur")
+    // {
+    //     {
+    //         int nRandom = d10(1);
+    //         if (nRandom == 1) { SetLocalString(oPC, "enchant", "eq_mino_medm"); }
+    //         else if (nRandom == 2) { SetLocalString(oPC, "enchant", "eq_mino_litm1"); }
+    //         else if (nRandom == 3) { SetLocalString(oPC, "enchant", "eq_mino_hevm"); }
+    //         else if (nRandom == 4) { SetLocalString(oPC, "enchant", "eq_mino_litm2"); }
+    //         else if (nRandom == 5) { SetLocalString(oPC, "enchant", "eq_mino_robm"); }
+    //         else if (nRandom == 6) { SetLocalString(oPC, "enchant", "eq_mino_robm"); }
+    //         else if (nRandom == 7) { SetLocalString(oPC, "enchant", "eq_mino_medm"); }
+    //         else if (nRandom == 8) { SetLocalString(oPC, "enchant", "eq_mino_litm1"); }
+    //         else if (nRandom == 9) { SetLocalString(oPC, "enchant", "eq_mino_hevm"); }
+    //         else if (nRandom == 10) { SetLocalString(oPC, "enchant", "eq_mino_litm2"); }
+    //     }
+    // }
+    //
+    // else if (GetIsPC(oPC) && GetSubRace(oPC) == "Ogre")
+    // {
+    //     {
+    //         int nRandom = d10(1);
+    //         if (nRandom == 1) { SetLocalString(oPC, "enchant", "eq_ogre_medm"); }
+    //         else if (nRandom == 2) { SetLocalString(oPC, "enchant", "eq_ogre_litm1"); }
+    //         else if (nRandom == 3) { SetLocalString(oPC, "enchant", "eq_ogre_hevm"); }
+    //         else if (nRandom == 4) { SetLocalString(oPC, "enchant", "eq_ogre_litm2"); }
+    //         else if (nRandom == 5) { SetLocalString(oPC, "enchant", "eq_ogre_ro1m"); }
+    //         else if (nRandom == 6) { SetLocalString(oPC, "enchant", "eq_ogre_ro2m"); }
+    //         else if (nRandom == 7) { SetLocalString(oPC, "enchant", "eq_ogre_medm"); }
+    //         else if (nRandom == 8) { SetLocalString(oPC, "enchant", "eq_ogre_hevm"); }
+    //         else if (nRandom == 9) { SetLocalString(oPC, "enchant", "eq_ogre_litm1"); }
+    //         else if (nRandom == 10) { SetLocalString(oPC, "enchant", "eq_ogre_litm2"); }
+    //     }
+    // }
+    if (!Array_Size(sl_ench_arm_list))
+    {
+        Array_PushBack_Str(sl_ench_arm_list, "ench_helm1");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_tunic");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_scale");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_hide");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_chain");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_bplate");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_sleat");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_padd");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_leat");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_cshirt");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_smail");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_hplate");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_fplate");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_band");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_robe2");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_robe1");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_helm");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_tshield");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_shield");
+        Array_PushBack_Str(sl_ench_arm_list, "ench_lshield");
+        Array_PushBack_Str(sl_ench_arm_list, "sl_ench_amulet");
+        Array_PushBack_Str(sl_ench_arm_list, "sl_ench_belt");
+        Array_PushBack_Str(sl_ench_arm_list, "sl_ench_boots");
+        Array_PushBack_Str(sl_ench_arm_list, "sl_ench_bracer");
+        Array_PushBack_Str(sl_ench_arm_list, "sl_ench_cloak");
+        Array_PushBack_Str(sl_ench_arm_list, "sl_ench_ring");
+
+        PrintString("Created ench arm list: " + IntToString(Array_Size(sl_ench_arm_list)));
+    }
+
+    int random = Random(Array_Size(sl_ench_arm_list));
+
+    object item = sl_create_ench_item(holder, Array_At_Str(sl_ench_arm_list, random));
+    SetLocalString(holder, "enchant", Array_At_Str(sl_ench_arm_list, random));
+    SetLocalObject(holder, "sl_loot_item", item);
+
     ExecuteScript("loot_ench_arm", holder);
+    sl_print_to_log(holder);
 }
 
 int sl_get_chance(object holder)
@@ -346,7 +421,8 @@ void main()
     }
 
     SetLocalInt(holder, "sl_loot_chance", sl_get_chance(holder));
-    if (d100(1) > GetLocalInt(holder, "sl_loot_chance"))
+    SetLocalInt(holder, "sl_loot_chance_roll", d100(1));
+    if (GetLocalInt(holder, "sl_loot_chance_roll") > GetLocalInt(holder, "sl_loot_chance"))
     {
         return;
     }

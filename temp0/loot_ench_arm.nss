@@ -1,10 +1,10 @@
 // This creates dynamic magical armor
 #include "x2_inc_itemprop"
-#include "sl_loot_ench_lib"
 
 void main()
 {
     object oPC = OBJECT_SELF;
+    object oArmor = GetLocalObject(oPC, "sl_loot_item");
     int nLevel = GetLocalInt(oPC, "sl_loot_level");
     int nHalf = nLevel / 2;
     int nModify1 = nLevel / 3;
@@ -31,75 +31,6 @@ void main()
         int nSpell = d12(14) + 192;
         SetLocalInt(oPC, "whatspell", nSpell);
     }
-
-    //Select armor to make//////////////////////////////////////////////////////////
-    if (GetIsPC(oPC) && GetSubRace(oPC) == "Minotaur")
-    {
-        {
-            int nRandom = d10(1);
-            if (nRandom == 1) { SetLocalString(oPC, "enchant", "eq_mino_medm"); }
-            else if (nRandom == 2) { SetLocalString(oPC, "enchant", "eq_mino_litm1"); }
-            else if (nRandom == 3) { SetLocalString(oPC, "enchant", "eq_mino_hevm"); }
-            else if (nRandom == 4) { SetLocalString(oPC, "enchant", "eq_mino_litm2"); }
-            else if (nRandom == 5) { SetLocalString(oPC, "enchant", "eq_mino_robm"); }
-            else if (nRandom == 6) { SetLocalString(oPC, "enchant", "eq_mino_robm"); }
-            else if (nRandom == 7) { SetLocalString(oPC, "enchant", "eq_mino_medm"); }
-            else if (nRandom == 8) { SetLocalString(oPC, "enchant", "eq_mino_litm1"); }
-            else if (nRandom == 9) { SetLocalString(oPC, "enchant", "eq_mino_hevm"); }
-            else if (nRandom == 10) { SetLocalString(oPC, "enchant", "eq_mino_litm2"); }
-        }
-    }
-
-    else if (GetIsPC(oPC) && GetSubRace(oPC) == "Ogre")
-    {
-        {
-            int nRandom = d10(1);
-            if (nRandom == 1) { SetLocalString(oPC, "enchant", "eq_ogre_medm"); }
-            else if (nRandom == 2) { SetLocalString(oPC, "enchant", "eq_ogre_litm1"); }
-            else if (nRandom == 3) { SetLocalString(oPC, "enchant", "eq_ogre_hevm"); }
-            else if (nRandom == 4) { SetLocalString(oPC, "enchant", "eq_ogre_litm2"); }
-            else if (nRandom == 5) { SetLocalString(oPC, "enchant", "eq_ogre_ro1m"); }
-            else if (nRandom == 6) { SetLocalString(oPC, "enchant", "eq_ogre_ro2m"); }
-            else if (nRandom == 7) { SetLocalString(oPC, "enchant", "eq_ogre_medm"); }
-            else if (nRandom == 8) { SetLocalString(oPC, "enchant", "eq_ogre_hevm"); }
-            else if (nRandom == 9) { SetLocalString(oPC, "enchant", "eq_ogre_litm1"); }
-            else if (nRandom == 10) { SetLocalString(oPC, "enchant", "eq_ogre_litm2"); }
-        }
-    }
-
-    else
-    {
-        {
-            int nRandom = Random(26) + 1;
-            if (nRandom == 1) { SetLocalString(oPC, "enchant", "ench_helm1"); }
-            else if (nRandom == 2) { SetLocalString(oPC, "enchant", "ench_tunic"); }
-            else if (nRandom == 3) { SetLocalString(oPC, "enchant", "ench_scale"); }
-            else if (nRandom == 4) { SetLocalString(oPC, "enchant", "ench_hide"); }
-            else if (nRandom == 5) { SetLocalString(oPC, "enchant", "ench_chain"); }
-            else if (nRandom == 6) { SetLocalString(oPC, "enchant", "ench_bplate"); }
-            else if (nRandom == 7) { SetLocalString(oPC, "enchant", "ench_sleat"); }
-            else if (nRandom == 8) { SetLocalString(oPC, "enchant", "ench_padd"); }
-            else if (nRandom == 9) { SetLocalString(oPC, "enchant", "ench_leat"); }
-            else if (nRandom == 10) { SetLocalString(oPC, "enchant", "ench_cshirt"); }
-            else if (nRandom == 11) { SetLocalString(oPC, "enchant", "ench_smail"); }
-            else if (nRandom == 12) { SetLocalString(oPC, "enchant", "ench_hplate"); }
-            else if (nRandom == 13) { SetLocalString(oPC, "enchant", "ench_fplate"); }
-            else if (nRandom == 14) { SetLocalString(oPC, "enchant", "ench_band"); }
-            else if (nRandom == 15) { SetLocalString(oPC, "enchant", "ench_robe2"); }
-            else if (nRandom == 16) { SetLocalString(oPC, "enchant", "ench_robe1"); }
-            else if (nRandom == 17) { SetLocalString(oPC, "enchant", "ench_helm"); }
-            else if (nRandom == 18) { SetLocalString(oPC, "enchant", "ench_tshield"); }
-            else if (nRandom == 19) { SetLocalString(oPC, "enchant", "ench_shield"); }
-            else if (nRandom == 20) { SetLocalString(oPC, "enchant", "ench_lshield"); }
-            else if (nRandom == 21) { SetLocalString(oPC, "enchant", "sl_ench_amulet"); }
-            else if (nRandom == 22) { SetLocalString(oPC, "enchant", "sl_ench_belt"); }
-            else if (nRandom == 23) { SetLocalString(oPC, "enchant", "sl_ench_boots"); }
-            else if (nRandom == 24) { SetLocalString(oPC, "enchant", "sl_ench_bracer"); }
-            else if (nRandom == 25) { SetLocalString(oPC, "enchant", "sl_ench_cloak"); }
-            else if (nRandom == 26) { SetLocalString(oPC, "enchant", "sl_ench_ring"); }
-        }
-    }
-    ////////////////////////////////////////////////////////////////////////////////
 
     //Select an ability modifier////////////////////////////////////////////////////
     {
@@ -829,8 +760,6 @@ void main()
     itemproperty armSoak = ItemPropertyDamageReduction(GetLocalInt(oPC, "enchdamred"), GetLocalInt(oPC, "enchdamred1"));
     itemproperty propCast = ItemPropertyCastSpell(GetLocalInt(oPC, "enchcast"), GetLocalInt(oPC, "enchsptimes"));
 
-    object oArmor = sl_create_ench_item(GetLocalString(oPC, "enchant"), OBJECT_SELF);
-
     SetItemCharges(oArmor, 50);
 
     //Add Spell Bonus
@@ -913,17 +842,17 @@ void main()
         IPSafeAddItemProperty(oArmor, propACBon);
     }
 
-    //In case it is for giant classes
-    if (GetIsPC(oPC) && GetRacialType(oPC) == RACIAL_TYPE_HUMANOID_MONSTROUS)
-    {
-        itemproperty wearMonst = ItemPropertyLimitUseByRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS);
-        IPSafeAddItemProperty(oArmor, wearMonst);
-    }
-    if (GetIsPC(oPC) && GetRacialType(oPC) == RACIAL_TYPE_GIANT)
-    {
-        itemproperty wearGiant = ItemPropertyLimitUseByRace(IP_CONST_RACIALTYPE_GIANT);
-        IPSafeAddItemProperty(oArmor, wearGiant);
-    }
+    // sl: In case it is for giant classes
+    // if (GetIsPC(oPC) && GetRacialType(oPC) == RACIAL_TYPE_HUMANOID_MONSTROUS)
+    // {
+    //     itemproperty wearMonst = ItemPropertyLimitUseByRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS);
+    //     IPSafeAddItemProperty(oArmor, wearMonst);
+    // }
+    // if (GetIsPC(oPC) && GetRacialType(oPC) == RACIAL_TYPE_GIANT)
+    // {
+    //     itemproperty wearGiant = ItemPropertyLimitUseByRace(IP_CONST_RACIALTYPE_GIANT);
+    //     IPSafeAddItemProperty(oArmor, wearGiant);
+    // }
 
     //Delete all the variable used
     DeleteLocalInt(oPC, "whatspell");

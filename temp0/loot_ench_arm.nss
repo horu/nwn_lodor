@@ -922,12 +922,12 @@ void main()
     }
 
     //In case it is for giant classes
-    if (GetRacialType(oPC) == RACIAL_TYPE_HUMANOID_MONSTROUS)
+    if (GetIsPC(oPC) && GetRacialType(oPC) == RACIAL_TYPE_HUMANOID_MONSTROUS)
     {
         itemproperty wearMonst = ItemPropertyLimitUseByRace(IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS);
         IPSafeAddItemProperty(oArmor, wearMonst);
     }
-    if (GetRacialType(oPC) == RACIAL_TYPE_GIANT)
+    if (GetIsPC(oPC) && GetRacialType(oPC) == RACIAL_TYPE_GIANT)
     {
         itemproperty wearGiant = ItemPropertyLimitUseByRace(IP_CONST_RACIALTYPE_GIANT);
         IPSafeAddItemProperty(oArmor, wearGiant);

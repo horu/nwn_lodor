@@ -169,6 +169,17 @@ void sl_print_to_log(object holder)
     PrintString(msg);
 }
 
+void sl_clear_holder(object holder)
+{
+    DeleteLocalObject(holder, "sl_loot_item");
+    DeleteLocalObject(holder, "sl_loot_opener");
+    DeleteLocalInt(holder, "sl_loot_level");
+    DeleteLocalInt(holder, "sl_loot_chance_roll");
+    DeleteLocalInt(holder, "sl_loot_chance");
+    DeleteLocalInt(holder, "sl_loot_type");
+    DeleteLocalInt(holder, "sl_loot_boss");
+}
+
 const string sl_ench_wep_list = "sl_ench_wep_list";
 const string sl_ench_wep_type_list = "sl_ench_wep_type_list";
 
@@ -299,6 +310,7 @@ void sl_create_ench_wep(object holder)
 
     ExecuteScript("loot_ench_wep", holder);
     sl_print_to_log(holder);
+    sl_clear_holder(holder);
 }
 
 const string sl_ench_arm_list = "sl_ench_arm_list";
@@ -389,6 +401,7 @@ void sl_create_ench_arm(object holder)
 
     ExecuteScript("loot_ench_arm", holder);
     sl_print_to_log(holder);
+    sl_clear_holder(holder);
 }
 
 int sl_get_chance(object holder)
@@ -446,6 +459,7 @@ void main()
     if (GetLocalInt(holder, "sl_loot_chance_roll") > GetLocalInt(holder, "sl_loot_chance"))
     {
         sl_print_to_log(holder);
+        sl_clear_holder(holder);
         return;
     }
 

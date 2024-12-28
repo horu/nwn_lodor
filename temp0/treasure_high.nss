@@ -43,9 +43,8 @@ void main()
     } //Lodor Specific Items
 
     // sl:
-    int loot_cap = 10 - GetHitDice(oPC) / 5;
-    if (d100(1) <= loot_cap) { ExecuteScript("loot_ench_arm", OBJECT_SELF); }
-    if (d100(1) <= loot_cap) { ExecuteScript("loot_ench_wep", OBJECT_SELF); }
+    SetLocalObject(OBJECT_SELF, "sl_loot_opener", oPC);
+    ExecuteScript("sl_loot_ench", OBJECT_SELF);
 
     if (GetTag(OBJECT_SELF) == "miradir_chest2")
     {

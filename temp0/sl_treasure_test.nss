@@ -42,13 +42,16 @@ void main()
         SetLocalInt(OBJECT_SELF, "newloot2", 1); //Select a Reagent From
         ExecuteScript("loot_new_list", OBJECT_SELF);
     } //Lodor Specific Items
-    // sl:
+    // sl DEBUG:
+    int sl_chance = StringToInt(GetLocalString(GetModule(), "sl_pc_chat_msg"));
     SetLocalObject(OBJECT_SELF, "sl_loot_opener", oPC);
-    SetLocalInt(OBJECT_SELF, "sl_loot_chanse", 100);
+    SetLocalInt(OBJECT_SELF, "sl_loot_chance", sl_chance);
     SetLocalInt(OBJECT_SELF, "sl_loot_type", 1); // wep only
     ExecuteScript("sl_loot_ench", OBJECT_SELF);
+    SetIdentified(GetLocalObject(OBJECT_SELF, "sl_loot_item"), TRUE);
     SetLocalInt(OBJECT_SELF, "sl_loot_type", 2); // arm only
     ExecuteScript("sl_loot_ench", OBJECT_SELF);
+    SetIdentified(GetLocalObject(OBJECT_SELF, "sl_loot_item"), TRUE);
 
     if (GetTag(OBJECT_SELF) == "lodor_barrel_low")
     {

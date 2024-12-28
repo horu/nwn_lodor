@@ -54,7 +54,7 @@ void main()
     {
         GenerateHighTreasure(oLastOpener, OBJECT_SELF);
         SetLocalObject(OBJECT_SELF, "sl_loot_opener", oPC);
-        SetLocalInt(OBJECT_SELF, "sl_loot_chanse", 75);
+        SetLocalInt(OBJECT_SELF, "sl_loot_chance", 75);
         SetLocalInt(OBJECT_SELF, "sl_loot_type", 1); // wep only
         ExecuteScript("sl_loot_ench", OBJECT_SELF);
     }

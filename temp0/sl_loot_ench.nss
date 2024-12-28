@@ -1,5 +1,6 @@
 // Generate random ench device.
 #include "nwnx_data"
+#include "nwnx_itemprop"
 
 int sl_is_it_armor(object item)
 {
@@ -121,6 +122,40 @@ object sl_create_ench_item(object holder, string templ)
     object new_item = CopyItem(item, holder);
     DestroyObject(item);
     return new_item;
+}
+
+void sl_print_to_log(object holder)
+{
+    string msg = "Create ench item";
+    msg += ": holder_tag " + GetTag(holder);
+    msg += ", item_tag " + GetLocalString(holder, "enchant");
+    msg += ", item_wep_type " + IntToString(GetLocalInt(holder, "enchantwep"));
+    msg += ", level " + IntToString(GetLocalInt(holder, "sl_loot_level"));
+    msg += ", chance " + IntToString(GetLocalInt(holder, "sl_loot_chance"));
+    msg += ", type " + IntToString(GetLocalInt(holder, "sl_loot_type"));
+    msg += ", boss " + IntToString(GetLocalInt(holder, "sl_loot_boss"));
+    if (GetLocalObject(holder, "sl_loot_opener") != OBJECT_INVALID)
+    {
+        string name = GetName(GetLocalObject(holder, "sl_loot_opener"));
+        msg += ", opener " + name;
+    }
+    else
+    {
+        msg += ", opener OBJECT_INVALID";
+    }
+
+    msg += ", props:";
+    object item = GetLocalObject(holder, "sl_loot_item");
+
+    itemproperty prop = GetFirstItemProperty(item);
+    while (GetIsItemPropertyValid(prop))
+    {
+        struct NWNX_IPUnpacked unpacked = NWNX_ItemProperty_UnpackIP(prop);
+        msg += ", " + unpacked.sID;
+
+        prop = GetNextItemProperty(item);
+    }
+    PrintString(msg);
 }
 
 const string sl_ench_wep_list = "sl_ench_wep_list";
@@ -252,6 +287,7 @@ void sl_create_ench_wep(object holder)
     SetLocalObject(holder, "sl_loot_item", item);
 
     ExecuteScript("loot_ench_wep", holder);
+    sl_print_to_log(holder);
 }
 
 void sl_create_ench_arm(object holder)
@@ -259,13 +295,13 @@ void sl_create_ench_arm(object holder)
     ExecuteScript("loot_ench_arm", holder);
 }
 
-int sl_get_chanse(object holder)
+int sl_get_chance(object holder)
 {
-    int chanse = GetLocalInt(holder, "sl_loot_chanse");
-    if (chanse)
+    int chance = GetLocalInt(holder, "sl_loot_chance");
+    if (chance)
     {
         // For special loot
-        return chanse;
+        return chance;
     }
 
     int level = GetLocalInt(holder, "sl_loot_level");
@@ -309,19 +345,18 @@ void main()
         SetLocalInt(holder, "sl_loot_level", GetHitDice(opener));
     }
 
-    int chanse = sl_get_chanse(holder);
-    if (d100(1) > chanse)
+    SetLocalInt(holder, "sl_loot_chance", sl_get_chance(holder));
+    if (d100(1) > GetLocalInt(holder, "sl_loot_chance"))
     {
         return;
     }
 
-    int type = GetLocalInt(holder, "sl_loot_type");
-    if (!type)
+    if (!GetLocalInt(holder, "sl_loot_type"))
     {
-        type = d2(1);
+        SetLocalInt(holder, "sl_loot_type", d2(1));
     }
 
-    if (type == 1)
+    if (GetLocalInt(holder, "sl_loot_type") == 1)
     {
         sl_create_ench_wep(holder);
     }

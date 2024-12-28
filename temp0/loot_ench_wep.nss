@@ -1,6 +1,5 @@
 // This creates dynamic magical weapons
 #include "x2_inc_itemprop"
-#include "sl_loot_ench_lib"
 
 void main()
 {

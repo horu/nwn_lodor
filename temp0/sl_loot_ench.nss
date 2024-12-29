@@ -143,7 +143,7 @@ void sl_print_to_log(object holder)
     }
     //msg += ", item_wep_type " + IntToString(GetLocalInt(holder, "enchantwep"));
     msg += ", lvl " + IntToString(GetLocalInt(holder, "sl_loot_level"));
-    msg += ", req " + IntToString(GetLocalInt(holder, "sl_loot_req_level"));
+    //msg += ", req " + IntToString(GetLocalInt(holder, "sl_loot_req_level"));
     msg += ", ch " + IntToString(GetLocalInt(holder, "sl_loot_chance_roll"));
     msg += "/" + IntToString(GetLocalInt(holder, "sl_loot_chance"));
     msg += ", type " + IntToString(GetLocalInt(holder, "sl_loot_type"));
@@ -514,7 +514,7 @@ void main()
         {
             sl_create_ench_arm(holder);
         }
-        sl_override_req_level(holder);
+        //sl_override_req_level(holder);
     }
     sl_print_to_log(holder);
     sl_clear_holder(holder);

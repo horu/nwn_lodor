@@ -456,21 +456,6 @@ int sl_get_level(object creature)
     return level;
 }
 
-void sl_set_area_loot_level(object holder)
-{
-    if (!sl_is_creature_loot(holder))
-    {
-        return;
-    }
-
-    int level = sl_get_level(holder);
-    object area = GetArea(holder);
-    if (GetLocalInt(area, "sl_loot_level") < level)
-    {
-        SetLocalInt(area, "sl_loot_level", level);
-    }
-}
-
 int sl_get_loot_level(object holder)
 {
     if (sl_is_creature_loot(holder))
@@ -495,7 +480,6 @@ void main()
 {
     object holder = OBJECT_SELF;
 
-    sl_set_area_loot_level(holder);
     SetLocalInt(holder, "sl_loot_level", sl_get_loot_level(holder));
     SetLocalInt(holder, "sl_loot_chance", sl_get_chance(holder));
     SetLocalInt(holder, "sl_loot_chance_roll", d100(1));

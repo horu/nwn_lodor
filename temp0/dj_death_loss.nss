@@ -23,31 +23,31 @@ void main()
         object item = GetItemInSlot(i, oPC);
         if (item == OBJECT_INVALID)
         {
-            log_msg += " OI/";
+            log_msg += "-OI ";
             continue;
         }
 
         if (GetStringLeft(GetTag(item), 8) == "POW_ring")
         {
-            log_msg += " POW/";
+            log_msg += "-POW ";
             continue;
         }
 
         if (GetLocalInt(item, "insured"))
         {
             SetLocalInt(item, "insured", 0);
-            log_msg += " INS/";
+            log_msg += "-INS ";
             continue;
         }
 
         int roll = d100(1);
         if (roll > chance)
         {
-            log_msg += " " + IntToString(roll) + "/";
+            log_msg += "-" + IntToString(roll) + " ";
             continue;
         }
 
-        log_msg += " " + IntToString(roll) + " LOS/";
+        log_msg += "-" + IntToString(roll) + "(" + GetTag(item) + ") ";
         object copy_item = CopyItem(item, oTomb, TRUE);
         DestroyObject(item);
         DelayCommand(3.8, FloatingTextStringOnCreature("Lost item " + GetName(copy_item), oPC, FALSE));

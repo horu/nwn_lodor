@@ -31,8 +31,8 @@ void main()
     string sGrave2 = RandomName();
     string sGrave3 = sGrave1 + sGrave2;
     object oTomb = CreateObject(OBJECT_TYPE_PLACEABLE, "player_tomb", lDead, FALSE, sGrave3);
-    DelayCommand(2.0, SetLocalString(oPC, "whodied", sGrave3));
-    DelayCommand(3.0, ExecuteScript("dj_death_loss", oPC));
+    SetLocalString(oPC, "whodied", sGrave3);
+    ExecuteScript("dj_death_loss", oPC);
 
     // Vampire Blood Loss
     object oBottle = GetItemPossessedBy(oPC, "vampire_bottle");

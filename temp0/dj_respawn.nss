@@ -39,8 +39,8 @@ void main()
             string sGrave2 = RandomName();
             string sGrave3 = sGrave1 + sGrave2;
             object oTomb = CreateObject(OBJECT_TYPE_PLACEABLE, "player_tomb", lDead, FALSE, sGrave3);
-            DelayCommand(0.1, SetLocalString(oPC, "whodied", sGrave3));
-            DelayCommand(0.2, ExecuteScript("dj_death_loss", oPC));
+            SetLocalString(oPC, "whodied", sGrave3);
+            ExecuteScript("dj_death_loss", oPC);
         }
 
         //If the PC drank a Potion of Preservation or is Preserved from their god

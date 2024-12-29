@@ -127,27 +127,36 @@ object sl_create_ench_item(object holder, string templ)
 void sl_print_to_log(object holder)
 {
     object item = GetLocalObject(holder, "sl_loot_item");
+    object opener = GetLocalObject(holder, "sl_loot_opener");
     string msg = "ench " + IntToString(item != OBJECT_INVALID);
 
-    msg += ": ho " + GetTag(holder);
-    msg += ", it " + GetTag(item);
+    msg += ": hold " + GetTag(holder);
+    msg += ", race " + IntToString(GetRacialType(holder));
+    if (item != OBJECT_INVALID)
+    {
+        msg += ", item " + GetTag(item);
+    }
+    else
+    {
+        msg += ", item OI";
+    }
     //msg += ", item_wep_type " + IntToString(GetLocalInt(holder, "enchantwep"));
     msg += ", lvl " + IntToString(GetLocalInt(holder, "sl_loot_level"));
     msg += ", ch " + IntToString(GetLocalInt(holder, "sl_loot_chance_roll"));
     msg += "/" + IntToString(GetLocalInt(holder, "sl_loot_chance"));
-    msg += ", t " + IntToString(GetLocalInt(holder, "sl_loot_type"));
-    msg += ", b " + IntToString(GetLocalInt(holder, "sl_loot_boss"));
-    if (GetLocalObject(holder, "sl_loot_opener") != OBJECT_INVALID)
+    msg += ", type " + IntToString(GetLocalInt(holder, "sl_loot_type"));
+    msg += ", boss " + IntToString(GetLocalInt(holder, "sl_loot_boss"));
+    if (opener != OBJECT_INVALID)
     {
-        string name = GetName(GetLocalObject(holder, "sl_loot_opener"));
-        msg += ", o " + name;
+        string name = GetName(opener);
+        msg += ", open " + name;
     }
     else
     {
-        msg += ", o OI";
+        msg += ", open OI";
     }
 
-    msg += ", pr:";
+    msg += ", prop:";
 
     itemproperty prop = GetFirstItemProperty(item);
     while (GetIsItemPropertyValid(prop))
@@ -415,6 +424,7 @@ int sl_get_chance(object holder)
     int race = GetRacialType(holder);
     if (race == RACIAL_TYPE_ANIMAL ||
         race == RACIAL_TYPE_BEAST ||
+        race == RACIAL_TYPE_MAGICAL_BEAST ||
         race == RACIAL_TYPE_VERMIN ||
         race == RACIAL_TYPE_INVALID)
     {
@@ -430,40 +440,63 @@ int sl_get_chance(object holder)
     return 3 - level / 15;
 }
 
+int sl_is_creature_loot(object holder)
+{
+    object opener = GetLocalObject(holder, "sl_loot_opener");
+    return opener == OBJECT_INVALID;
+}
+
+int sl_get_level(object creature)
+{
+    int level = GetHitDice(creature);
+    if (level > 40)
+    {
+        return 40;
+    }
+    return level;
+}
+
+void sl_set_area_loot_level(object holder)
+{
+    if (!sl_is_creature_loot(holder))
+    {
+        return;
+    }
+
+    int level = sl_get_level(holder);
+    object area = GetArea(holder);
+    if (GetLocalInt(area, "sl_loot_level") < level)
+    {
+        SetLocalInt(area, "sl_loot_level", level);
+    }
+}
+
+int sl_get_loot_level(object holder)
+{
+    if (sl_is_creature_loot(holder))
+    {
+        // holder is creature, not container.
+        return sl_get_level(holder);
+    }
+
+    // Container. Set max level by mobs.
+    object area = GetArea(holder);
+    int level = GetLocalInt(area, "sl_loot_level");
+    if (level)
+    {
+        return level;
+    }
+
+    object opener = GetLocalObject(holder, "sl_loot_opener");
+    return sl_get_level(opener);
+}
 
 void main()
 {
     object holder = OBJECT_SELF;
-    object opener = GetLocalObject(holder, "sl_loot_opener");
-    if (opener == OBJECT_INVALID)
-    {
-        int level = GetHitDice(holder);
 
-        // holder is creature, not container.
-        SetLocalInt(holder, "sl_loot_level", level);
-
-        // Set level for loot area.
-        object area = GetArea(holder);
-        if (GetLocalInt(area, "sl_loot_level") < level)
-        {
-            SetLocalInt(area, "sl_loot_level", level);
-        }
-    }
-    else
-    {
-        // Container. Set max level by mobs.
-        object area = GetArea(holder);
-        int level = GetLocalInt(area, "sl_loot_level");
-        if (level)
-        {
-            SetLocalInt(holder, "sl_loot_level", level);
-        }
-        else
-        {
-            SetLocalInt(holder, "sl_loot_level", GetHitDice(opener));
-        }
-    }
-
+    sl_set_area_loot_level(holder);
+    SetLocalInt(holder, "sl_loot_level", sl_get_loot_level(holder));
     SetLocalInt(holder, "sl_loot_chance", sl_get_chance(holder));
     SetLocalInt(holder, "sl_loot_chance_roll", d100(1));
     if (GetLocalInt(holder, "sl_loot_chance_roll") > GetLocalInt(holder, "sl_loot_chance"))

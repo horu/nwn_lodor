@@ -1,3 +1,5 @@
+#include "inc_sqlite_time"
+
 void main()
 {
     object oPC = GetPCSpeaker();
@@ -10,6 +12,16 @@ void main()
     // DEBUG
     //SetXP(oPC, iXPMove);
 
+    int cur_time = SQLite_GetTimeStamp();
+    int last_jump_time = GetLocalInt(oInfo, "sl_last_jump_home");
+    int jump_time_limit = 3600; // 1h
+    int time_to_wait = last_jump_time + jump_time_limit - cur_time;
+    if (time_to_wait > 0)
+    {
+        FloatingTextStringOnCreature("Wait for " + IntToString(time_to_wait / 60 + 1) + " minutes before.", oPC, FALSE);
+        return;
+    }
+    SetLocalInt(oInfo, "sl_last_jump_home", cur_time);
 
     if (GetSubRace(oPC) == "Vampire")
     {

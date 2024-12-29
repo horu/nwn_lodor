@@ -43,7 +43,7 @@ void main()
         ExecuteScript("loot_new_list", OBJECT_SELF);
     } //Lodor Specific Items
     // sl DEBUG:
-    int sl_chance = StringToInt(GetLocalString(GetModule(), "sl_pc_chat_msg"));
+    int sl_chance = StringToInt(GetLocalString(oPC, "sl_pc_chat_msg"));
     SetLocalObject(OBJECT_SELF, "sl_loot_opener", oPC);
     SetLocalInt(OBJECT_SELF, "sl_loot_chance", sl_chance);
     SetLocalInt(OBJECT_SELF, "sl_loot_type", 1); // wep only

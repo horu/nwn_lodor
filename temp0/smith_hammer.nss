@@ -10,17 +10,27 @@ void main()
     if (GetBaseItemType(oItem) == BASE_ITEM_HELMET)
     {
         int nAppear = GetItemAppearance(oItem, ITEM_APPR_TYPE_ARMOR_MODEL, 0);
-        if (nAppear > 31)
+
+        string msg = GetLocalString(oPC, "sl_pc_chat_msg");
+        int nNewApr = StringToInt(msg);
+        if (nNewApr)
         {
-            int nNewApr = 1;
-            CopyItemAndModify(oItem, ITEM_APPR_TYPE_ARMOR_MODEL, 0, nNewApr, TRUE);
-            DestroyObject(oItem, 1.0);
+            DeleteLocalString(oPC, "sl_pc_chat_msg");
         }
         else
         {
-            int nNewApr = nAppear + 1;
-            CopyItemAndModify(oItem, ITEM_APPR_TYPE_ARMOR_MODEL, 0, nNewApr, TRUE);
-            DestroyObject(oItem, 1.0);
+            nNewApr = nAppear + 1;
+        }
+
+        if (nNewApr >= 50)
+        {
+            nNewApr = 1;
+        }
+
+        SendMessageToPC(oPC, "Last appearance ID: " + IntToString(nAppear) + ". New ID: " + IntToString(nNewApr) + ". Speak next ID.");
+        if (CopyItemAndModify(oItem, ITEM_APPR_TYPE_ARMOR_MODEL, 0, nNewApr, TRUE) != OBJECT_INVALID)
+        {
+            DestroyObject(oItem);
         }
     }
 
@@ -43,7 +53,7 @@ void main()
         if (nAppear == 42) { SetLocalInt(oPC, "smith", 43); }
         if (nAppear == 43) { SetLocalInt(oPC, "smith", 11); }
         CopyItemAndModify(oItem, ITEM_APPR_TYPE_SIMPLE_MODEL, 0, GetLocalInt(oPC, "smith"), TRUE);
-        DestroyObject(oItem, 1.0);
+        DestroyObject(oItem);
     }
 
     // WEAPON COLORS
@@ -73,13 +83,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_COLOR, ITEM_APPR_WEAPON_MODEL_TOP, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_COLOR, ITEM_APPR_WEAPON_MODEL_TOP, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
     }
@@ -109,13 +119,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_COLOR, ITEM_APPR_WEAPON_MODEL_MIDDLE, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_COLOR, ITEM_APPR_WEAPON_MODEL_MIDDLE, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
     }
@@ -145,13 +155,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_COLOR, ITEM_APPR_WEAPON_MODEL_BOTTOM, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_COLOR, ITEM_APPR_WEAPON_MODEL_BOTTOM, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
     }
@@ -166,13 +176,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_TOP, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_TOP, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
         else if (GetLocalInt(oHammer, "smith") == 2)
@@ -182,13 +192,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_MIDDLE, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_MIDDLE, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
         else if (GetLocalInt(oHammer, "smith") == 3)
@@ -198,13 +208,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_BOTTOM, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_BOTTOM, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
     }
@@ -222,13 +232,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_TOP, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_TOP, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
         else if (GetLocalInt(oHammer, "smith") == 2)
@@ -238,13 +248,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_MIDDLE, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_MIDDLE, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
         else if (GetLocalInt(oHammer, "smith") == 3)
@@ -254,13 +264,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_BOTTOM, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_BOTTOM, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
     }
@@ -275,13 +285,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_TOP, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_TOP, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
         else if (GetLocalInt(oHammer, "smith") == 2)
@@ -291,13 +301,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_MIDDLE, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_MIDDLE, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
         else if (GetLocalInt(oHammer, "smith") == 3)
@@ -307,13 +317,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_BOTTOM, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_BOTTOM, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
     }
@@ -336,13 +346,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_TOP, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_TOP, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
         else if (GetLocalInt(oHammer, "smith") == 2)
@@ -352,13 +362,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_MIDDLE, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_MIDDLE, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
         else if (GetLocalInt(oHammer, "smith") == 3)
@@ -368,13 +378,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_BOTTOM, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_BOTTOM, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
     }
@@ -390,13 +400,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_TOP, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_TOP, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
         else if (GetLocalInt(oHammer, "smith") == 2)
@@ -406,13 +416,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_MIDDLE, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_MIDDLE, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
         else if (GetLocalInt(oHammer, "smith") == 3)
@@ -422,13 +432,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_BOTTOM, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_BOTTOM, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
     }
@@ -443,13 +453,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_TOP, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_TOP, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
         else if (GetLocalInt(oHammer, "smith") == 2)
@@ -459,13 +469,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_MIDDLE, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_MIDDLE, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
         else if (GetLocalInt(oHammer, "smith") == 3)
@@ -475,13 +485,13 @@ void main()
             {
                 int nNewApr = 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_BOTTOM, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
             else
             {
                 int nNewApr = nAppear + 1;
                 CopyItemAndModify(oItem, ITEM_APPR_TYPE_WEAPON_MODEL, ITEM_APPR_WEAPON_MODEL_BOTTOM, nNewApr, TRUE);
-                DestroyObject(oItem, 1.0);
+                DestroyObject(oItem);
             }
         }
     }

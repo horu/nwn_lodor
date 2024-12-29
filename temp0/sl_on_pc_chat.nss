@@ -1,5 +1,6 @@
 void main()
 {
     string msg = GetPCChatMessage();
-    SetLocalString(GetModule(), "sl_pc_chat_msg", msg);
+    object pc = GetPCChatSpeaker();
+    SetLocalString(pc, "sl_pc_chat_msg", msg);
 }

@@ -122,13 +122,13 @@ void main()
         DeleteLocalInt(oItem, "CT_DESTRUCT_TIME");
     }
 
-    if (GetTag(oItem) == "ld_craft_glove")
-    {
-        itemproperty iSmith1 = ItemPropertyBonusFeat(IP_CONST_FEAT_ARMOR_PROF_HEAVY);
-        itemproperty iSmith2 = ItemPropertyBonusFeat(IP_CONST_FEAT_ARMOR_PROF_LIGHT);
-        itemproperty iSmith3 = ItemPropertyBonusFeat(IP_CONST_FEAT_ARMOR_PROF_MEDIUM);
-        IPSafeAddItemProperty(oItem, iSmith1);
-        IPSafeAddItemProperty(oItem, iSmith2);
-        IPSafeAddItemProperty(oItem, iSmith3);
-    }
+    // if (GetTag(oItem) == "ld_craft_glove")
+    // {
+    //     itemproperty iSmith1 = ItemPropertyBonusFeat(IP_CONST_FEAT_ARMOR_PROF_HEAVY);
+    //     itemproperty iSmith2 = ItemPropertyBonusFeat(IP_CONST_FEAT_ARMOR_PROF_LIGHT);
+    //     itemproperty iSmith3 = ItemPropertyBonusFeat(IP_CONST_FEAT_ARMOR_PROF_MEDIUM);
+    //     IPSafeAddItemProperty(oItem, iSmith1);
+    //     IPSafeAddItemProperty(oItem, iSmith2);
+    //     IPSafeAddItemProperty(oItem, iSmith3);
+    // }
 }

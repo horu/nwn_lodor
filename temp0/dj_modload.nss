@@ -10,6 +10,7 @@ void main()
 
     NWNX_Damage_SetAttackEventScript("sl_on_attack");
     NWNX_Events_SubscribeEvent(NWNX_ON_PLACEABLE_CLOSE_AFTER, "sl_on_plac_close");
+    //NWNX_Events_SubscribeEvent(NWNX_ON_ITEM_EQUIP_BEFORE, "sl_on_test_event");
 
     // Put the Bosses & Special Creatures on the Map.
     CreateObject(OBJECT_TYPE_CREATURE, "ld_drub", GetLocation(GetWaypointByTag("drub_spawn")));

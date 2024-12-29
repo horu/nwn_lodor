@@ -1,6 +1,7 @@
 // Generate random ench device.
 #include "nwnx_data"
 #include "nwnx_itemprop"
+#include "nwnx_item"
 
 int sl_is_it_armor(object item)
 {
@@ -142,6 +143,7 @@ void sl_print_to_log(object holder)
     }
     //msg += ", item_wep_type " + IntToString(GetLocalInt(holder, "enchantwep"));
     msg += ", lvl " + IntToString(GetLocalInt(holder, "sl_loot_level"));
+    msg += ", req " + IntToString(GetLocalInt(holder, "sl_loot_req_level"));
     msg += ", ch " + IntToString(GetLocalInt(holder, "sl_loot_chance_roll"));
     msg += "/" + IntToString(GetLocalInt(holder, "sl_loot_chance"));
     msg += ", type " + IntToString(GetLocalInt(holder, "sl_loot_type"));
@@ -174,6 +176,7 @@ void sl_clear_holder(object holder)
     DeleteLocalObject(holder, "sl_loot_item");
     DeleteLocalObject(holder, "sl_loot_opener");
     DeleteLocalInt(holder, "sl_loot_level");
+    DeleteLocalInt(holder, "sl_loot_req_level");
     DeleteLocalInt(holder, "sl_loot_chance_roll");
     DeleteLocalInt(holder, "sl_loot_chance");
     DeleteLocalInt(holder, "sl_loot_type");
@@ -309,8 +312,6 @@ void sl_create_ench_wep(object holder)
     SetLocalObject(holder, "sl_loot_item", item);
 
     ExecuteScript("loot_ench_wep", holder);
-    sl_print_to_log(holder);
-    sl_clear_holder(holder);
 }
 
 const string sl_ench_arm_list = "sl_ench_arm_list";
@@ -400,8 +401,6 @@ void sl_create_ench_arm(object holder)
     }
 
     ExecuteScript("loot_ench_arm", holder);
-    sl_print_to_log(holder);
-    sl_clear_holder(holder);
 }
 
 int sl_get_chance(object holder)
@@ -476,31 +475,47 @@ int sl_get_loot_level(object holder)
     return sl_get_level(opener);
 }
 
+void sl_override_req_level(object holder)
+{
+    object item = GetLocalObject(holder, "sl_loot_item");
+    int req_level = GetLocalInt(holder, "sl_loot_req_level");
+
+    itemproperty prop = GetFirstItemProperty(item);
+    while (GetIsItemPropertyValid(prop))
+    {
+        req_level += 1;
+        prop = GetNextItemProperty(item);
+    }
+
+    SetLocalInt(holder, "sl_loot_req_level", req_level);
+    NWNX_Item_SetMinEquipLevelOverride(item, req_level);
+}
+
 void main()
 {
     object holder = OBJECT_SELF;
 
     SetLocalInt(holder, "sl_loot_level", sl_get_loot_level(holder));
+    SetLocalInt(holder, "sl_loot_req_level", GetLocalInt(holder, "sl_loot_level"));
     SetLocalInt(holder, "sl_loot_chance", sl_get_chance(holder));
     SetLocalInt(holder, "sl_loot_chance_roll", d100(1));
-    if (GetLocalInt(holder, "sl_loot_chance_roll") > GetLocalInt(holder, "sl_loot_chance"))
+    if (GetLocalInt(holder, "sl_loot_chance_roll") <= GetLocalInt(holder, "sl_loot_chance"))
     {
-        sl_print_to_log(holder);
-        sl_clear_holder(holder);
-        return;
-    }
+        if (!GetLocalInt(holder, "sl_loot_type"))
+        {
+            SetLocalInt(holder, "sl_loot_type", d2(1));
+        }
 
-    if (!GetLocalInt(holder, "sl_loot_type"))
-    {
-        SetLocalInt(holder, "sl_loot_type", d2(1));
+        if (GetLocalInt(holder, "sl_loot_type") == 1)
+        {
+            sl_create_ench_wep(holder);
+        }
+        else
+        {
+            sl_create_ench_arm(holder);
+        }
+        sl_override_req_level(holder);
     }
-
-    if (GetLocalInt(holder, "sl_loot_type") == 1)
-    {
-        sl_create_ench_wep(holder);
-    }
-    else
-    {
-        sl_create_ench_arm(holder);
-    }
+    sl_print_to_log(holder);
+    sl_clear_holder(holder);
 }

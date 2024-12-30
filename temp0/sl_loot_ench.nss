@@ -465,10 +465,11 @@ int sl_get_loot_level(object holder)
 
     // Container. Set max level by mobs.
     object area = GetArea(holder);
-    int level = GetLocalInt(area, "sl_loot_level");
-    if (level)
+    int area_level_sum = GetLocalInt(area, "sl_loot_level_sum");
+    int area_level_count = GetLocalInt(area, "sl_loot_level_count");
+    if (area_level_count)
     {
-        return level;
+        return area_level_sum / area_level_count;
     }
 
     object opener = GetLocalObject(holder, "sl_loot_opener");

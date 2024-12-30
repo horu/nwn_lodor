@@ -13,8 +13,6 @@ void sl_destroy_body_bag(object bag)
 
 void main()
 {
-    //string data = NWNX_Events_GetEventData(NWNX_ON_PLACEABLE_CLOSE_AFTER);
-
     object closed_object = OBJECT_SELF;
     if (!GetIsObjectValid(closed_object))
     {

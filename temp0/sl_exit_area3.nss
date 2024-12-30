@@ -27,11 +27,11 @@ void main()
             DestroyObject(oTreasure);
         }
         // encounter reset spawn counter
-        if (GetObjectType(oTreasure) == OBJECT_TYPE_ENCOUNTER)
-        {
-            SetEncounterSpawnsCurrent(0, oTreasure);
-            SetEncounterActive(TRUE, oTreasure);
-        }
+        // if (GetObjectType(oTreasure) == OBJECT_TYPE_ENCOUNTER)
+        // {
+        //     SetEncounterSpawnsCurrent(0, oTreasure);
+        //     SetEncounterActive(TRUE, oTreasure);
+        // }
         // delete loot bags
         if (GetTag(oTreasure) == "BodyBag")
         {

@@ -9,6 +9,13 @@ void main()
     if (nDidit == 0)
     {
         SetLocalInt(oPC, "lodorport", 1);
+        object oWasHere = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
+        if (GetTag(oWasHere) == "lodor_abilities")
+        {
+            ExecuteScript("dj_spawn_pnt", oPC);
+            return;
+        }
+
         FloatingTextStringOnCreature("Please wait while you enter the World of Lodor (Approx 30 Seconds).", oPC, FALSE);
         DelayCommand(3.0, ExecuteScript("dj_faction", OBJECT_SELF));
         DelayCommand(7.0, ExecuteScript("dj_faction_set", OBJECT_SELF));

@@ -3,9 +3,6 @@
 
 void main()
 {
-    // sl: add lodor loot for creatures
-    ExecuteScript("sl_loot_ench", OBJECT_SELF);
-
     int nMinotaur = d10(1);
 
     // Maybe a reagent will spawn

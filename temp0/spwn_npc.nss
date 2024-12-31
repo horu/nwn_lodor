@@ -30,6 +30,7 @@ void main()
     ActionRandomWalk();
 
     ExecuteScript("sl_area_loot_lvl", OBJECT_SELF);
+    ExecuteScript("sl_loot_ench", OBJECT_SELF);
     NWNX_Creature_SetCorpseDecayTime(OBJECT_SELF, 500);
 
     // Treasure Section for the NPC

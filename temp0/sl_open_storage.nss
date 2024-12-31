@@ -2,8 +2,8 @@
 
 void main()
 {
-    object storage = OBJECT_SELF;
+    object store = OBJECT_SELF;
     object pc = GetLastOpenedBy();
 
-    sl_storage_restore(storage, pc);
+    sl_storage_restore_store(store, pc);
 }

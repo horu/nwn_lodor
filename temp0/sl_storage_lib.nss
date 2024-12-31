@@ -24,7 +24,17 @@ void sl_storate_log_error(object pc, string msg)
     FloatingTextStringOnCreature("Storage error.", pc, FALSE);
 }
 
-void sl_storage_restore(object storage, object pc)
+void sl_storage_clear_store(object store)
+{
+    object item = GetFirstItemInInventory(store);
+    while (GetIsObjectValid(item))
+    {
+        DestroyObject(item);
+        item = GetNextItemInInventory(store);
+    }
+}
+
+void sl_storage_restore_store(object store, object pc)
 {
     object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
 
@@ -41,7 +51,7 @@ void sl_storage_restore(object storage, object pc)
             continue;
         }
 
-        object restored_item = CopyItem(item, storage, TRUE);
+        object restored_item = CopyItem(item, store, TRUE);
         if (restored_item == OBJECT_INVALID)
         {
             sl_storate_log_error(pc, "<" + GetTag(item) + "> CopyItem error.");
@@ -57,7 +67,7 @@ void sl_storage_restore(object storage, object pc)
     sl_storate_log(pc, "Restore storage items " + IntToString(storage_size) + ": " + items_log);
 }
 
-int sl_storage_add(object item, object pc)
+int sl_storage_add_item(object item, object pc)
 {
     if (!GetIdentified(item))
     {
@@ -79,13 +89,31 @@ int sl_storage_add(object item, object pc)
     return TRUE;
 }
 
-void sl_storage_save(object storage, object pc)
+int sl_storage_remove_item(object item, object pc)
+{
+    object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
+
+    string str_item = NWNX_Object_Serialize(item);
+    int index = sl_array_find_str(sl_storage_array, str_item, storage_item);
+    if (index == -1)
+    {
+        sl_storate_log_error(pc, "<" + GetTag(item) + "> Item not found to remove.");
+        return FALSE;
+    }
+
+    sl_array_erase_str(sl_storage_array, index, storage_item);
+    int storage_size = sl_array_size(sl_storage_array, storage_item);
+    sl_storate_log(pc, "Remove storage item " + IntToString(storage_size) + ": " + GetTag(item));
+    return TRUE;
+}
+
+void sl_storage_save_store(object store, object pc)
 {
     object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
 
     sl_array_clear(sl_storage_array, storage_item);
     string items_log;
-    object item = GetFirstItemInInventory(storage);
+    object item = GetFirstItemInInventory(store);
     while (GetIsObjectValid(item))
     {
         string str_item = NWNX_Object_Serialize(item);
@@ -98,23 +126,23 @@ void sl_storage_save(object storage, object pc)
         sl_array_pushback_str(sl_storage_array, str_item, storage_item);
         items_log += " " + GetTag(item);
         DestroyObject(item);
-        item = GetNextItemInInventory(storage);
+        item = GetNextItemInInventory(store);
     }
     int storage_size = sl_array_size(sl_storage_array, storage_item);
     sl_storate_log(pc, "Save storage items " + IntToString(storage_size) + ": " + items_log);
 }
 
-object sl_storage_create(object pc, string base_storage_tag)
+object sl_storage_create_store(object pc, string base_store_tag)
 {
-    string storage_tag = base_storage_tag + "_" + GetName(pc);
-    object storage = GetObjectByTag(storage_tag);
-    if (storage == OBJECT_INVALID)
+    string store_tag = base_store_tag + "_" + GetName(pc);
+    object store = GetObjectByTag(store_tag);
+    if (store == OBJECT_INVALID)
     {
-        sl_storate_log(pc, "Create storage: " + storage_tag);
-        object base_storage = GetObjectByTag(base_storage_tag);
-        if (base_storage == OBJECT_INVALID)
+        sl_storate_log(pc, "Create store: " + store_tag);
+        object base_store = GetObjectByTag(base_store_tag);
+        if (base_store == OBJECT_INVALID)
         {
-            sl_storate_log_error(pc, "Can not create base storage: " + base_storage_tag);
+            sl_storate_log_error(pc, "Can not create base store: " + base_store_tag);
             return OBJECT_INVALID;
         }
         object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
@@ -124,13 +152,14 @@ object sl_storage_create(object pc, string base_storage_tag)
             return OBJECT_INVALID;
         }
 
-        storage = CopyObject(base_storage, GetLocation(base_storage), OBJECT_INVALID, storage_tag);
-        NWNX_Store_SetBlackMarketMarkDown(storage, 0);
-        NWNX_Store_SetMarkDown(storage, 0);
-        NWNX_Store_SetMarkUp(storage, 1);
-        NWNX_Creature_SetMaxSellToStorePriceOverride(pc, storage, 0);
+        store = CopyObject(base_store, GetLocation(base_store), OBJECT_INVALID, store_tag);
+        NWNX_Store_SetBlackMarketMarkDown(store, 0);
+        NWNX_Store_SetMarkDown(store, 0);
+        NWNX_Store_SetMarkUp(store, 1);
+        NWNX_Creature_SetMaxSellToStorePriceOverride(pc, store, 0);
         FloatingTextStringOnCreature("Paid storage. You will have to pay to get items back.", pc, FALSE);
     }
+    sl_storage_clear_store(store);
 
-    return storage;
+    return store;
 }

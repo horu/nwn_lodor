@@ -3,6 +3,6 @@
 void main()
 {
     object pc = GetPCSpeaker();
-    object storage = sl_storage_create(pc, "sl_storage");
-    OpenStore(storage, pc);
+    object store = sl_storage_create_store(pc, "sl_storage");
+    OpenStore(store, pc);
 }

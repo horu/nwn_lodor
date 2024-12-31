@@ -10,7 +10,8 @@ void main()
 
     NWNX_Damage_SetAttackEventScript("sl_on_attack");
     NWNX_Events_SubscribeEvent(NWNX_ON_PLACEABLE_CLOSE_AFTER, "sl_on_plac_close");
-    NWNX_Events_SubscribeEvent(NWNX_ON_STORE_REQUEST_SELL_BEFORE, "sl_on_sell");
+    NWNX_Events_SubscribeEvent(NWNX_ON_STORE_REQUEST_SELL_AFTER, "sl_on_sell");
+    NWNX_Events_SubscribeEvent(NWNX_ON_STORE_REQUEST_BUY_AFTER, "sl_on_buy");
     //NWNX_Events_SubscribeEvent(NWNX_ON_ITEM_EQUIP_BEFORE, "sl_on_test_event");
 
     // Put the Bosses & Special Creatures on the Map.

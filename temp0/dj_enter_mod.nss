@@ -15,6 +15,10 @@ void main()
     float fPlace = GetFacingFromLocation(lZone);
     location lGo = Location(oPlace, vPlace, fPlace);
 
+    SetDroppableFlag(GetItemPossessedBy(oPC, "faction_report"), FALSE);
+    SetDroppableFlag(GetItemPossessedBy(oPC, "food_pouch"), FALSE);
+    SetDroppableFlag(GetItemPossessedBy(oPC, "lodoc_waterem"), FALSE);
+
     if (GetTag(oWasHere) == "lodor_abilities")
     {
         if (oPlace == OBJECT_INVALID)

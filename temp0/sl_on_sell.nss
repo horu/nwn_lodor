@@ -1,4 +1,5 @@
 #include "nwnx_events"
+#include "sl_storage_lib"
 
 void main()
 {
@@ -6,18 +7,15 @@ void main()
     object item = StringToObject(NWNX_Events_GetEventData("ITEM"));
     object store = StringToObject(NWNX_Events_GetEventData("STORE"));
 
-    if (GetStringLeft(GetTag(store), 10) != "sl_storage")
+    if (GetStringLeft(GetTag(store), 10) == "sl_storage")
     {
-        return;
+        int result = sl_storage_add(item, pc);
+        if (!result)
+        {
+            CopyItem(item, pc, TRUE);
+            DestroyObject(item);
+            NWNX_Events_SetEventResult("0");
+            return;
+        }
     }
-
-    if (GetIdentified(item))
-    {
-        return;
-    }
-
-    FloatingTextStringOnCreature("You can not store unidentified items.", pc, TRUE);
-    object copy_item = CopyItem(item, pc, TRUE);
-    SetIdentified(copy_item, FALSE);
-    DestroyObject(item);
 }

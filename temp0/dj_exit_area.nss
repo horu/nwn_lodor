@@ -3,7 +3,7 @@ void main()
     // Clear loot bags and items
     DelayCommand(300.0, ExecuteScript("dj_exit_area2", OBJECT_SELF));
     // Clear creatures
-    DelayCommand(310.0, ExecuteScript("sl_exit_area3", OBJECT_SELF));
+    DelayCommand(1800.0, ExecuteScript("sl_exit_area3", OBJECT_SELF));
 
     object oPC = GetExitingObject();
     object oInfo = GetItemPossessedBy(oPC, "faction_report");

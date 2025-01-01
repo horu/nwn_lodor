@@ -2,7 +2,7 @@
 #include "nwnx_object"
 #include "nwnx_item"
 #include "nwnx_creature"
-#include "sl_common_lib"
+#include "sl_array_lib"
 
 // Special item in player inventory to store variables.
 const string sl_storage_item_tag = "faction_report";

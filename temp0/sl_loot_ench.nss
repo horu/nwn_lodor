@@ -1,5 +1,5 @@
 // Generate random ench device.
-#include "sl_common_lib"
+#include "sl_array_lib"
 #include "nwnx_itemprop"
 #include "nwnx_item"
 

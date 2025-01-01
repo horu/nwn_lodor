@@ -1,68 +1,123 @@
-void sl_assert(int condition, string error_msg)
-{
-    if (!condition)
-    {
-        PrintString(error_msg);
-    }
-}
 
 // Array. To permonently save data use item as obj.
-const string sl_array_prefix = "sl_array_";
+
+string sl_array_at_str(string tag, int index, object obj = OBJECT_INVALID);
+int sl_array_size(string tag, object obj = OBJECT_INVALID);
+int sl_array_find_str(string tag, string element, object obj = OBJECT_INVALID);
+void sl_array_pushback_str(string tag, string element, object obj = OBJECT_INVALID);
+void sl_array_set_str(string tag, int index, string element, object obj = OBJECT_INVALID);
+void sl_array_erase_str(string tag, int index, object obj = OBJECT_INVALID);
+void sl_array_clear(string tag, object obj = OBJECT_INVALID);
+
+
+/// Implementation
+
+// Private
+const string _sl_array_prefix = "sl_array_";
+
+string _sl_array_get_local_name_base(string tag)
+{
+    return _sl_array_prefix + tag;
+}
 
 string _sl_array_get_local_name_size(string tag)
 {
-    return sl_array_prefix + tag + "_size";
+    return _sl_array_get_local_name_base(tag) + "_size";
 }
 
 string _sl_array_get_local_name(string tag, int index)
 {
-    return sl_array_prefix + tag + IntToString(index);
+    return _sl_array_get_local_name_base(tag) + "_" + IntToString(index);
+}
+
+object _sl_array_get_default_obj(object obj = OBJECT_INVALID)
+{
+    if (obj == OBJECT_INVALID)
+    {
+        obj = GetModule();
+    }
+    return obj;
+}
+
+const int _sl_array_log_enabled = TRUE;
+
+void _sl_array_log(string tag, object obj, string msg)
+{
+    if (!_sl_array_log_enabled)
+    {
+        return;
+    }
+
+    string obj_name = GetTag(obj);
+    string base = _sl_array_get_local_name_base(tag);
+    PrintString("[sl_array] [" + obj_name + "] [" + base + "] " + msg);
+}
+
+void _sl_array_set_size(string tag, object obj, int size)
+{
+    string size_name = _sl_array_get_local_name_size(tag);
+    SetLocalInt(obj, size_name, size);
+    _sl_array_log(tag, obj, "Set " + size_name + ": " + IntToString(size));
+}
+
+void _sl_array_set_str(string tag, int index, string element, object obj)
+{
+    string element_name = _sl_array_get_local_name(tag, index);
+    SetLocalString(obj, element_name, element);
+    _sl_array_log(tag, obj, "Set " + element_name);
+}
+
+void _sl_array_delete_str(string tag, int index, object obj)
+{
+    string element_name = _sl_array_get_local_name(tag, index);
+    DeleteLocalString(obj, element_name);
+    _sl_array_log(tag, obj, "Del " + element_name);
+}
+
+// Public
+int sl_array_size(string tag, object obj = OBJECT_INVALID)
+{
+    obj = _sl_array_get_default_obj(obj);
+
+    string size_name = _sl_array_get_local_name_size(tag);
+    return GetLocalInt(obj, size_name);
+}
+
+void sl_array_set_str(string tag, int index, string element, object obj = OBJECT_INVALID)
+{
+    obj = _sl_array_get_default_obj(obj);
+
+    int size = sl_array_size(tag, obj);
+    if (index >= size)
+    {
+        return;
+    }
+
+    _sl_array_set_str(tag, index, element, obj);
 }
 
 void sl_array_pushback_str(string tag, string element, object obj = OBJECT_INVALID)
 {
-    if (obj == OBJECT_INVALID)
-    {
-        obj = GetModule();
-    }
+    obj = _sl_array_get_default_obj(obj);
 
-    string size_name = _sl_array_get_local_name_size(tag);
-    int size = GetLocalInt(obj, size_name);
-    SetLocalString(obj, _sl_array_get_local_name(tag, size), element);
-    PrintString(GetName(obj) + " push " + _sl_array_get_local_name(tag, size) + " " + IntToString(size));
+    int size = sl_array_size(tag, obj);
+    _sl_array_set_str(tag, size, element, obj);
     size += 1;
-    SetLocalInt(obj, size_name, size);
+    _sl_array_set_size(tag, obj, size);
 }
 
 string sl_array_at_str(string tag, int index, object obj = OBJECT_INVALID)
 {
-    if (obj == OBJECT_INVALID)
-    {
-        obj = GetModule();
-    }
+    obj = _sl_array_get_default_obj(obj);
 
-    PrintString(GetName(obj) + " at " + _sl_array_get_local_name(tag, index));
-    return GetLocalString(obj, _sl_array_get_local_name(tag, index));
-}
-
-int sl_array_size(string tag, object obj = OBJECT_INVALID)
-{
-    if (obj == OBJECT_INVALID)
-    {
-        obj = GetModule();
-    }
-
-    string size_name = _sl_array_get_local_name_size(tag);
-    PrintString(GetName(obj) + " size " + size_name + " " + IntToString(GetLocalInt(obj, size_name)));
-    return GetLocalInt(obj, size_name);
+    string element_name = _sl_array_get_local_name(tag, index);
+    _sl_array_log(tag, obj, "At  " + element_name);
+    return GetLocalString(obj, element_name);
 }
 
 int sl_array_find_str(string tag, string element, object obj = OBJECT_INVALID)
 {
-    if (obj == OBJECT_INVALID)
-    {
-        obj = GetModule();
-    }
+    obj = _sl_array_get_default_obj(obj);
 
     int size = sl_array_size(tag, obj);
     int index;
@@ -71,53 +126,44 @@ int sl_array_find_str(string tag, string element, object obj = OBJECT_INVALID)
         string it = sl_array_at_str(tag, index, obj);
         if (element == it)
         {
-            PrintString(GetName(obj) + " found " + IntToString(index));
+            _sl_array_log(tag, obj, "Fnd " + IntToString(index));
             return index;
         }
     }
-    PrintString(GetName(obj) + " not found.");
+    _sl_array_log(tag, obj, "Not " + IntToString(index));
     return -1;
 }
 
 void sl_array_erase_str(string tag, int index, object obj = OBJECT_INVALID)
 {
-    if (obj == OBJECT_INVALID)
-    {
-        obj = GetModule();
-    }
+    obj = _sl_array_get_default_obj(obj);
 
-    string size_name = _sl_array_get_local_name_size(tag);
-    int size = GetLocalInt(obj, size_name);
+    int size = sl_array_size(tag, obj);
     if (index >= size)
     {
         return;
     }
 
-    DeleteLocalString(obj, _sl_array_get_local_name(tag, index));
+    _sl_array_delete_str(tag, index, obj);
     for (index; index < size - 1; index++)
     {
         int old_index = index + 1;
         string it = sl_array_at_str(tag, old_index, obj);
-        SetLocalString(obj, _sl_array_get_local_name(tag, index), it);
-        PrintString(GetName(obj) + " move " + _sl_array_get_local_name(tag, old_index) + " to " + IntToString(index));
+        _sl_array_set_str(tag, index, it, obj);
     }
     size -= 1;
-    SetLocalInt(obj, size_name, size);
+    _sl_array_set_size(tag, obj, size);
 }
 
 void sl_array_clear(string tag, object obj = OBJECT_INVALID)
 {
-    if (obj == OBJECT_INVALID)
-    {
-        obj = GetModule();
-    }
+    obj = _sl_array_get_default_obj(obj);
 
     int size = sl_array_size(tag, obj);
     int index;
     for (index = 0; index < size; index++)
     {
-        PrintString(GetName(obj) + " clear " + _sl_array_get_local_name(tag, index) + " " + IntToString(size));
-        DeleteLocalString(obj, _sl_array_get_local_name(tag, index));
+        _sl_array_delete_str(tag, index, obj);
     }
     DeleteLocalInt(obj, _sl_array_get_local_name_size(tag));
 }

@@ -5,7 +5,7 @@
 #include "sl_common_lib"
 
 // Special variable prefix for storage variables.
-const string sl_storage_array = "sl_item_storage";
+const string sl_storage_array = "sl_storage";
 // Special item in player inventory to store variables.
 const string sl_storage_item_tag = "faction_report";
 

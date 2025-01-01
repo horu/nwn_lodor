@@ -75,7 +75,7 @@ int sl_storage_remove_item(object item, object pc)
         return FALSE;
     }
 
-    sl_array_erase_str(sl_storage_array, index, storage_item);
+    sl_array_erase(sl_storage_array, index, storage_item);
     int storage_size = sl_array_size(sl_storage_array, storage_item);
     _sl_storate_log(pc, "Remove storage item " + IntToString(storage_size) + ": " + GetTag(item));
     return TRUE;

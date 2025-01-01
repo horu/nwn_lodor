@@ -1,5 +1,5 @@
 // Generate random ench device.
-#include "nwnx_data"
+#include "sl_common_lib"
 #include "nwnx_itemprop"
 #include "nwnx_item"
 
@@ -115,10 +115,10 @@ object sl_modify_appr(object item)
 }
 
 // Creaute Enchanted Item with modificated appearance.
-object sl_create_ench_item(object holder, string templ)
+object sl_create_ench_item(object holder, string item_tag)
 {
     object temp_storage = GetObjectByTag("sl_ench_loot_storage");
-    object item = CreateItemOnObject(templ, temp_storage, 1);
+    object item = CreateItemOnObject(item_tag, temp_storage, 1);
     item = sl_modify_appr(item);
     object new_item = CopyItem(item, holder);
     DestroyObject(item);
@@ -129,7 +129,7 @@ void sl_print_to_log(object holder)
 {
     object item = GetLocalObject(holder, "sl_loot_item");
     object opener = GetLocalObject(holder, "sl_loot_opener");
-    string msg = "ench " + IntToString(item != OBJECT_INVALID);
+    string msg = "[ench] " + IntToString(item != OBJECT_INVALID);
 
     msg += ": hold " + GetTag(holder);
     msg += ", race " + IntToString(GetRacialType(holder));
@@ -183,138 +183,139 @@ void sl_clear_holder(object holder)
     DeleteLocalInt(holder, "sl_loot_boss");
 }
 
-const string sl_ench_wep_list = "sl_ench_wep_list";
-const string sl_ench_wep_type_list = "sl_ench_wep_type_list";
+const string sl_ench_wep_list = "sl_ench_wep";
+const string sl_ench_wep_type_list = "sl_ench_wep_type";
 
 void sl_create_ench_wep(object holder)
 {
-    if (!Array_Size(sl_ench_wep_list))
+    if (!sl_array_size(sl_ench_wep_list))
     {
         // Create ench wep list if empty
-        Array_PushBack_Str(sl_ench_wep_list, "ench_bsword");
-        Array_PushBack_Int(sl_ench_wep_type_list, 1);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_bsword");
+        sl_array_pushback_int(sl_ench_wep_type_list, 1);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_sickl");
-        Array_PushBack_Int(sl_ench_wep_type_list, 3);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_sickl");
+        sl_array_pushback_int(sl_ench_wep_type_list, 3);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_haxe");
-        Array_PushBack_Int(sl_ench_wep_type_list, 3);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_haxe");
+        sl_array_pushback_int(sl_ench_wep_type_list, 3);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_baxe");
-        Array_PushBack_Int(sl_ench_wep_type_list, 3);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_baxe");
+        sl_array_pushback_int(sl_ench_wep_type_list, 3);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_dagger");
-        Array_PushBack_Int(sl_ench_wep_type_list, 1);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_dagger");
+        sl_array_pushback_int(sl_ench_wep_type_list, 1);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_gsword");
-        Array_PushBack_Int(sl_ench_wep_type_list, 1);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_gsword");
+        sl_array_pushback_int(sl_ench_wep_type_list, 1);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_lsword");
-        Array_PushBack_Int(sl_ench_wep_type_list, 1);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_lsword");
+        sl_array_pushback_int(sl_ench_wep_type_list, 1);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_katana");
-        Array_PushBack_Int(sl_ench_wep_type_list, 1);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_katana");
+        sl_array_pushback_int(sl_ench_wep_type_list, 1);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_rapier");
-        Array_PushBack_Int(sl_ench_wep_type_list, 1);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_rapier");
+        sl_array_pushback_int(sl_ench_wep_type_list, 1);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_scim");
-        Array_PushBack_Int(sl_ench_wep_type_list, 1);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_scim");
+        sl_array_pushback_int(sl_ench_wep_type_list, 1);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_ssword");
-        Array_PushBack_Int(sl_ench_wep_type_list, 1);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_ssword");
+        sl_array_pushback_int(sl_ench_wep_type_list, 1);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_halb");
-        Array_PushBack_Int(sl_ench_wep_type_list, 3);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_halb");
+        sl_array_pushback_int(sl_ench_wep_type_list, 3);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_scyt");
-        Array_PushBack_Int(sl_ench_wep_type_list, 3);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_scyt");
+        sl_array_pushback_int(sl_ench_wep_type_list, 3);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_spear");
-        Array_PushBack_Int(sl_ench_wep_type_list, 4);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_spear");
+        sl_array_pushback_int(sl_ench_wep_type_list, 4);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_kama");
-        Array_PushBack_Int(sl_ench_wep_type_list, 3);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_kama");
+        sl_array_pushback_int(sl_ench_wep_type_list, 3);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_kukri");
-        Array_PushBack_Int(sl_ench_wep_type_list, 3);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_kukri");
+        sl_array_pushback_int(sl_ench_wep_type_list, 3);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_dmace");
-        Array_PushBack_Int(sl_ench_wep_type_list, 2);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_dmace");
+        sl_array_pushback_int(sl_ench_wep_type_list, 2);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_daxe");
-        Array_PushBack_Int(sl_ench_wep_type_list, 3);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_daxe");
+        sl_array_pushback_int(sl_ench_wep_type_list, 3);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_qstf");
-        Array_PushBack_Int(sl_ench_wep_type_list, 2);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_qstf");
+        sl_array_pushback_int(sl_ench_wep_type_list, 2);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_dsword");
-        Array_PushBack_Int(sl_ench_wep_type_list, 1);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_dsword");
+        sl_array_pushback_int(sl_ench_wep_type_list, 1);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_club");
-        Array_PushBack_Int(sl_ench_wep_type_list, 2);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_club");
+        sl_array_pushback_int(sl_ench_wep_type_list, 2);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_lflail");
-        Array_PushBack_Int(sl_ench_wep_type_list, 2);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_lflail");
+        sl_array_pushback_int(sl_ench_wep_type_list, 2);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_hflail");
-        Array_PushBack_Int(sl_ench_wep_type_list, 2);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_hflail");
+        sl_array_pushback_int(sl_ench_wep_type_list, 2);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_hamm");
-        Array_PushBack_Int(sl_ench_wep_type_list, 2);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_hamm");
+        sl_array_pushback_int(sl_ench_wep_type_list, 2);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_whamm");
-        Array_PushBack_Int(sl_ench_wep_type_list, 2);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_whamm");
+        sl_array_pushback_int(sl_ench_wep_type_list, 2);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_mace");
-        Array_PushBack_Int(sl_ench_wep_type_list, 2);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_mace");
+        sl_array_pushback_int(sl_ench_wep_type_list, 2);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_mstar");
-        Array_PushBack_Int(sl_ench_wep_type_list, 2);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_mstar");
+        sl_array_pushback_int(sl_ench_wep_type_list, 2);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_gaxe");
-        Array_PushBack_Int(sl_ench_wep_type_list, 3);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_gaxe");
+        sl_array_pushback_int(sl_ench_wep_type_list, 3);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_whip");
-        Array_PushBack_Int(sl_ench_wep_type_list, 5);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_whip");
+        sl_array_pushback_int(sl_ench_wep_type_list, 5);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_sling");
-        Array_PushBack_Int(sl_ench_wep_type_list, 6);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_sling");
+        sl_array_pushback_int(sl_ench_wep_type_list, 6);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_sbow");
-        Array_PushBack_Int(sl_ench_wep_type_list, 7);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_sbow");
+        sl_array_pushback_int(sl_ench_wep_type_list, 7);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_lbow");
-        Array_PushBack_Int(sl_ench_wep_type_list, 7);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_lbow");
+        sl_array_pushback_int(sl_ench_wep_type_list, 7);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_cbow");
-        Array_PushBack_Int(sl_ench_wep_type_list, 7);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_cbow");
+        sl_array_pushback_int(sl_ench_wep_type_list, 7);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_lcbow");
-        Array_PushBack_Int(sl_ench_wep_type_list, 7);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_lcbow");
+        sl_array_pushback_int(sl_ench_wep_type_list, 7);
 
-        Array_PushBack_Str(sl_ench_wep_list, "sl_ench_gloves");
-        Array_PushBack_Int(sl_ench_wep_type_list, 2);
+        sl_array_pushback_str(sl_ench_wep_list, "sl_ench_gloves");
+        sl_array_pushback_int(sl_ench_wep_type_list, 2);
 
-        Array_PushBack_Str(sl_ench_wep_list, "ench_dwaxe");
-        Array_PushBack_Int(sl_ench_wep_type_list, 3);
+        sl_array_pushback_str(sl_ench_wep_list, "ench_dwaxe");
+        sl_array_pushback_int(sl_ench_wep_type_list, 3);
 
-        PrintString("Created ench wep list: " +
-            IntToString(Array_Size(sl_ench_wep_list)) + "/" +
-            IntToString(Array_Size(sl_ench_wep_type_list)));
+        PrintString("[ench] Created ench wep list: " +
+            IntToString(sl_array_size(sl_ench_wep_list)) + "/" +
+            IntToString(sl_array_size(sl_ench_wep_type_list)));
     }
 
-    int random = Random(Array_Size(sl_ench_wep_list));
+    int random = Random(sl_array_size(sl_ench_wep_list));
 
-    object item = sl_create_ench_item(holder, Array_At_Str(sl_ench_wep_list, random));
-    SetLocalString(holder, "enchant", Array_At_Str(sl_ench_wep_list, random));
-    SetLocalInt(holder, "enchantwep", Array_At_Int(sl_ench_wep_type_list, random));
+    string item_tag = sl_array_at_str(sl_ench_wep_list, random);
+    object item = sl_create_ench_item(holder, item_tag);
+    SetLocalString(holder, "enchant", item_tag);
+    SetLocalInt(holder, "enchantwep", sl_array_at_int(sl_ench_wep_type_list, random));
     SetLocalObject(holder, "sl_loot_item", item);
 
     ExecuteScript("loot_ench_wep", holder);
 }
 
-const string sl_ench_arm_list = "sl_ench_arm_list";
+const string sl_ench_arm_list = "sl_ench_arm";
 
 void sl_create_ench_arm(object holder)
 {
@@ -351,42 +352,43 @@ void sl_create_ench_arm(object holder)
     //         else if (nRandom == 10) { SetLocalString(oPC, "enchant", "eq_ogre_litm2"); }
     //     }
     // }
-    if (!Array_Size(sl_ench_arm_list))
+    if (!sl_array_size(sl_ench_arm_list))
     {
-        Array_PushBack_Str(sl_ench_arm_list, "ench_helm1");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_tunic");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_scale");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_hide");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_chain");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_bplate");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_sleat");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_padd");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_leat");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_cshirt");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_smail");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_hplate");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_fplate");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_band");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_robe2");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_robe1");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_helm");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_tshield");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_shield");
-        Array_PushBack_Str(sl_ench_arm_list, "ench_lshield");
-        Array_PushBack_Str(sl_ench_arm_list, "sl_ench_amulet");
-        Array_PushBack_Str(sl_ench_arm_list, "sl_ench_belt");
-        Array_PushBack_Str(sl_ench_arm_list, "sl_ench_boots");
-        Array_PushBack_Str(sl_ench_arm_list, "sl_ench_bracer");
-        Array_PushBack_Str(sl_ench_arm_list, "sl_ench_cloak");
-        Array_PushBack_Str(sl_ench_arm_list, "sl_ench_ring");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_helm1");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_tunic");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_scale");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_hide");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_chain");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_bplate");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_sleat");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_padd");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_leat");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_cshirt");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_smail");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_hplate");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_fplate");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_band");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_robe2");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_robe1");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_helm");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_tshield");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_shield");
+        sl_array_pushback_str(sl_ench_arm_list, "ench_lshield");
+        sl_array_pushback_str(sl_ench_arm_list, "sl_ench_amulet");
+        sl_array_pushback_str(sl_ench_arm_list, "sl_ench_belt");
+        sl_array_pushback_str(sl_ench_arm_list, "sl_ench_boots");
+        sl_array_pushback_str(sl_ench_arm_list, "sl_ench_bracer");
+        sl_array_pushback_str(sl_ench_arm_list, "sl_ench_cloak");
+        sl_array_pushback_str(sl_ench_arm_list, "sl_ench_ring");
 
-        PrintString("Created ench arm list: " + IntToString(Array_Size(sl_ench_arm_list)));
+        PrintString("[ench] Created ench arm list: " + IntToString(sl_array_size(sl_ench_arm_list)));
     }
 
-    int random = Random(Array_Size(sl_ench_arm_list));
+    int random = Random(sl_array_size(sl_ench_arm_list));
 
-    object item = sl_create_ench_item(holder, Array_At_Str(sl_ench_arm_list, random));
-    SetLocalString(holder, "enchant", Array_At_Str(sl_ench_arm_list, random));
+    string item_tag = sl_array_at_str(sl_ench_arm_list, random);
+    object item = sl_create_ench_item(holder, item_tag);
+    SetLocalString(holder, "enchant", item_tag);
     SetLocalObject(holder, "sl_loot_item", item);
 
     // Decrease lvl

@@ -2,18 +2,22 @@
 // Array. To permonently save data use item as obj.
 
 string sl_array_at_str(string tag, int index, object obj = OBJECT_INVALID);
-int sl_array_size(string tag, object obj = OBJECT_INVALID);
-int sl_array_find_str(string tag, string element, object obj = OBJECT_INVALID);
 void sl_array_pushback_str(string tag, string element, object obj = OBJECT_INVALID);
+int sl_array_find_str(string tag, string element, object obj = OBJECT_INVALID);
 void sl_array_set_str(string tag, int index, string element, object obj = OBJECT_INVALID);
-void sl_array_erase_str(string tag, int index, object obj = OBJECT_INVALID);
-void sl_array_clear(string tag, object obj = OBJECT_INVALID);
 
+int sl_array_at_int(string tag, int index, object obj = OBJECT_INVALID);
+void sl_array_pushback_int(string tag, int element, object obj = OBJECT_INVALID);
+
+int sl_array_size(string tag, object obj = OBJECT_INVALID);
+void sl_array_erase(string tag, int index, object obj = OBJECT_INVALID);
+void sl_array_clear(string tag, object obj = OBJECT_INVALID);
 
 /// Implementation
 
 // Private
 const string _sl_array_prefix = "sl_array_";
+const int _sl_array_log_enabled = TRUE;
 
 string _sl_array_get_local_name_base(string tag)
 {
@@ -39,8 +43,6 @@ object _sl_array_get_default_obj(object obj = OBJECT_INVALID)
     return obj;
 }
 
-const int _sl_array_log_enabled = TRUE;
-
 void _sl_array_log(string tag, object obj, string msg)
 {
     if (!_sl_array_log_enabled)
@@ -51,6 +53,15 @@ void _sl_array_log(string tag, object obj, string msg)
     string obj_name = GetTag(obj);
     string base = _sl_array_get_local_name_base(tag);
     PrintString("[sl_array] [" + obj_name + "] [" + base + "] " + msg);
+}
+
+string _sl_array_get_str_hash(string element)
+{
+    if (GetStringLength(element) > 32)
+    {
+        return IntToString(HashString(element));
+    }
+    return element;
 }
 
 void _sl_array_set_size(string tag, object obj, int size)
@@ -64,7 +75,7 @@ void _sl_array_set_str(string tag, int index, string element, object obj)
 {
     string element_name = _sl_array_get_local_name(tag, index);
     SetLocalString(obj, element_name, element);
-    _sl_array_log(tag, obj, "Set " + element_name + ": " + IntToString(HashString(element)));
+    _sl_array_log(tag, obj, "Set " + element_name + ": " + _sl_array_get_str_hash(element));
 }
 
 void _sl_array_delete_str(string tag, int index, object obj)
@@ -96,6 +107,7 @@ void sl_array_set_str(string tag, int index, string element, object obj = OBJECT
     _sl_array_set_str(tag, index, element, obj);
 }
 
+
 void sl_array_pushback_str(string tag, string element, object obj = OBJECT_INVALID)
 {
     obj = _sl_array_get_default_obj(obj);
@@ -106,14 +118,30 @@ void sl_array_pushback_str(string tag, string element, object obj = OBJECT_INVAL
     _sl_array_set_size(tag, obj, size);
 }
 
+void sl_array_pushback_int(string tag, int element, object obj = OBJECT_INVALID)
+{
+    sl_array_pushback_str(tag, IntToString(element), obj);
+}
+
+
 string sl_array_at_str(string tag, int index, object obj = OBJECT_INVALID)
 {
     obj = _sl_array_get_default_obj(obj);
 
     string element_name = _sl_array_get_local_name(tag, index);
     string element = GetLocalString(obj, element_name);
-    _sl_array_log(tag, obj, "At  " + element_name + ": " + IntToString(HashString(element)));
+    _sl_array_log(tag, obj, "At  " + element_name + ": " + _sl_array_get_str_hash(element));
     return element;
+}
+
+int sl_array_at_int(string tag, int index, object obj = OBJECT_INVALID)
+{
+    string st = sl_array_at_str(tag, index, obj);
+    if (st == "")
+    {
+        return 0;
+    }
+    return StringToInt(st);
 }
 
 int sl_array_find_str(string tag, string element, object obj = OBJECT_INVALID)
@@ -127,15 +155,15 @@ int sl_array_find_str(string tag, string element, object obj = OBJECT_INVALID)
         string it = sl_array_at_str(tag, index, obj);
         if (element == it)
         {
-            _sl_array_log(tag, obj, "Fnd " + IntToString(index) + ": " + IntToString(HashString(element)));
+            _sl_array_log(tag, obj, "Fnd " + IntToString(index) + ": " + _sl_array_get_str_hash(element));
             return index;
         }
     }
-    _sl_array_log(tag, obj, "Not " + IntToString(index) + ": " + IntToString(HashString(element)));
+    _sl_array_log(tag, obj, "Not " + IntToString(index) + ": " + _sl_array_get_str_hash(element));
     return -1;
 }
 
-void sl_array_erase_str(string tag, int index, object obj = OBJECT_INVALID)
+void sl_array_erase(string tag, int index, object obj = OBJECT_INVALID)
 {
     obj = _sl_array_get_default_obj(obj);
 

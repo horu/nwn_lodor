@@ -145,15 +145,20 @@ void sl_array_erase_str(string tag, int index, object obj = OBJECT_INVALID)
         return;
     }
 
-    _sl_array_delete_str(tag, index, obj);
     for (index; index < size - 1; index++)
     {
         int old_index = index + 1;
         string it = sl_array_at_str(tag, old_index, obj);
         _sl_array_set_str(tag, index, it, obj);
     }
+    _sl_array_delete_str(tag, index, obj);
+
     size -= 1;
     _sl_array_set_size(tag, obj, size);
+    if (!size)
+    {
+        DeleteLocalInt(obj, _sl_array_get_local_name_size(tag));
+    }
 }
 
 void sl_array_clear(string tag, object obj = OBJECT_INVALID)

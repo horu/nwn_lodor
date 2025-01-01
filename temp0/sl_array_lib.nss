@@ -1,5 +1,6 @@
 
 // Array. To permonently save data use item as obj.
+// Use string value <tag>_N and <tag>_size to store values.
 
 string sl_array_at_str(string tag, int index, object obj = OBJECT_INVALID);
 void sl_array_pushback_str(string tag, string element, object obj = OBJECT_INVALID);
@@ -16,22 +17,16 @@ void sl_array_clear(string tag, object obj = OBJECT_INVALID);
 /// Implementation
 
 // Private
-const string _sl_array_prefix = "sl_array_";
 const int _sl_array_log_enabled = TRUE;
-
-string _sl_array_get_local_name_base(string tag)
-{
-    return _sl_array_prefix + tag;
-}
 
 string _sl_array_get_local_name_size(string tag)
 {
-    return _sl_array_get_local_name_base(tag) + "_size";
+    return tag + "_size";
 }
 
 string _sl_array_get_local_name(string tag, int index)
 {
-    return _sl_array_get_local_name_base(tag) + "_" + IntToString(index);
+    return tag + "_" + IntToString(index);
 }
 
 object _sl_array_get_default_obj(object obj = OBJECT_INVALID)
@@ -51,8 +46,7 @@ void _sl_array_log(string tag, object obj, string msg)
     }
 
     string obj_name = GetTag(obj);
-    string base = _sl_array_get_local_name_base(tag);
-    PrintString("[sl_array] [" + obj_name + "] [" + base + "] " + msg);
+    PrintString("[sl_array] [" + obj_name + "] [" + tag + "] " + msg);
 }
 
 string _sl_array_get_str_hash(string element)

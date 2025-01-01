@@ -4,10 +4,33 @@
 #include "nwnx_creature"
 #include "sl_common_lib"
 
-// Special variable prefix for storage variables.
-const string sl_storage_array = "sl_storage";
 // Special item in player inventory to store variables.
 const string sl_storage_item_tag = "faction_report";
+
+// Base storage
+int sl_storage_add_item(object item, object pc);
+int sl_storage_remove_item(object item, object pc);
+int sl_storage_get_size(object pc);
+// Return OBJECT_INVALID when index >= size or error. Copy item to inventory and remove it.
+object sl_storage_get_item(int index, object pc);
+void sl_storage_clear(object pc);
+
+// Store storage
+object sl_storage_create_store(object pc, string base_store_tag);
+void sl_storage_restore_store(object store, object pc);
+// NWNX_ON_STORE_REQUEST_SELL_BEFORE handler. NWNX_Events_SkipEvent after call.
+void sl_storage_sell_to_store(object store, object pc, object item);
+// NWNX_ON_STORE_REQUEST_BUY_BEFORE handler. NWNX_Events_SkipEvent after call.
+void sl_storage_buy_from_store(object store, object pc, object item);
+void sl_storage_save_store(object store, object pc);
+
+
+/// Implementation
+
+// Private
+
+// Special variable prefix for storage variables.
+const string sl_storage_array = "sl_storage";
 
 void _sl_storate_log(object pc, string msg)
 {
@@ -21,7 +44,7 @@ void _sl_storate_log_error(object pc, string msg)
     FloatingTextStringOnCreature("Storage error.", pc, FALSE);
 }
 
-// Base storage
+// Public
 
 int sl_storage_add_item(object item, object pc)
 {
@@ -58,7 +81,31 @@ int sl_storage_remove_item(object item, object pc)
     return TRUE;
 }
 
-// Store storage
+int sl_storage_get_size(object pc)
+{
+    object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
+    return sl_array_size(sl_storage_array, storage_item);
+}
+
+object sl_storage_get_item(int index, object pc)
+{
+    object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
+
+    string str_item = sl_array_at_str(sl_storage_array, index, storage_item);
+    object item = NWNX_Object_Deserialize(str_item);
+    if (item == OBJECT_INVALID)
+    {
+        _sl_storate_log_error(pc, "<" + GetTag(item) + "> NWNX_Object_Deserialize error.");
+    }
+    return item;
+}
+
+void sl_storage_clear(object pc)
+{
+    object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
+    sl_array_clear(sl_storage_array, storage_item);
+}
+
 
 void sl_storage_clear_store(object store)
 {
@@ -104,18 +151,15 @@ object sl_storage_create_store(object pc, string base_store_tag)
 
 void sl_storage_restore_store(object store, object pc)
 {
-    object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
-
-    int storage_size = sl_array_size(sl_storage_array, storage_item);
+    int storage_size = sl_storage_get_size(pc);
     string items_log;
     int i;
     for (i = 0; i < storage_size; i++)
     {
-        string str_item = sl_array_at_str(sl_storage_array, i, storage_item);
-        object item = NWNX_Object_Deserialize(str_item);
+        object item = sl_storage_get_item(i, pc);
         if (item == OBJECT_INVALID)
         {
-            _sl_storate_log_error(pc, "<" + GetTag(item) + "> NWNX_Object_Deserialize error.");
+            // Error was printed. Ignore.
             continue;
         }
 
@@ -123,19 +167,17 @@ void sl_storage_restore_store(object store, object pc)
         if (restored_item == OBJECT_INVALID)
         {
             _sl_storate_log_error(pc, "<" + GetTag(item) + "> CopyItem error.");
-            continue;
+        }
+        else
+        {
+            items_log += " " + GetTag(restored_item);
         }
 
-        items_log += " " + GetTag(item);
         DestroyObject(item);
-
-        // NWNX_Item_SetBaseGoldPieceValue(restored_item, 0);
-        // NWNX_Item_SetAddGoldPieceValue(restored_item, 0);
     }
     _sl_storate_log(pc, "Restore storage items " + IntToString(storage_size) + ": " + items_log);
 }
 
-// NWNX_ON_STORE_REQUEST_SELL_BEFORE handler. NWNX_Events_SkipEvent after call.
 void sl_storage_sell_to_store(object store, object pc, object item)
 {
     if (!GetIdentified(item))
@@ -163,7 +205,6 @@ void sl_storage_sell_to_store(object store, object pc, object item)
     }
 }
 
-// NWNX_ON_STORE_REQUEST_BUY_BEFORE handler. NWNX_Events_SkipEvent after call.
 void sl_storage_buy_from_store(object store, object pc, object item)
 {
     int remove_result = sl_storage_remove_item(item, pc);
@@ -176,25 +217,22 @@ void sl_storage_buy_from_store(object store, object pc, object item)
 
 void sl_storage_save_store(object store, object pc)
 {
-    object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
-
-    sl_array_clear(sl_storage_array, storage_item);
+    sl_storage_clear(pc);
     string items_log;
     object item = GetFirstItemInInventory(store);
     while (GetIsObjectValid(item))
     {
-        string str_item = NWNX_Object_Serialize(item);
-        if (str_item == "")
+        int add_result = sl_storage_add_item(item, pc);
+        if (!add_result)
         {
-            _sl_storate_log_error(pc, "<" + GetTag(item) + "> NWNX_Object_Serialize error.");
+            // Error was printed. Ignore.
             continue;
         }
 
-        sl_array_pushback_str(sl_storage_array, str_item, storage_item);
         items_log += " " + GetTag(item);
         DestroyObject(item);
         item = GetNextItemInInventory(store);
     }
-    int storage_size = sl_array_size(sl_storage_array, storage_item);
+    int storage_size = sl_storage_get_size(pc);
     _sl_storate_log(pc, "Save storage items " + IntToString(storage_size) + ": " + items_log);
 }

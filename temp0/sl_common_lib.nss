@@ -64,7 +64,7 @@ void _sl_array_set_str(string tag, int index, string element, object obj)
 {
     string element_name = _sl_array_get_local_name(tag, index);
     SetLocalString(obj, element_name, element);
-    _sl_array_log(tag, obj, "Set " + element_name);
+    _sl_array_log(tag, obj, "Set " + element_name + ": " + IntToString(HashString(element)));
 }
 
 void _sl_array_delete_str(string tag, int index, object obj)
@@ -111,8 +111,9 @@ string sl_array_at_str(string tag, int index, object obj = OBJECT_INVALID)
     obj = _sl_array_get_default_obj(obj);
 
     string element_name = _sl_array_get_local_name(tag, index);
-    _sl_array_log(tag, obj, "At  " + element_name);
-    return GetLocalString(obj, element_name);
+    string element = GetLocalString(obj, element_name);
+    _sl_array_log(tag, obj, "At  " + element_name + ": " + IntToString(HashString(element)));
+    return element;
 }
 
 int sl_array_find_str(string tag, string element, object obj = OBJECT_INVALID)
@@ -126,11 +127,11 @@ int sl_array_find_str(string tag, string element, object obj = OBJECT_INVALID)
         string it = sl_array_at_str(tag, index, obj);
         if (element == it)
         {
-            _sl_array_log(tag, obj, "Fnd " + IntToString(index));
+            _sl_array_log(tag, obj, "Fnd " + IntToString(index) + ": " + IntToString(HashString(element)));
             return index;
         }
     }
-    _sl_array_log(tag, obj, "Not " + IntToString(index));
+    _sl_array_log(tag, obj, "Not " + IntToString(index) + ": " + IntToString(HashString(element)));
     return -1;
 }
 

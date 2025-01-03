@@ -1,5 +1,4 @@
 #include "nwnx_store"
-#include "nwnx_object"
 #include "nwnx_item"
 #include "nwnx_creature"
 #include "sl_array_lib"
@@ -50,14 +49,7 @@ int sl_storage_add_item(object item, object pc)
 {
     object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
 
-    string str_item = NWNX_Object_Serialize(item);
-    if (str_item == "")
-    {
-        _sl_storate_log_error(pc, "<" + GetTag(item) + "> NWNX_Object_Serialize error.");
-        return FALSE;
-    }
-
-    sl_array_pushback_str(sl_storage_array, str_item, storage_item);
+    sl_array_pushback_obj(sl_storage_array, item, storage_item);
     int storage_size = sl_array_size(sl_storage_array, storage_item);
     _sl_storate_log(pc, "Add storage item " + IntToString(storage_size) + ": " + GetTag(item));
     return TRUE;
@@ -67,8 +59,7 @@ int sl_storage_remove_item(object item, object pc)
 {
     object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
 
-    string str_item = NWNX_Object_Serialize(item);
-    int index = sl_array_find_str(sl_storage_array, str_item, storage_item);
+    int index = sl_array_find_obj(sl_storage_array, item, storage_item);
     if (index == -1)
     {
         _sl_storate_log_error(pc, "<" + GetTag(item) + "> Item not found to remove.");
@@ -84,6 +75,7 @@ int sl_storage_remove_item(object item, object pc)
 int sl_storage_get_size(object pc)
 {
     object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
+
     return sl_array_size(sl_storage_array, storage_item);
 }
 
@@ -91,13 +83,7 @@ object sl_storage_get_item(int index, object pc)
 {
     object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
 
-    string str_item = sl_array_at_str(sl_storage_array, index, storage_item);
-    object item = NWNX_Object_Deserialize(str_item);
-    if (item == OBJECT_INVALID)
-    {
-        _sl_storate_log_error(pc, "<" + GetTag(item) + "> NWNX_Object_Deserialize error.");
-    }
-    return item;
+    return sl_array_at_obj(sl_storage_array, index, storage_item);
 }
 
 void sl_storage_clear(object pc)

@@ -1,6 +1,7 @@
+#include "nwnx_object"
 
 // Array. To permonently save data use item as obj.
-// Use string value <tag>_N and <tag>_size to store values.
+// Array uses string values for SetLocal* <tag>_N and <tag>_size to store values.
 
 string sl_array_at_str(string tag, int index, object obj = OBJECT_INVALID);
 void sl_array_pushback_str(string tag, string element, object obj = OBJECT_INVALID);
@@ -9,6 +10,16 @@ void sl_array_set_str(string tag, int index, string element, object obj = OBJECT
 
 int sl_array_at_int(string tag, int index, object obj = OBJECT_INVALID);
 void sl_array_pushback_int(string tag, int element, object obj = OBJECT_INVALID);
+int sl_array_find_int(string tag, int element, object obj = OBJECT_INVALID);
+
+float sl_array_at_flt(string tag, int index, object obj = OBJECT_INVALID);
+void sl_array_pushback_flt(string tag, float element, object obj = OBJECT_INVALID);
+int sl_array_find_flt(string tag, float element, object obj = OBJECT_INVALID);
+
+// Create copy of object to inventary and destroy it.
+object sl_array_at_obj(string tag, int index, object obj = OBJECT_INVALID);
+void sl_array_pushback_obj(string tag, object element, object obj = OBJECT_INVALID);
+int sl_array_find_obj(string tag, object element, object obj = OBJECT_INVALID);
 
 int sl_array_size(string tag, object obj = OBJECT_INVALID);
 void sl_array_erase(string tag, int index, object obj = OBJECT_INVALID);
@@ -93,7 +104,7 @@ void sl_array_set_str(string tag, int index, string element, object obj = OBJECT
     obj = _sl_array_get_default_obj(obj);
 
     int size = sl_array_size(tag, obj);
-    if (index >= size)
+    if (index >= size || index < 0)
     {
         return;
     }
@@ -117,6 +128,16 @@ void sl_array_pushback_int(string tag, int element, object obj = OBJECT_INVALID)
     sl_array_pushback_str(tag, IntToString(element), obj);
 }
 
+void sl_array_pushback_flt(string tag, float element, object obj = OBJECT_INVALID)
+{
+    sl_array_pushback_str(tag, FloatToString(element), obj);
+}
+
+void sl_array_pushback_obj(string tag, object element, object obj = OBJECT_INVALID)
+{
+    sl_array_pushback_str(tag, NWNX_Object_Serialize(element), obj);
+}
+
 
 string sl_array_at_str(string tag, int index, object obj = OBJECT_INVALID)
 {
@@ -138,6 +159,27 @@ int sl_array_at_int(string tag, int index, object obj = OBJECT_INVALID)
     return StringToInt(st);
 }
 
+float sl_array_at_flt(string tag, int index, object obj = OBJECT_INVALID)
+{
+    string st = sl_array_at_str(tag, index, obj);
+    if (st == "")
+    {
+        return 0.0;
+    }
+    return StringToFloat(st);
+}
+
+object sl_array_at_obj(string tag, int index, object obj = OBJECT_INVALID)
+{
+    string st = sl_array_at_str(tag, index, obj);
+    if (st == "")
+    {
+        return OBJECT_INVALID;
+    }
+    return NWNX_Object_Deserialize(st);
+}
+
+
 int sl_array_find_str(string tag, string element, object obj = OBJECT_INVALID)
 {
     obj = _sl_array_get_default_obj(obj);
@@ -157,12 +199,28 @@ int sl_array_find_str(string tag, string element, object obj = OBJECT_INVALID)
     return -1;
 }
 
+int sl_array_find_int(string tag, int element, object obj = OBJECT_INVALID)
+{
+    return sl_array_find_str(tag, IntToString(element), obj);
+}
+
+int sl_array_find_flt(string tag, float element, object obj = OBJECT_INVALID)
+{
+    return sl_array_find_str(tag, FloatToString(element), obj);
+}
+
+int sl_array_find_obj(string tag, object element, object obj = OBJECT_INVALID)
+{
+    return sl_array_find_str(tag, NWNX_Object_Serialize(element), obj);
+}
+
+
 void sl_array_erase(string tag, int index, object obj = OBJECT_INVALID)
 {
     obj = _sl_array_get_default_obj(obj);
 
     int size = sl_array_size(tag, obj);
-    if (index >= size)
+    if (index >= size || index < 0)
     {
         return;
     }

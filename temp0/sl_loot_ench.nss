@@ -420,7 +420,8 @@ int sl_get_chance(object holder)
     {
         // Container. Old value 2+2%
         int fail_count = GetLocalInt(loot_opener, "sl_loot_fail_count");
-        return fail_count + 24 - level / 2;
+        //return fail_count + 24 - level / 2;
+        return fail_count + 24 - level / 4;
     }
 
     // Creature
@@ -437,10 +438,12 @@ int sl_get_chance(object holder)
 
     if (GetLocalInt(holder, "sl_loot_boss"))
     {
-        return 50 - level;
+        //return 50 - level;
+        return 50 - level / 2;
     }
 
-    return 3 - level / 15;
+    //return 3 - level / 15;
+    return 4;
 }
 
 int sl_is_creature_loot(object holder)

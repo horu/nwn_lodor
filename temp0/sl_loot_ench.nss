@@ -415,10 +415,12 @@ int sl_get_chance(object holder)
     }
 
     int level = GetLocalInt(holder, "sl_loot_level");
-    if (GetLocalObject(holder, "sl_loot_opener") != OBJECT_INVALID)
+    object loot_opener = GetLocalObject(holder, "sl_loot_opener");
+    if (loot_opener != OBJECT_INVALID)
     {
         // Container. Old value 2+2%
-        return 24 - level / 2;
+        int fail_count = GetLocalInt(loot_opener, "sl_loot_fail_count");
+        return fail_count + 24 - level / 2;
     }
 
     // Creature
@@ -497,6 +499,7 @@ void sl_override_req_level(object holder)
 void main()
 {
     object holder = OBJECT_SELF;
+    object loot_opener = GetLocalObject(holder, "sl_loot_opener");
 
     SetLocalInt(holder, "sl_loot_level", sl_get_loot_level(holder));
     SetLocalInt(holder, "sl_loot_req_level", GetLocalInt(holder, "sl_loot_level"));
@@ -517,7 +520,14 @@ void main()
         {
             sl_create_ench_arm(holder);
         }
+        SetLocalInt(loot_opener, "sl_loot_fail_count", 0);
         //sl_override_req_level(holder);
+    }
+    else
+    {
+        // Dinamic increase chance
+        int fail_count = GetLocalInt(loot_opener, "sl_loot_fail_count");
+        SetLocalInt(loot_opener, "sl_loot_fail_count", fail_count + 1);
     }
     sl_print_to_log(holder);
     sl_clear_holder(holder);

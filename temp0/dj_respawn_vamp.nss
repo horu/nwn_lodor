@@ -22,7 +22,7 @@ void ApplyPenalty(object oDead)
 
 void main()
 {
-    object oPC = GetLastPlayerDied();
+    object oPC = OBJECT_SELF;
     location lDead = GetLocation(oPC);
     object oInfo = GetItemPossessedBy(oPC, "faction_report");
     SetLocalInt(oInfo, "ijustdied", 0);
@@ -93,7 +93,7 @@ void main()
             ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(GetMaxHitPoints(oPC)), oPC);
             RemoveEffects(oPC);
             SetLocalInt(oInfo, "preserve", 0);
-            ExecuteScript("dj_spawn_pnt", OBJECT_SELF);
+            ExecuteScript("dj_spawn_pnt", oPC);
         }
         else
         {
@@ -101,7 +101,7 @@ void main()
             ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(GetMaxHitPoints(oPC)), oPC);
             RemoveEffects(oPC);
             ApplyPenalty(oPC);
-            ExecuteScript("dj_spawn_pnt", OBJECT_SELF);
+            ExecuteScript("dj_spawn_pnt", oPC);
         }
     }
 }

@@ -20,12 +20,12 @@ void ApplyPenalty(object oDead)
 void main()
 {
     // DEBUG
-    //object oPC = GetLastRespawnButtonPresser();
-    object oPC = OBJECT_SELF;
+    object oPC = GetLastRespawnButtonPresser();
+    //object oPC = OBJECT_SELF;
 
     if (GetSubRace(oPC) == "Vampire")
     {
-        ExecuteScript("dj_respawn_vamp", OBJECT_SELF);
+        ExecuteScript("dj_respawn_vamp", oPC);
     }
     else
     {
@@ -50,7 +50,7 @@ void main()
             ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(GetMaxHitPoints(oPC)), oPC);
             RemoveEffects(oPC);
             SetLocalInt(oInfo, "preserve", 0);
-            ExecuteScript("dj_spawn_pnt", OBJECT_SELF);
+            ExecuteScript("dj_spawn_pnt", oPC);
         }
         else
         {
@@ -58,7 +58,7 @@ void main()
             ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectHeal(GetMaxHitPoints(oPC)), oPC);
             RemoveEffects(oPC);
             if (GetHitDice(oPC) > 3) { ApplyPenalty(oPC); }
-            ExecuteScript("dj_spawn_pnt", OBJECT_SELF);
+            ExecuteScript("dj_spawn_pnt", oPC);
         }
     }
 }

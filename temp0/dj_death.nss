@@ -94,8 +94,8 @@ void main()
             SetLocalInt(oPlayer, "NW_G_Playerhasbeenbad", 10); // * Player bad
             SetStandardFactionReputation(STANDARD_FACTION_DEFENDER, 80, oPlayer);
         }
+        PopUpGUIPanel(oPlayer, GUI_PANEL_PLAYER_DEATH);
         // DEBUG
-        //PopUpGUIPanel(oPlayer,GUI_PANEL_PLAYER_DEATH);
-        DelayCommand(1.0, ExecuteScript("dj_respawn", oPlayer));
+        //DelayCommand(1.0, ExecuteScript("dj_respawn", oPlayer));
     }
 }

@@ -6,11 +6,9 @@
 
 void main()
 {
-    struct NWNX_Redis_PubSubMessageData data = NWNX_Redis_GetPubSubMessageData();
+  struct NWNX_Redis_PubSubMessageData data = NWNX_Redis_GetPubSubMessageData();
 
-    WriteTimestampedLogEntry(
-        "Pubsub Event: channel=" + data.channel +
-        " message=" + data.message);
+  WriteTimestampedLogEntry("Pubsub Event: channel=" + data.channel +
+    " message=" + data.message);
 }
-
 /// @}

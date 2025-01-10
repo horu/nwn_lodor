@@ -74,7 +74,7 @@ start_nwserver() {
         --name nwserver \
         --platform=linux/amd64 \
         -d \
-        ghcr.io/nwnxee/unified:09544eb
+        ghcr.io/nwnxee/unified:9e849cc
     echo $(date) nwserver started
 }
 

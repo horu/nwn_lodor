@@ -49,9 +49,7 @@ int SQLite_GetTimeStamp()
 
 struct SQLite_MillisecondTimeStamp SQLite_GetMillisecondTimeStamp()
 {
-    sqlquery query = SqlPrepareQueryObject(
-        GetModule(),
-        "SELECT STRFTIME('%s', 'now'), SUBSTR(STRFTIME('%f', 'now'), 4)");
+    sqlquery query = SqlPrepareQueryObject(GetModule(), "SELECT STRFTIME('%s', 'now'), SUBSTR(STRFTIME('%f', 'now'), 4)");
     SqlStep(query);
     struct SQLite_MillisecondTimeStamp t;
     t.seconds = SqlGetInt(query, 0);

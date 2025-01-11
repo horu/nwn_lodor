@@ -189,6 +189,7 @@ int sl_get_chance(object holder)
         race == RACIAL_TYPE_BEAST ||
         race == RACIAL_TYPE_MAGICAL_BEAST ||
         race == RACIAL_TYPE_VERMIN ||
+        race == RACIAL_TYPE_OUTSIDER ||
         race == RACIAL_TYPE_INVALID)
     {
         // Filter animals and others.

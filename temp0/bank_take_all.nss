@@ -1,9 +1,9 @@
 void main()
 {
     object oPC = GetPCSpeaker();
-    object oMoney = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
+    object oMoney = GetItemPossessedBy(oPC, "faction_report");
 
-    int nGold = GetLocalInt(oMoney, "money");
+    int nGold = GetLocalInt(oMoney, "sl_money");
 
     if (nGold == 0)
     {
@@ -13,6 +13,6 @@ void main()
     else
     {
         GiveGoldToCreature(oPC, nGold);
-        SetLocalInt(oMoney, "money", 0);
+        SetLocalInt(oMoney, "sl_money", 0);
     }
 }

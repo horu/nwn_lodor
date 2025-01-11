@@ -1,10 +1,10 @@
 void main()
 {
     object oPC = GetPCSpeaker();
-    object oMoney = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
+    object oMoney = GetItemPossessedBy(oPC, "faction_report");
 
     int nHave = GetGold(oPC);
-    int nGold = GetLocalInt(oMoney, "money");
+    int nGold = GetLocalInt(oMoney, "sl_money");
     int nAdjust = nHave + nGold;
 
     if (nAdjust > 500000)
@@ -14,6 +14,6 @@ void main()
     else
     {
         TakeGoldFromCreature(nHave, oPC, TRUE);
-        SetLocalInt(oMoney, "money", nAdjust);
+        SetLocalInt(oMoney, "sl_money", nAdjust);
     }
 }

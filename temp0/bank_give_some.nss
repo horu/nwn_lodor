@@ -1,16 +1,17 @@
 void main()
 {
     object oPC = GetPCSpeaker();
-    object oMoney = GetItemInSlot(INVENTORY_SLOT_CARMOUR, oPC);
+    object oMoney = GetItemPossessedBy(oPC, "faction_report");
 
-    int nHave = GetLocalInt(oPC, "banker");
-    int nGold = GetLocalInt(oMoney, "money");
+    int nHave = StringToInt(GetLocalString(oPC, "sl_pc_chat_msg"));
+    //int nHave = GetLocalInt(oPC, "banker");
+    int nGold = GetLocalInt(oMoney, "sl_money");
     int nAdjust = nHave + nGold;
     int nReal = GetGold(oPC);
 
     if (nHave == 0)
     {
-        SendMessageToPC(oPC, "You must decide on an amount to transact.");
+        SendMessageToPC(oPC, "You must decide on an amount to transact. Speek how much.");
     }
 
     else
@@ -24,7 +25,7 @@ void main()
             else
             {
                 TakeGoldFromCreature(nHave, oPC, TRUE);
-                SetLocalInt(oMoney, "money", nAdjust);
+                SetLocalInt(oMoney, "sl_money", nAdjust);
             }
         }
 

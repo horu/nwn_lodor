@@ -145,7 +145,7 @@ string sl_array_at_str(string tag, int index, object obj = OBJECT_INVALID)
 
     string element_name = _sl_array_get_local_name(tag, index);
     string element = GetLocalString(obj, element_name);
-    _sl_array_log(tag, obj, "At  " + element_name + ": " + _sl_array_get_str_hash(element));
+    //_sl_array_log(tag, obj, "At  " + element_name + ": " + _sl_array_get_str_hash(element));
     return element;
 }
 

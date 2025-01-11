@@ -5,7 +5,7 @@ void main()
     object oTomb = GetObjectByTag(sTag);
     int pc_gold = GetGold(oPC);
 
-    int lost_gold = pc_gold / d100(1);
+    int lost_gold = pc_gold / d20(1);
     AssignCommand(oTomb, TakeGoldFromCreature(lost_gold, oPC, FALSE));
     DelayCommand(3.0, FloatingTextStringOnCreature("Lost gold " + IntToString(lost_gold), oPC, FALSE));
 
@@ -33,13 +33,6 @@ void main()
             continue;
         }
 
-        if (GetLocalInt(item, "insured"))
-        {
-            SetLocalInt(item, "insured", 0);
-            log_msg += "-INS ";
-            continue;
-        }
-
         int roll = d100(1);
         if (roll > chance)
         {
@@ -47,10 +40,18 @@ void main()
             continue;
         }
 
+        if (GetLocalInt(item, "insured"))
+        {
+            SetLocalInt(item, "insured", 0);
+            log_msg += "-INS ";
+            DelayCommand(3.2, FloatingTextStringOnCreature("Insured event for " + GetName(item), oPC, FALSE));
+            continue;
+        }
+
         log_msg += "-" + IntToString(roll) + "(" + GetTag(item) + ") ";
         object copy_item = CopyItem(item, oTomb, TRUE);
         DestroyObject(item);
-        DelayCommand(3.8, FloatingTextStringOnCreature("Lost item " + GetName(copy_item), oPC, FALSE));
+        DelayCommand(3.2, FloatingTextStringOnCreature("Lost item " + GetName(copy_item), oPC, FALSE));
     }
 
     PrintString(log_msg);

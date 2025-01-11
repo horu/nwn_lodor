@@ -8,7 +8,7 @@ void main()
 
     SetDeity(oPC, "");
     SetLocalInt(oInfo, "godlove", 0);
-    SetLocalInt(oInfo, "preserve", 0);
+    // sl: SetLocalInt(oInfo, "preserve", 0);
     DeleteLocalLocation(oInfo, "godmark");
 
     object oItem = GetFirstItemInInventory(oPC);

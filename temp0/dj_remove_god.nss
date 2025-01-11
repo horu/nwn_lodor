@@ -7,7 +7,7 @@ void main()
     object oInfo = GetItemPossessedBy(oPC, "faction_report");
 
     SetLocalInt(oInfo, "godlove", 0);
-    SetLocalInt(oInfo, "preserve", 0);
+    // sl: SetLocalInt(oInfo, "preserve", 0);
 
     object oItem2 = GetFirstItemInInventory(oPC);
     object oRingL = GetItemInSlot(INVENTORY_SLOT_LEFTRING, oPC);

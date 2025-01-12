@@ -21,6 +21,11 @@ object sl_array_AtObj(string tag, int index, object obj = OBJECT_INVALID);
 void sl_array_PushbackObj(string tag, object element, object obj = OBJECT_INVALID);
 int sl_array_FindObj(string tag, object element, object obj = OBJECT_INVALID);
 
+// Create pointer to object
+object sl_array_AtObjRef(string tag, int index, object obj = OBJECT_INVALID);
+void sl_array_PushbackObjRef(string tag, object element, object obj = OBJECT_INVALID);
+int sl_array_FindObjRef(string tag, object element, object obj = OBJECT_INVALID);
+
 int sl_array_Size(string tag, object obj = OBJECT_INVALID);
 void sl_array_Erase(string tag, int index, object obj = OBJECT_INVALID);
 void sl_array_Clear(string tag, object obj = OBJECT_INVALID);
@@ -138,6 +143,11 @@ void sl_array_PushbackObj(string tag, object element, object obj = OBJECT_INVALI
     sl_array_PushbackStr(tag, NWNX_Object_Serialize(element), obj);
 }
 
+void sl_array_PushbackObjRef(string tag, object element, object obj = OBJECT_INVALID)
+{
+    sl_array_PushbackStr(tag, ObjectToString(element), obj);
+}
+
 
 string sl_array_AtStr(string tag, int index, object obj = OBJECT_INVALID)
 {
@@ -179,6 +189,16 @@ object sl_array_AtObj(string tag, int index, object obj = OBJECT_INVALID)
     return NWNX_Object_Deserialize(st);
 }
 
+object sl_array_AtObjRef(string tag, int index, object obj = OBJECT_INVALID)
+{
+    string st = sl_array_AtStr(tag, index, obj);
+    if (st == "")
+    {
+        return OBJECT_INVALID;
+    }
+    return StringToObject(st);
+}
+
 
 int sl_array_FindStr(string tag, string element, object obj = OBJECT_INVALID)
 {
@@ -212,6 +232,11 @@ int sl_array_FindFlt(string tag, float element, object obj = OBJECT_INVALID)
 int sl_array_FindObj(string tag, object element, object obj = OBJECT_INVALID)
 {
     return sl_array_FindStr(tag, NWNX_Object_Serialize(element), obj);
+}
+
+int sl_array_FindObjRef(string tag, object element, object obj = OBJECT_INVALID)
+{
+    return sl_array_FindStr(tag, ObjectToString(element), obj);
 }
 
 

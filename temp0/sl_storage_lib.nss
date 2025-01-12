@@ -7,21 +7,21 @@
 const string sl_storage_item_tag = "faction_report";
 
 // Base storage
-int sl_storage_add_item(object item, object pc);
-int sl_storage_remove_item(object item, object pc);
-int sl_storage_get_size(object pc);
+int sl_storage_AddItem(object item, object pc);
+int sl_storage_RemoveItem(object item, object pc);
+int sl_storage_GetSize(object pc);
 // Return OBJECT_INVALID when index >= size or error. Copy item to inventory and remove it.
-object sl_storage_get_item(int index, object pc);
-void sl_storage_clear(object pc);
+object sl_storage_GetItem(int index, object pc);
+void sl_storage_Clear(object pc);
 
 // Store storage
-object sl_storage_create_store(object pc, string base_store_tag);
-void sl_storage_restore_store(object store, object pc);
+object sl_storage_CreateStore(object pc, string base_store_tag);
+void sl_storage_RestoreStore(object store, object pc);
 // NWNX_ON_STORE_REQUEST_SELL_BEFORE handler. NWNX_Events_SkipEvent after call.
-void sl_storage_sell_to_store(object store, object pc, object item);
+void sl_storage_SellToStore(object store, object pc, object item);
 // NWNX_ON_STORE_REQUEST_BUY_BEFORE handler. NWNX_Events_SkipEvent after call.
-void sl_storage_buy_from_store(object store, object pc, object item);
-void sl_storage_save_store(object store, object pc);
+void sl_storage_BuyFromStore(object store, object pc, object item);
+void sl_storage_SaveStore(object store, object pc);
 
 
 /// Implementation
@@ -31,69 +31,69 @@ void sl_storage_save_store(object store, object pc);
 // Special variable prefix for storage variables.
 const string sl_storage_array = "sl_storage";
 
-void _sl_storate_log(object pc, string msg)
+void _sl_storage_Log(object pc, string msg)
 {
     string name = GetName(pc);
     PrintString("[sl_storage] [" + name + "] " + msg);
 }
 
-void _sl_storate_log_error(object pc, string msg)
+void _sl_storage_Log_error(object pc, string msg)
 {
-    _sl_storate_log(pc, msg);
+    _sl_storage_Log(pc, msg);
     FloatingTextStringOnCreature("Storage error.", pc, FALSE);
 }
 
 // Public
 
-int sl_storage_add_item(object item, object pc)
+int sl_storage_AddItem(object item, object pc)
 {
     object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
 
-    sl_array_pushback_obj(sl_storage_array, item, storage_item);
-    int storage_size = sl_array_size(sl_storage_array, storage_item);
-    _sl_storate_log(pc, "Add storage item " + IntToString(storage_size) + ": " + GetTag(item));
+    sl_array_PushbackObj(sl_storage_array, item, storage_item);
+    int storage_size = sl_array_Size(sl_storage_array, storage_item);
+    _sl_storage_Log(pc, "Add storage item " + IntToString(storage_size) + ": " + GetTag(item));
     return TRUE;
 }
 
-int sl_storage_remove_item(object item, object pc)
+int sl_storage_RemoveItem(object item, object pc)
 {
     object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
 
-    int index = sl_array_find_obj(sl_storage_array, item, storage_item);
+    int index = sl_array_FindObj(sl_storage_array, item, storage_item);
     if (index == -1)
     {
-        _sl_storate_log_error(pc, "<" + GetTag(item) + "> Item not found to remove.");
+        _sl_storage_Log_error(pc, "<" + GetTag(item) + "> Item not found to remove.");
         return FALSE;
     }
 
-    sl_array_erase(sl_storage_array, index, storage_item);
-    int storage_size = sl_array_size(sl_storage_array, storage_item);
-    _sl_storate_log(pc, "Remove storage item " + IntToString(storage_size) + ": " + GetTag(item));
+    sl_array_Erase(sl_storage_array, index, storage_item);
+    int storage_size = sl_array_Size(sl_storage_array, storage_item);
+    _sl_storage_Log(pc, "Remove storage item " + IntToString(storage_size) + ": " + GetTag(item));
     return TRUE;
 }
 
-int sl_storage_get_size(object pc)
+int sl_storage_GetSize(object pc)
 {
     object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
 
-    return sl_array_size(sl_storage_array, storage_item);
+    return sl_array_Size(sl_storage_array, storage_item);
 }
 
-object sl_storage_get_item(int index, object pc)
+object sl_storage_GetItem(int index, object pc)
 {
     object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
 
-    return sl_array_at_obj(sl_storage_array, index, storage_item);
+    return sl_array_AtObj(sl_storage_array, index, storage_item);
 }
 
-void sl_storage_clear(object pc)
+void sl_storage_Clear(object pc)
 {
     object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
-    sl_array_clear(sl_storage_array, storage_item);
+    sl_array_Clear(sl_storage_array, storage_item);
 }
 
 
-void sl_storage_clear_store(object store)
+void sl_storage_ClearStore(object store)
 {
     object item = GetFirstItemInInventory(store);
     while (GetIsObjectValid(item))
@@ -103,23 +103,23 @@ void sl_storage_clear_store(object store)
     }
 }
 
-object sl_storage_create_store(object pc, string base_store_tag)
+object sl_storage_CreateStore(object pc, string base_store_tag)
 {
     string store_tag = base_store_tag + "_" + GetName(pc);
     object store = GetObjectByTag(store_tag);
     if (store == OBJECT_INVALID)
     {
-        _sl_storate_log(pc, "Create store: " + store_tag);
+        _sl_storage_Log(pc, "Create store: " + store_tag);
         object base_store = GetObjectByTag(base_store_tag);
         if (base_store == OBJECT_INVALID)
         {
-            _sl_storate_log_error(pc, "Can not create base store: " + base_store_tag);
+            _sl_storage_Log_error(pc, "Can not create base store: " + base_store_tag);
             return OBJECT_INVALID;
         }
         object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
         if (storage_item == OBJECT_INVALID)
         {
-            _sl_storate_log_error(pc, "Not found storage item for pc: " + sl_storage_item_tag);
+            _sl_storage_Log_error(pc, "Not found storage item for pc: " + sl_storage_item_tag);
             return OBJECT_INVALID;
         }
 
@@ -130,19 +130,19 @@ object sl_storage_create_store(object pc, string base_store_tag)
         NWNX_Creature_SetMaxSellToStorePriceOverride(pc, store, 0);
         FloatingTextStringOnCreature("It is free to use storage.", pc, FALSE);
     }
-    sl_storage_clear_store(store);
+    sl_storage_ClearStore(store);
 
     return store;
 }
 
-void sl_storage_restore_store(object store, object pc)
+void sl_storage_RestoreStore(object store, object pc)
 {
-    int storage_size = sl_storage_get_size(pc);
+    int storage_size = sl_storage_GetSize(pc);
     string items_log;
     int i;
     for (i = 0; i < storage_size; i++)
     {
-        object item = sl_storage_get_item(i, pc);
+        object item = sl_storage_GetItem(i, pc);
         if (item == OBJECT_INVALID)
         {
             // Error was printed. Ignore.
@@ -152,7 +152,7 @@ void sl_storage_restore_store(object store, object pc)
         object restored_item = CopyItem(item, store, TRUE);
         if (restored_item == OBJECT_INVALID)
         {
-            _sl_storate_log_error(pc, "<" + GetTag(item) + "> CopyItem error.");
+            _sl_storage_Log_error(pc, "<" + GetTag(item) + "> CopyItem error.");
         }
         else
         {
@@ -161,10 +161,10 @@ void sl_storage_restore_store(object store, object pc)
 
         DestroyObject(item);
     }
-    _sl_storate_log(pc, "Restore storage items " + IntToString(storage_size) + ": " + items_log);
+    _sl_storage_Log(pc, "Restore storage items " + IntToString(storage_size) + ": " + items_log);
 }
 
-void sl_storage_sell_to_store(object store, object pc, object item)
+void sl_storage_SellToStore(object store, object pc, object item)
 {
     if (!GetIdentified(item))
     {
@@ -183,7 +183,7 @@ void sl_storage_sell_to_store(object store, object pc, object item)
         return;
     }
 
-    int add_result = sl_storage_add_item(item, pc);
+    int add_result = sl_storage_AddItem(item, pc);
     if (add_result)
     {
         CopyItem(item, store, TRUE);
@@ -191,9 +191,9 @@ void sl_storage_sell_to_store(object store, object pc, object item)
     }
 }
 
-void sl_storage_buy_from_store(object store, object pc, object item)
+void sl_storage_BuyFromStore(object store, object pc, object item)
 {
-    int remove_result = sl_storage_remove_item(item, pc);
+    int remove_result = sl_storage_RemoveItem(item, pc);
     if (remove_result)
     {
         CopyItem(item, pc, TRUE);
@@ -201,14 +201,14 @@ void sl_storage_buy_from_store(object store, object pc, object item)
     }
 }
 
-void sl_storage_save_store(object store, object pc)
+void sl_storage_SaveStore(object store, object pc)
 {
-    sl_storage_clear(pc);
+    sl_storage_Clear(pc);
     string items_log;
     object item = GetFirstItemInInventory(store);
     while (GetIsObjectValid(item))
     {
-        int add_result = sl_storage_add_item(item, pc);
+        int add_result = sl_storage_AddItem(item, pc);
         if (!add_result)
         {
             // Error was printed. Ignore.
@@ -219,6 +219,6 @@ void sl_storage_save_store(object store, object pc)
         DestroyObject(item);
         item = GetNextItemInInventory(store);
     }
-    int storage_size = sl_storage_get_size(pc);
-    _sl_storate_log(pc, "Save storage items " + IntToString(storage_size) + ": " + items_log);
+    int storage_size = sl_storage_GetSize(pc);
+    _sl_storage_Log(pc, "Save storage items " + IntToString(storage_size) + ": " + items_log);
 }

@@ -1,6 +1,6 @@
 #include "nwnx_events"
 
-void sl_destroy_body_bag(object bag)
+void sl_DestroyBodyBag(object bag)
 {
     object item = GetFirstItemInInventory(bag);
     while (GetIsObjectValid(item))
@@ -21,6 +21,6 @@ void main()
 
     if (GetTag(closed_object) == "BodyBag")
     {
-        DelayCommand(60.0, sl_destroy_body_bag(closed_object));
+        DelayCommand(60.0, sl_DestroyBodyBag(closed_object));
     }
 }

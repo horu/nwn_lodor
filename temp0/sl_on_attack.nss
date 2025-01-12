@@ -1,6 +1,6 @@
 #include "nwnx_damage"
 
-int sl_is_hit(struct NWNX_Damage_AttackEventData attack_data)
+int sl_IsHit(struct NWNX_Damage_AttackEventData attack_data)
 {
     if (attack_data.iToHitRoll == 20)
     {
@@ -19,12 +19,12 @@ int sl_is_hit(struct NWNX_Damage_AttackEventData attack_data)
     return FALSE;
 }
 
-int sl_is_miss(struct NWNX_Damage_AttackEventData attack_data)
+int sl_IsMiss(struct NWNX_Damage_AttackEventData attack_data)
 {
     return attack_data.iAttackResult == 4 && attack_data.iToHitRoll != 1;
 }
 
-void sl_print_info(object npc, object pc)
+void sl_PrintInfo(object npc, object pc)
 {
     string ab_msg = "";
     int i;
@@ -53,7 +53,7 @@ void sl_print_info(object npc, object pc)
     SendMessageToPC(pc, msg);
 }
 
-void sl_calculate_ab_ac(object attacker, struct NWNX_Damage_AttackEventData attack_data)
+void sl_CalculateAbAc(object attacker, struct NWNX_Damage_AttackEventData attack_data)
 {
     if (attack_data.iAttackType == 65002) //Attack of Opportunity
     {
@@ -74,7 +74,7 @@ void sl_calculate_ab_ac(object attacker, struct NWNX_Damage_AttackEventData atta
         if (ab != attack_mod)
         {
             SetLocalInt(npc, local_name, attack_mod);
-            sl_print_info(npc, pc);
+            sl_PrintInfo(npc, pc);
             return;
         }
     }
@@ -85,22 +85,22 @@ void sl_calculate_ab_ac(object attacker, struct NWNX_Damage_AttackEventData atta
         string local_min = "sl_ac_min_" + GetName(pc);
         string local_max = "sl_ac_max_" + GetName(pc);
 
-        if (sl_is_hit(attack_data))
+        if (sl_IsHit(attack_data))
         {
             int max_ac = GetLocalInt(npc, local_max);
             if (!max_ac || max_ac > attack_value)
             {
                 SetLocalInt(npc, local_max, attack_value);
-                sl_print_info(npc, pc);
+                sl_PrintInfo(npc, pc);
                 return;
             }
         }
-        else if (sl_is_miss(attack_data))
+        else if (sl_IsMiss(attack_data))
         {
             if (GetLocalInt(npc, local_min) < attack_value + 1)
             {
                 SetLocalInt(npc, local_min, attack_value + 1);
-                sl_print_info(npc, pc);
+                sl_PrintInfo(npc, pc);
                 return;
             }
         }
@@ -108,7 +108,7 @@ void sl_calculate_ab_ac(object attacker, struct NWNX_Damage_AttackEventData atta
         // Print every round
         if (attack_num == 1)
         {
-            sl_print_info(npc, pc);
+            sl_PrintInfo(npc, pc);
         }
     }
 }
@@ -118,5 +118,5 @@ void main()
     struct NWNX_Damage_AttackEventData attack_data = NWNX_Damage_GetAttackEventData();
 
     object attacker = OBJECT_SELF;
-    sl_calculate_ab_ac(attacker, attack_data);
+    sl_CalculateAbAc(attacker, attack_data);
 }

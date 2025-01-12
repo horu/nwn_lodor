@@ -47,14 +47,14 @@ void add_ench_wep_props(object item, int level)
 
 void add_ench_item(object store, int index, int level)
 {
-    object item = sl_ench_create_wep(store, index);
+    object item = sl_ench_CreateWep(store, index);
     add_ench_wep_props(item, level);
     PrintString("[store_ench] Create wep lvl " + IntToString(level) + "/" + IntToString(index));
 }
 
 void add_ench_items(object store)
 {
-    int wep_list_size = sl_ench_get_wep_list_size();
+    int wep_list_size = sl_ench_GetWepListSize();
     int level;
     for (level = 2; level <= 10; level += 2)
     {

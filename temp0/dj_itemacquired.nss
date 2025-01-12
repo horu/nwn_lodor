@@ -1,6 +1,6 @@
 #include "x2_inc_itemprop"
 
-void sl_add_food_to_pouch(object oItem, object oPC)
+void sl_AddFoodToPouch(object oItem, object oPC)
 {
     object oPouch = GetItemPossessedBy(oPC, "food_pouch");
     if (oPouch == OBJECT_INVALID)
@@ -38,7 +38,7 @@ void main()
     object oPC = GetModuleItemAcquiredBy();
 
     // Add food to puch
-    sl_add_food_to_pouch(oItem, oPC);
+    sl_AddFoodToPouch(oItem, oPC);
 
     if (GetRacialType(oPC) == IP_CONST_RACIALTYPE_FEY)
     {

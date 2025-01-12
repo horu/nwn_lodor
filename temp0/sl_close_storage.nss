@@ -5,5 +5,5 @@ void main()
     object storage = OBJECT_SELF;
     object pc = GetLastClosedBy();
 
-    //sl_storage_save(storage, pc);
+    //sl_storage_Save(storage, pc);
 }

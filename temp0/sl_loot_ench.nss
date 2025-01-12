@@ -4,7 +4,7 @@
 #include "nwnx_itemprop"
 #include "nwnx_item"
 
-void sl_print_to_log(object holder)
+void sl_PrintToLog(object holder)
 {
     object item = GetLocalObject(holder, "sl_loot_item");
     object opener = GetLocalObject(holder, "sl_loot_opener");
@@ -50,7 +50,7 @@ void sl_print_to_log(object holder)
     PrintString(msg);
 }
 
-void sl_clear_holder(object holder)
+void sl_ClearHolder(object holder)
 {
     DeleteLocalObject(holder, "sl_loot_item");
     DeleteLocalObject(holder, "sl_loot_opener");
@@ -62,13 +62,13 @@ void sl_clear_holder(object holder)
     DeleteLocalInt(holder, "sl_loot_boss");
 }
 
-void sl_create_ench_wep(object holder)
+void sl_CreateEnchWep(object holder)
 {
-    int random = Random(sl_ench_get_wep_list_size());
+    int random = Random(sl_ench_GetWepListSize());
 
-    object item = sl_ench_create_wep(holder, random);
-    SetLocalString(holder, "enchant", sl_ench_get_wep_tag(random));
-    SetLocalInt(holder, "enchantwep", sl_ench_get_wep_type(random));
+    object item = sl_ench_CreateWep(holder, random);
+    SetLocalString(holder, "enchant", sl_ench_GetWepTag(random));
+    SetLocalInt(holder, "enchantwep", sl_ench_GetWepType(random));
     SetLocalObject(holder, "sl_loot_item", item);
 
     ExecuteScript("loot_ench_wep", holder);
@@ -76,7 +76,7 @@ void sl_create_ench_wep(object holder)
 
 const string sl_ench_arm_list = "sl_ench_arm";
 
-void sl_create_ench_arm(object holder)
+void sl_CreateEnchArm(object holder)
 {
     // if (GetIsPC(oPC) && GetSubRace(oPC) == "Minotaur")
     // {
@@ -111,42 +111,42 @@ void sl_create_ench_arm(object holder)
     //         else if (nRandom == 10) { SetLocalString(oPC, "enchant", "eq_ogre_litm2"); }
     //     }
     // }
-    if (!sl_array_size(sl_ench_arm_list))
+    if (!sl_array_Size(sl_ench_arm_list))
     {
-        sl_array_pushback_str(sl_ench_arm_list, "ench_helm1");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_tunic");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_scale");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_hide");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_chain");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_bplate");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_sleat");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_padd");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_leat");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_cshirt");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_smail");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_hplate");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_fplate");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_band");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_robe2");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_robe1");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_helm");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_tshield");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_shield");
-        sl_array_pushback_str(sl_ench_arm_list, "ench_lshield");
-        sl_array_pushback_str(sl_ench_arm_list, "sl_ench_amulet");
-        sl_array_pushback_str(sl_ench_arm_list, "sl_ench_belt");
-        sl_array_pushback_str(sl_ench_arm_list, "sl_ench_boots");
-        sl_array_pushback_str(sl_ench_arm_list, "sl_ench_bracer");
-        sl_array_pushback_str(sl_ench_arm_list, "sl_ench_cloak");
-        sl_array_pushback_str(sl_ench_arm_list, "sl_ench_ring");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_helm1");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_tunic");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_scale");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_hide");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_chain");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_bplate");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_sleat");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_padd");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_leat");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_cshirt");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_smail");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_hplate");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_fplate");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_band");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_robe2");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_robe1");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_helm");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_tshield");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_shield");
+        sl_array_PushbackStr(sl_ench_arm_list, "ench_lshield");
+        sl_array_PushbackStr(sl_ench_arm_list, "sl_ench_amulet");
+        sl_array_PushbackStr(sl_ench_arm_list, "sl_ench_belt");
+        sl_array_PushbackStr(sl_ench_arm_list, "sl_ench_boots");
+        sl_array_PushbackStr(sl_ench_arm_list, "sl_ench_bracer");
+        sl_array_PushbackStr(sl_ench_arm_list, "sl_ench_cloak");
+        sl_array_PushbackStr(sl_ench_arm_list, "sl_ench_ring");
 
-        PrintString("[ench] Created ench arm list: " + IntToString(sl_array_size(sl_ench_arm_list)));
+        PrintString("[ench] Created ench arm list: " + IntToString(sl_array_Size(sl_ench_arm_list)));
     }
 
-    int random = Random(sl_array_size(sl_ench_arm_list));
+    int random = Random(sl_array_Size(sl_ench_arm_list));
 
-    string item_tag = sl_array_at_str(sl_ench_arm_list, random);
-    object item = sl_create_ench_item(holder, item_tag);
+    string item_tag = sl_array_AtStr(sl_ench_arm_list, random);
+    object item = sl_ench_CreateEnchItem(holder, item_tag);
     SetLocalString(holder, "enchant", item_tag);
     SetLocalObject(holder, "sl_loot_item", item);
 
@@ -164,7 +164,7 @@ void sl_create_ench_arm(object holder)
     ExecuteScript("loot_ench_arm", holder);
 }
 
-int sl_get_chance(object holder)
+int sl_GetChance(object holder)
 {
     int chance = GetLocalInt(holder, "sl_loot_chance");
     if (chance)
@@ -206,13 +206,13 @@ int sl_get_chance(object holder)
     return 4;
 }
 
-int sl_is_creature_loot(object holder)
+int sl_IsCreatureLoot(object holder)
 {
     object opener = GetLocalObject(holder, "sl_loot_opener");
     return opener == OBJECT_INVALID;
 }
 
-int sl_get_level(object creature)
+int sl_GetLevel(object creature)
 {
     int level = GetHitDice(creature);
     if (level > 40)
@@ -222,12 +222,12 @@ int sl_get_level(object creature)
     return level;
 }
 
-int sl_get_loot_level(object holder)
+int sl_GetLootLevel(object holder)
 {
-    if (sl_is_creature_loot(holder))
+    if (sl_IsCreatureLoot(holder))
     {
         // holder is creature, not container.
-        return sl_get_level(holder);
+        return sl_GetLevel(holder);
     }
 
     // Container. Set max level by mobs.
@@ -240,10 +240,10 @@ int sl_get_loot_level(object holder)
     }
 
     object opener = GetLocalObject(holder, "sl_loot_opener");
-    return sl_get_level(opener);
+    return sl_GetLevel(opener);
 }
 
-void sl_override_req_level(object holder)
+void sl_OverrideReqLevel(object holder)
 {
     object item = GetLocalObject(holder, "sl_loot_item");
     int req_level = GetLocalInt(holder, "sl_loot_req_level");
@@ -264,9 +264,9 @@ void main()
     object holder = OBJECT_SELF;
     object loot_opener = GetLocalObject(holder, "sl_loot_opener");
 
-    SetLocalInt(holder, "sl_loot_level", sl_get_loot_level(holder));
+    SetLocalInt(holder, "sl_loot_level", sl_GetLootLevel(holder));
     SetLocalInt(holder, "sl_loot_req_level", GetLocalInt(holder, "sl_loot_level"));
-    SetLocalInt(holder, "sl_loot_chance", sl_get_chance(holder));
+    SetLocalInt(holder, "sl_loot_chance", sl_GetChance(holder));
     SetLocalInt(holder, "sl_loot_chance_roll", d100(1));
     if (GetLocalInt(holder, "sl_loot_chance_roll") <= GetLocalInt(holder, "sl_loot_chance"))
     {
@@ -277,14 +277,14 @@ void main()
 
         if (GetLocalInt(holder, "sl_loot_type") == 1)
         {
-            sl_create_ench_wep(holder);
+            sl_CreateEnchWep(holder);
         }
         else
         {
-            sl_create_ench_arm(holder);
+            sl_CreateEnchArm(holder);
         }
         SetLocalInt(loot_opener, "sl_loot_fail_count", 0);
-        //sl_override_req_level(holder);
+        //sl_OverrideReqLevel(holder);
     }
     else
     {
@@ -292,6 +292,6 @@ void main()
         int fail_count = GetLocalInt(loot_opener, "sl_loot_fail_count");
         SetLocalInt(loot_opener, "sl_loot_fail_count", fail_count + 1);
     }
-    sl_print_to_log(holder);
-    sl_clear_holder(holder);
+    sl_PrintToLog(holder);
+    sl_ClearHolder(holder);
 }

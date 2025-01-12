@@ -1,4 +1,4 @@
-int sl_get_level(object creature)
+int sl_GetLevel(object creature)
 {
     int level = GetHitDice(creature);
     if (level > 40)
@@ -12,7 +12,7 @@ void main()
 {
     object creature = OBJECT_SELF;
 
-    int level = sl_get_level(creature);
+    int level = sl_GetLevel(creature);
     object area = GetArea(creature);
     int area_level_sum = GetLocalInt(area, "sl_loot_level_sum");
     int area_level_count = GetLocalInt(area, "sl_loot_level_count");

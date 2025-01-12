@@ -9,7 +9,7 @@ void main()
 
     if (GetStringLeft(GetTag(store), 10) == "sl_storage")
     {
-        sl_storage_buy_from_store(store, pc, item);
+        sl_storage_BuyFromStore(store, pc, item);
         NWNX_Events_SkipEvent();
         return;
     }

@@ -2,7 +2,6 @@
 
 int sl_ench_GetWepListSize();
 object sl_ench_CreateWep(object holder, int index);
-int sl_ench_GetWepType(int index);
 
 int sl_ench_GetArmListSize();
 object sl_ench_CreateArm(object holder, int index);
@@ -133,8 +132,6 @@ object sl_ench_CreateEnchItem(object holder, string item_tag)
 }
 
 const string sl_ench_wep_list = "sl_ench_wep";
-const string sl_ench_wep_type_list = "sl_ench_wep_type";
-
 const string sl_ench_arm_list = "sl_ench_arm";
 
 void sl_ench_CreateArmList()
@@ -215,116 +212,43 @@ void sl_ench_CreateWepList()
     }
 
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_bsword"); // Enchanted Bastard Sword
-    // sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-    //
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_sickl"); // Enchanted Sickle
-    // sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_haxe"); // Enchanted Handaxe
-    sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_gaxe"); // Enchanted Greataxe
-    sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_baxe"); // Enchanted Battleaxe
-    sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_dagger"); // Enchanted Dagger
-    sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_gsword"); // Enchanted Greatsword
-    sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_lsword"); // Enchanted Longsword
-    sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-    //
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_katana"); // Enchanted Katana
-    // sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_rapier"); // Enchanted Rapier
-    sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_scim"); // Enchanted Scimitar
-    sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-    //
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_ssword"); // Enchanted Short Sword
-    // sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-    //
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_halb"); // Enchanted Halberd
-    // sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_scyt"); // Enchanted Scythe
-    sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-    //
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_spear"); // Enchanted Spear
-    // sl_array_PushbackInt(sl_ench_wep_type_list, 4);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_kama"); // Enchanted Kama
-    sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_kukri"); // Enchanted Kukri
-    sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-    //
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_dmace"); // Enchanted Dire Mace
-    // sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-    //
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_daxe"); // Enchanted Double Axe
-    // sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_qstf"); // Enchanted Quarterstaff
-    sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_dsword"); // Enchanted Two-Bladed Sword
-    sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_club"); // Enchanted Club
-    sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-    //
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_lflail"); // Enchanted Light Flail
-    // sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-    //
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_hflail"); // Enchanted Heavy Flail
-    // sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-    //
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_hamm"); // Enchanted Light Hammer
-    // sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_whamm"); // Enchanted Warhammer
-    sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-    //
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_mace"); // Enchanted Mace
-    // sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_mstar"); // Enchanted Morningstar
-    sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-    //
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_whip"); // Enchanted Whip
-    // sl_array_PushbackInt(sl_ench_wep_type_list, 5);
-    //
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_sling"); // Enchanted Sling
-    // sl_array_PushbackInt(sl_ench_wep_type_list, 6);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_sbow"); // Enchanted Shortbow
-    sl_array_PushbackInt(sl_ench_wep_type_list, 7);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_lbow"); // Enchanted Longbow
-    sl_array_PushbackInt(sl_ench_wep_type_list, 7);
-    //
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_cbow"); // Enchanted Heavy Crossbow
-    // sl_array_PushbackInt(sl_ench_wep_type_list, 7);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "ench_lcbow"); // Enchanted Light Crossbow
-    sl_array_PushbackInt(sl_ench_wep_type_list, 7);
-    //
     sl_array_PushbackStr(sl_ench_wep_list, "sl_ench_gloves"); // Enchanted Gloves
-    sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-    //
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_dwaxe");
-    // sl_array_PushbackInt(sl_ench_wep_type_list, 3);
 
-    PrintString("[ench] Created ench wep list: " +
-        IntToString(sl_array_Size(sl_ench_wep_list)) + "/" +
-        IntToString(sl_array_Size(sl_ench_wep_type_list)));
+    PrintString("[ench] Created ench wep list: " + IntToString(sl_array_Size(sl_ench_wep_list)));
 }
 
 int sl_ench_GetWepListSize()
@@ -339,12 +263,6 @@ object sl_ench_CreateWep(object holder, int index)
 
     string item_tag = sl_array_AtStr(sl_ench_wep_list, index);
     return sl_ench_CreateEnchItem(holder, item_tag);
-}
-
-int sl_ench_GetWepType(int index)
-{
-    sl_ench_CreateWepList();
-    return sl_array_AtInt(sl_ench_wep_type_list, index);
 }
 
 int sl_ench_GetArmListSize()

@@ -20,7 +20,6 @@ void sl_PrintToLog(object holder)
     {
         msg += ", item OI";
     }
-    //msg += ", item_wep_type " + IntToString(GetLocalInt(holder, "enchantwep"));
     msg += ", lvl " + IntToString(GetLocalInt(holder, "sl_loot_level"));
     //msg += ", req " + IntToString(GetLocalInt(holder, "sl_loot_req_level"));
     msg += ", ch " + IntToString(GetLocalInt(holder, "sl_loot_chance_roll"));
@@ -68,7 +67,6 @@ void sl_CreateEnchWep(object holder)
 
     object item = sl_ench_CreateWep(holder, random);
     SetLocalString(holder, "enchant", GetTag(item));
-    SetLocalInt(holder, "enchantwep", sl_ench_GetWepType(random));
     SetLocalObject(holder, "sl_loot_item", item);
 
     ExecuteScript("loot_ench_wep", holder);

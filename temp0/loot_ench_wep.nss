@@ -1,200 +1,186 @@
 // This creates dynamic magical weapons
 #include "x2_inc_itemprop"
 
+const int chance = 10;
+
+int GetDamageBonus(int choice)
+{
+    if (choice <= 1)       { return IP_CONST_DAMAGEBONUS_1; }
+    else if (choice == 2)  { return IP_CONST_DAMAGEBONUS_2; }
+    else if (choice == 3)  { return IP_CONST_DAMAGEBONUS_1d4; }
+    else if (choice == 4)  { return IP_CONST_DAMAGEBONUS_3; }
+    else if (choice == 5)  { return IP_CONST_DAMAGEBONUS_2d4; }
+    else if (choice == 6)  { return IP_CONST_DAMAGEBONUS_1d6; }
+    else if (choice == 7)  { return IP_CONST_DAMAGEBONUS_4; }
+    else if (choice == 8)  { return IP_CONST_DAMAGEBONUS_5; }
+    else if (choice == 9)  { return IP_CONST_DAMAGEBONUS_2d6; }
+    else if (choice == 10) { return IP_CONST_DAMAGEBONUS_1d8; }
+    else if (choice == 11) { return IP_CONST_DAMAGEBONUS_6; }
+    else if (choice == 12) { return IP_CONST_DAMAGEBONUS_7; }
+    else if (choice == 13) { return IP_CONST_DAMAGEBONUS_2d8; }
+    else if (choice == 14) { return IP_CONST_DAMAGEBONUS_1d10; }
+    else if (choice == 15) { return IP_CONST_DAMAGEBONUS_1d12; }
+    else if (choice == 16) { return IP_CONST_DAMAGEBONUS_8; }
+    else if (choice == 17) { return IP_CONST_DAMAGEBONUS_9; }
+    else if (choice == 18) { return IP_CONST_DAMAGEBONUS_10; }
+    else if (choice == 19) { return IP_CONST_DAMAGEBONUS_2d10; }
+    else if (choice >= 20) { return IP_CONST_DAMAGEBONUS_2d12; }
+
+    return 0;
+}
+
+int GetDamageType()
+{
+    int choice = d12(1);
+    if (choice == 1)       { return IP_CONST_DAMAGETYPE_ACID; }
+    else if (choice == 2)  { return IP_CONST_DAMAGETYPE_BLUDGEONING; }
+    else if (choice == 3)  { return IP_CONST_DAMAGETYPE_COLD; }
+    else if (choice == 4)  { return IP_CONST_DAMAGETYPE_DIVINE; }
+    else if (choice == 5)  { return IP_CONST_DAMAGETYPE_ELECTRICAL; }
+    else if (choice == 6)  { return IP_CONST_DAMAGETYPE_FIRE; }
+    else if (choice == 7)  { return IP_CONST_DAMAGETYPE_MAGICAL; }
+    else if (choice == 8)  { return IP_CONST_DAMAGETYPE_NEGATIVE; }
+    else if (choice == 9)  { return IP_CONST_DAMAGETYPE_PIERCING; }
+    else if (choice == 10) { return IP_CONST_DAMAGETYPE_POSITIVE; }
+    else if (choice == 11) { return IP_CONST_DAMAGETYPE_SLASHING; }
+    else if (choice == 12) { return IP_CONST_DAMAGETYPE_SONIC; }
+
+    return 0;
+}
+
+int GetSneakAttackFeat(int level)
+{
+    int choice = level / 10;
+
+    if (choice <= 0)       { return IP_CONST_FEAT_SNEAK_ATTACK_1D6; }
+    else if (choice == 1)  { return IP_CONST_FEAT_SNEAK_ATTACK_2D6; }
+    else if (choice == 2)  { return IP_CONST_FEAT_SNEAK_ATTACK_3D6; }
+    else if (choice >= 3)  { return IP_CONST_FEAT_SNEAK_ATTACK_5D6; }
+
+    return 0;
+}
+
+int GetBonusFeat(int level, int is_ranged)
+{
+    if (is_ranged)
+    {
+        int choice = d6(1);
+        if (choice == 1)       { return IP_CONST_FEAT_DODGE; }
+        else if (choice == 2)  { return IP_CONST_FEAT_MOBILITY; }
+        else if (choice == 3)  { return IP_CONST_FEAT_USE_POISON; }
+        else if (choice == 4)  { return GetSneakAttackFeat(level); }
+        else if (choice == 5)  { return IP_CONST_FEAT_POINTBLANK; }
+        else if (choice == 6)  { return IP_CONST_FEAT_RAPID_SHOT; }
+    }
+
+    int choice = d12(1);
+    if (choice == 1)       { return IP_CONST_FEAT_DODGE; }
+    else if (choice == 2)  { return IP_CONST_FEAT_MOBILITY; }
+    else if (choice == 3)  { return IP_CONST_FEAT_USE_POISON; }
+    else if (choice == 4)  { return GetSneakAttackFeat(level); }
+    else if (choice == 5)  { return IP_CONST_FEAT_CLEAVE; }
+    else if (choice == 6)  { return IP_CONST_FEAT_WEAPFINESSE; }
+    else if (choice == 7)  { return IP_CONST_FEAT_TWO_WEAPON_FIGHTING; }
+    else if (choice == 8)  { return IP_CONST_FEAT_AMBIDEXTROUS; }
+    else if (choice == 9)  { return IP_CONST_FEAT_DISARM; }
+    else if (choice == 10) { return IP_CONST_FEAT_COMBAT_CASTING; }
+    else if (choice == 11) { return IP_CONST_FEAT_KNOCKDOWN; }
+    else if (choice == 12) { return IP_CONST_FEAT_POWERATTACK; }
+
+    return 0;
+}
+
+int GetExtraDamage()
+{
+    int choice = d3(1);
+    if (choice == 1)       { return IP_CONST_DAMAGETYPE_PIERCING; }
+    else if (choice == 2)  { return IP_CONST_DAMAGETYPE_SLASHING; }
+    else if (choice == 3)  { return IP_CONST_DAMAGETYPE_BLUDGEONING; }
+
+    return 0;
+}
+
+int GetAmmo()
+{
+    int choice = d10(1);
+    if (choice == 1)       { return IP_CONST_UNLIMITEDAMMO_BASIC; }
+    else if (choice == 2)  { return IP_CONST_UNLIMITEDAMMO_1D6COLD; }
+    else if (choice == 3)  { return IP_CONST_UNLIMITEDAMMO_1D6FIRE; }
+    else if (choice == 4)  { return IP_CONST_UNLIMITEDAMMO_1D6LIGHT; }
+    else if (choice == 5)  { return IP_CONST_UNLIMITEDAMMO_PLUS1; }
+    else if (choice == 6)  { return IP_CONST_UNLIMITEDAMMO_PLUS2; }
+    else if (choice == 7)  { return IP_CONST_UNLIMITEDAMMO_PLUS3; }
+    else if (choice == 8)  { return IP_CONST_UNLIMITEDAMMO_PLUS4; }
+    else if (choice == 9)  { return IP_CONST_UNLIMITEDAMMO_PLUS5; }
+    else if (choice == 10) { return IP_CONST_UNLIMITEDAMMO_BASIC; }
+
+    return 0;
+}
+
 void main()
 {
     object oPC = OBJECT_SELF;
     object oWeapon = GetLocalObject(oPC, "sl_loot_item");
-    int nLevel = GetLocalInt(oPC, "sl_loot_level");
+    int level = GetLocalInt(oPC, "sl_loot_level");
 
-    //
-    ////////////////////////////////////////////////////////////////////////////////
+    int modify_12 = level / 3;
+    if (modify_12 < 1) { modify_12 = 1; }
+    if (modify_12 > 12) { modify_12 = 12; }
+
+    int modify_20 = level / 2;
+    if (modify_20 < 1) { modify_20 = 1; }
+    if (modify_20 > 20) { modify_20 = 20; }
+    SetLocalInt(oPC, "enchatmod", modify_20);
+
+    SetItemCharges(oWeapon, 50);
 
     //Select an ability modifier////////////////////////////////////////////////////
+    if (d100(1) <= chance)
     {
-        int nRandom = d6(1);
-        if (nRandom == 1) { SetLocalInt(oPC, "enchability", IP_CONST_ABILITY_STR); }
-        else if (nRandom == 2) { SetLocalInt(oPC, "enchability", IP_CONST_ABILITY_DEX); }
-        else if (nRandom == 3) { SetLocalInt(oPC, "enchability", IP_CONST_ABILITY_CON); }
-        else if (nRandom == 4) { SetLocalInt(oPC, "enchability", IP_CONST_ABILITY_INT); }
-        else if (nRandom == 5) { SetLocalInt(oPC, "enchability", IP_CONST_ABILITY_WIS); }
-        else if (nRandom == 6) { SetLocalInt(oPC, "enchability", IP_CONST_ABILITY_CHA); }
+        int ability = d6(1) - 1;
+        itemproperty prop = ItemPropertyAbilityBonus(ability, modify_12);
+        IPSafeAddItemProperty(oWeapon, prop);
     }
-
-    int nModify1 = nLevel / 3;
-    if (nModify1 < 1) { SetLocalInt(oPC, "enchabiplus", 1); }
-    else if (nModify1 > 12) { SetLocalInt(oPC, "enchabiplus", 12); }
-    else { SetLocalInt(oPC, "enchabiplus", nModify1); }
-    ////////////////////////////////////////////////////////////////////////////////
-
-    //Select an attack bonus////////////////////////////////////////////////////////
-    int nModify2 = nLevel / 2;
-    if (nModify2 < 1) { SetLocalInt(oPC, "enchatmod", 1); }
-    else if (nModify2 > 20) { SetLocalInt(oPC, "enchatmod", 20); }
-    else { SetLocalInt(oPC, "enchatmod", nModify2); }
-
-    {
-        int nRandom = d6(1);
-        if (nRandom == 1) { SetLocalInt(oPC, "enchalign", IP_CONST_ALIGNMENTGROUP_CHAOTIC); }
-        else if (nRandom == 2) { SetLocalInt(oPC, "enchalign", IP_CONST_ALIGNMENTGROUP_EVIL); }
-        else if (nRandom == 3) { SetLocalInt(oPC, "enchalign", IP_CONST_ALIGNMENTGROUP_GOOD); }
-        else if (nRandom == 4) { SetLocalInt(oPC, "enchalign", IP_CONST_ALIGNMENTGROUP_LAWFUL); }
-        else { SetLocalInt(oPC, "enchalign", IP_CONST_ALIGNMENTGROUP_NEUTRAL); }
-    }
-
-    // FIX THE RACIAL TYPE /////////////////////////////////////////////////////////
-    if ((GetLocalInt(oPC, "enchrace") == 0) ||
-        (GetLocalInt(oPC, "enchrace") == IP_CONST_RACIALTYPE_ANIMAL) ||
-        (GetLocalInt(oPC, "enchrace") == IP_CONST_RACIALTYPE_FEY) ||
-        (GetLocalInt(oPC, "enchrace") == IP_CONST_RACIALTYPE_ELF) ||
-        (GetLocalInt(oPC, "enchrace") == IP_CONST_RACIALTYPE_GNOME) ||
-        (GetLocalInt(oPC, "enchrace") == IP_CONST_RACIALTYPE_HALFELF) ||
-        (GetLocalInt(oPC, "enchrace") == IP_CONST_RACIALTYPE_HALFLING) ||
-        (GetLocalInt(oPC, "enchrace") == IP_CONST_RACIALTYPE_HALFORC) ||
-        (GetLocalInt(oPC, "enchrace") == IP_CONST_RACIALTYPE_HUMAN) ||
-        (GetLocalInt(oPC, "enchrace") == IP_CONST_RACIALTYPE_HUMANOID_GOBLINOID) ||
-        (GetLocalInt(oPC, "enchrace") == IP_CONST_RACIALTYPE_HUMANOID_ORC))
-    {
-        {
-            int nRandom = d12(1);
-            if (nRandom == 1) { SetLocalInt(oPC, "enchrace", IP_CONST_RACIALTYPE_ABERRATION); }
-            else if (nRandom == 2) { SetLocalInt(oPC, "enchrace", IP_CONST_RACIALTYPE_BEAST); }
-            else if (nRandom == 3) { SetLocalInt(oPC, "enchrace", IP_CONST_RACIALTYPE_CONSTRUCT); }
-            else if (nRandom == 4) { SetLocalInt(oPC, "enchrace", IP_CONST_RACIALTYPE_DRAGON); }
-            else if (nRandom == 5) { SetLocalInt(oPC, "enchrace", IP_CONST_RACIALTYPE_GIANT); }
-            else if (nRandom == 6) { SetLocalInt(oPC, "enchrace", IP_CONST_RACIALTYPE_HUMANOID_MONSTROUS); }
-            else if (nRandom == 7) { SetLocalInt(oPC, "enchrace", IP_CONST_RACIALTYPE_UNDEAD); }
-            else if (nRandom == 8) { SetLocalInt(oPC, "enchrace", IP_CONST_RACIALTYPE_HUMANOID_REPTILIAN); }
-            else if (nRandom == 9) { SetLocalInt(oPC, "enchrace", IP_CONST_RACIALTYPE_MAGICAL_BEAST); }
-            else if (nRandom == 10) { SetLocalInt(oPC, "enchrace", IP_CONST_RACIALTYPE_OUTSIDER); }
-            else if (nRandom == 11) { SetLocalInt(oPC, "enchrace", IP_CONST_RACIALTYPE_VERMIN); }
-            else { SetLocalInt(oPC, "enchrace", IP_CONST_RACIALTYPE_ELEMENTAL); }
-        }
-    }
-    ////////////////////////////////////////////////////////////////////////////////
-
-    {
-        int nRandom = d8(1);
-        if (nRandom == 1) { SetLocalInt(oPC, "enchsalign", IP_CONST_ALIGNMENT_CE); }
-        else if (nRandom == 2) { SetLocalInt(oPC, "enchsalign", IP_CONST_ALIGNMENT_CG); }
-        else if (nRandom == 3) { SetLocalInt(oPC, "enchsalign", IP_CONST_ALIGNMENT_CN); }
-        else if (nRandom == 4) { SetLocalInt(oPC, "enchsalign", IP_CONST_ALIGNMENT_LE); }
-        else if (nRandom == 5) { SetLocalInt(oPC, "enchsalign", IP_CONST_ALIGNMENT_LG); }
-        else if (nRandom == 6) { SetLocalInt(oPC, "enchsalign", IP_CONST_ALIGNMENT_LN); }
-        else if (nRandom == 7) { SetLocalInt(oPC, "enchsalign", IP_CONST_ALIGNMENT_NE); }
-        else { SetLocalInt(oPC, "enchsalign", IP_CONST_ALIGNMENT_NG); }
-    }
-    ////////////////////////////////////////////////////////////////////////////////
 
     //Select a Feat Bonus///////////////////////////////////////////////////////////
+    if (d100(1) <= chance)
     {
-        int nRandom = d6(1);
-        if (nRandom == 1) { SetLocalInt(oPC, "enchfeat", IP_CONST_FEAT_ALERTNESS); }
-        else if (nRandom == 2) { SetLocalInt(oPC, "enchfeat", IP_CONST_FEAT_CLEAVE); }
-        else if (nRandom == 3) { SetLocalInt(oPC, "enchfeat", IP_CONST_FEAT_DODGE); }
-        else if (nRandom == 4) { SetLocalInt(oPC, "enchfeat", IP_CONST_FEAT_KNOCKDOWN); }
-        else if (nRandom == 5) { SetLocalInt(oPC, "enchfeat", IP_CONST_FEAT_COMBAT_CASTING); }
-        else { SetLocalInt(oPC, "enchfeat", IP_CONST_FEAT_POWERATTACK); }
+        itemproperty prop = ItemPropertyBonusFeat(GetBonusFeat(level, IPGetIsRangedWeapon(oWeapon)));
+        IPSafeAddItemProperty(oWeapon, prop);
     }
-    ////////////////////////////////////////////////////////////////////////////////
 
-    //Select a Feat Bonus For Ranged Weapons////////////////////////////////////////
+    //Add A Massive Critical
+    if (d100(1) <= chance)
     {
-        int nRandom = d4(1);
-        if (nRandom == 1) { SetLocalInt(oPC, "enchfeatr", IP_CONST_FEAT_ALERTNESS); }
-        else if (nRandom == 2) { SetLocalInt(oPC, "enchfeatr", IP_CONST_FEAT_DODGE); }
-        else { SetLocalInt(oPC, "enchfeatr", IP_CONST_FEAT_POINTBLANK); }
+        itemproperty prop = ItemPropertyMassiveCritical(GetDamageBonus(modify_20));
+        IPSafeAddItemProperty(oWeapon, prop);
     }
-    ////////////////////////////////////////////////////////////////////////////////
 
-    //Select a Damage Bonus/////////////////////////////////////////////////////////
-    int nModify3 = nLevel / 2;
-    if (nModify3 <= 1) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_1); }
-    else if (nModify3 == 2) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_2); }
-    else if (nModify3 == 3) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_1d4); }
-    else if (nModify3 == 4) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_3); }
-    else if (nModify3 == 5) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_2d4); }
-    else if (nModify3 == 6) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_1d6); }
-    else if (nModify3 == 7) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_4); }
-    else if (nModify3 == 8) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_5); }
-    else if (nModify3 == 9) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_2d6); }
-    else if (nModify3 == 10) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_1d8); }
-    else if (nModify3 == 11) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_6); }
-    else if (nModify3 == 12) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_7); }
-    else if (nModify3 == 13) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_2d8); }
-    else if (nModify3 == 14) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_1d10); }
-    else if (nModify3 == 15) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_1d12); }
-    else if (nModify3 == 16) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_8); }
-    else if (nModify3 == 17) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_9); }
-    else if (nModify3 == 18) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_10); }
-    else if (nModify3 == 19) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_2d10); }
-    else if (nModify3 >= 20) { SetLocalInt(oPC, "enchdambon", IP_CONST_DAMAGEBONUS_2d12); }
+    //Add Damage Modifier
+    if (d100(1) <= chance)
+    {
+        itemproperty prop = ItemPropertyDamageBonus(GetDamageType(), GetDamageBonus(modify_20));
+        IPSafeAddItemProperty(oWeapon, prop);
+    }
 
+    //Set the Extra Damage Bonus///////////////////////////////////////////////////////////
+    if (d100(1) <= chance)
     {
-        int nRandom = d12(1);
-        if (nRandom == 1) { SetLocalInt(oPC, "enchdamtyp", IP_CONST_DAMAGETYPE_ACID); }
-        else if (nRandom == 2) { SetLocalInt(oPC, "enchdamtyp", IP_CONST_DAMAGETYPE_BLUDGEONING); }
-        else if (nRandom == 3) { SetLocalInt(oPC, "enchdamtyp", IP_CONST_DAMAGETYPE_COLD); }
-        else if (nRandom == 4) { SetLocalInt(oPC, "enchdamtyp", IP_CONST_DAMAGETYPE_DIVINE); }
-        else if (nRandom == 5) { SetLocalInt(oPC, "enchdamtyp", IP_CONST_DAMAGETYPE_ELECTRICAL); }
-        else if (nRandom == 6) { SetLocalInt(oPC, "enchdamtyp", IP_CONST_DAMAGETYPE_FIRE); }
-        else if (nRandom == 7) { SetLocalInt(oPC, "enchdamtyp", IP_CONST_DAMAGETYPE_MAGICAL); }
-        else if (nRandom == 8) { SetLocalInt(oPC, "enchdamtyp", IP_CONST_DAMAGETYPE_NEGATIVE); }
-        else if (nRandom == 9) { SetLocalInt(oPC, "enchdamtyp", IP_CONST_DAMAGETYPE_PIERCING); }
-        else if (nRandom == 10) { SetLocalInt(oPC, "enchdamtyp", IP_CONST_DAMAGETYPE_POSITIVE); }
-        else if (nRandom == 11) { SetLocalInt(oPC, "enchdamtyp", IP_CONST_DAMAGETYPE_SLASHING); }
-        else { SetLocalInt(oPC, "enchdamtyp", IP_CONST_DAMAGETYPE_SONIC); }
+        itemproperty prop = ItemPropertyExtraRangeDamageType(GetExtraDamage());
+        IPSafeAddItemProperty(oWeapon, prop);
     }
-    ////////////////////////////////////////////////////////////////////////////////
-
-    //Set the Melee Bonus///////////////////////////////////////////////////////////
-    int nMelee = GetLocalInt(oPC, "enchantwep");
-    if (nMelee == 1)
+    if (d100(1) <= chance)
     {
-        {
-            int nRandom = d2(1);
-            if (nRandom == 1) { SetLocalInt(oPC, "enchmelee", IP_CONST_DAMAGETYPE_PIERCING); }
-            else if (nRandom == 2) { SetLocalInt(oPC, "enchmelee", IP_CONST_DAMAGETYPE_SLASHING); }
-        }
+        itemproperty prop = ItemPropertyExtraMeleeDamageType(GetExtraDamage());
+        IPSafeAddItemProperty(oWeapon, prop);
     }
-    else if (nMelee == 2)
-    {
-        SetLocalInt(oPC, "enchmelee", IP_CONST_DAMAGETYPE_BLUDGEONING);
-    }
-    else if (nMelee == 3)
-    {
-        SetLocalInt(oPC, "enchmelee", IP_CONST_DAMAGETYPE_SLASHING);
-    }
-    else if (nMelee == 4)
-    {
-        SetLocalInt(oPC, "enchmelee", IP_CONST_DAMAGETYPE_PIERCING);
-    }
-    //Set the Range Bonus///////////////////////////////////////////////////////////
-    if (nMelee == 6)
-    {
-        SetLocalInt(oPC, "enchmelee", IP_CONST_DAMAGETYPE_BLUDGEONING);
-    }
-    else if (nMelee == 7)
-    {
-        SetLocalInt(oPC, "enchmelee", IP_CONST_DAMAGETYPE_PIERCING);
-    }
-    ////////////////////////////////////////////////////////////////////////////////
 
     //Select the unlimited ammo if any//////////////////////////////////////////////
+    if (d100(1) <= chance)
     {
-        int nRandom = d10(1);
-        if (nRandom == 1) { SetLocalInt(oPC, "enchulammo", IP_CONST_UNLIMITEDAMMO_BASIC); }
-        else if (nRandom == 2) { SetLocalInt(oPC, "enchulammo", IP_CONST_UNLIMITEDAMMO_1D6COLD); }
-        else if (nRandom == 3) { SetLocalInt(oPC, "enchulammo", IP_CONST_UNLIMITEDAMMO_1D6FIRE); }
-        else if (nRandom == 4) { SetLocalInt(oPC, "enchulammo", IP_CONST_UNLIMITEDAMMO_1D6LIGHT); }
-        else if (nRandom == 5) { SetLocalInt(oPC, "enchulammo", IP_CONST_UNLIMITEDAMMO_PLUS1); }
-        else if (nRandom == 6) { SetLocalInt(oPC, "enchulammo", IP_CONST_UNLIMITEDAMMO_PLUS2); }
-        else if (nRandom == 7) { SetLocalInt(oPC, "enchulammo", IP_CONST_UNLIMITEDAMMO_PLUS3); }
-        else if (nRandom == 8) { SetLocalInt(oPC, "enchulammo", IP_CONST_UNLIMITEDAMMO_PLUS4); }
-        else if (nRandom == 9) { SetLocalInt(oPC, "enchulammo", IP_CONST_UNLIMITEDAMMO_PLUS5); }
-        else { SetLocalInt(oPC, "enchulammo", IP_CONST_UNLIMITEDAMMO_BASIC); }
+        itemproperty prop = ItemPropertyUnlimitedAmmo(GetAmmo());
+        IPSafeAddItemProperty(oWeapon, prop);
     }
-    ////////////////////////////////////////////////////////////////////////////////
 
     //Set the On Hit Properties/////////////////////////////////////////////////////
     {
@@ -221,13 +207,13 @@ void main()
         else { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_KNOCK); }
     }
 
-    if (nLevel < 6) { SetLocalInt(oPC, "enchonhitsv", IP_CONST_ONHIT_SAVEDC_14); }
-    else if ((nLevel > 5) && (nLevel < 11)) { SetLocalInt(oPC, "enchonhitsv", IP_CONST_ONHIT_SAVEDC_16); }
-    else if ((nLevel > 10) && (nLevel < 16)) { SetLocalInt(oPC, "enchonhitsv", IP_CONST_ONHIT_SAVEDC_18); }
-    else if ((nLevel > 15) && (nLevel < 21)) { SetLocalInt(oPC, "enchonhitsv", IP_CONST_ONHIT_SAVEDC_20); }
-    else if ((nLevel > 20) && (nLevel < 26)) { SetLocalInt(oPC, "enchonhitsv", IP_CONST_ONHIT_SAVEDC_22); }
-    else if ((nLevel > 25) && (nLevel < 36)) { SetLocalInt(oPC, "enchonhitsv", IP_CONST_ONHIT_SAVEDC_24); }
-    else if ((nLevel > 35) && (nLevel < 100)) { SetLocalInt(oPC, "enchonhitsv", IP_CONST_ONHIT_SAVEDC_26); }
+    if (level < 6) { SetLocalInt(oPC, "enchonhitsv", IP_CONST_ONHIT_SAVEDC_14); }
+    else if ((level > 5) && (level < 11)) { SetLocalInt(oPC, "enchonhitsv", IP_CONST_ONHIT_SAVEDC_16); }
+    else if ((level > 10) && (level < 16)) { SetLocalInt(oPC, "enchonhitsv", IP_CONST_ONHIT_SAVEDC_18); }
+    else if ((level > 15) && (level < 21)) { SetLocalInt(oPC, "enchonhitsv", IP_CONST_ONHIT_SAVEDC_20); }
+    else if ((level > 20) && (level < 26)) { SetLocalInt(oPC, "enchonhitsv", IP_CONST_ONHIT_SAVEDC_22); }
+    else if ((level > 25) && (level < 36)) { SetLocalInt(oPC, "enchonhitsv", IP_CONST_ONHIT_SAVEDC_24); }
+    else if ((level > 35) && (level < 100)) { SetLocalInt(oPC, "enchonhitsv", IP_CONST_ONHIT_SAVEDC_26); }
 
 
     if ((GetLocalInt(oPC, "enchonhit") == IP_CONST_ONHIT_BLINDNESS) ||
@@ -324,17 +310,17 @@ void main()
     ////////////////////////////////////////////////////////////////////////////////
 
     //Cast Spell////////////////////////////////////////////////////////////////////
-    if (nModify1 < 2) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_SINGLE_USE); }
-    else if (nModify1 == 2) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_5_CHARGES_PER_USE); }
-    else if (nModify1 == 3) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_4_CHARGES_PER_USE); }
-    else if (nModify1 == 4) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_3_CHARGES_PER_USE); }
-    else if (nModify1 == 5) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_2_CHARGES_PER_USE); }
-    else if (nModify1 == 6) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_1_CHARGE_PER_USE); }
-    else if (nModify1 == 7) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_1_CHARGE_PER_USE); }
-    else if (nModify1 == 8) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_1_CHARGE_PER_USE); }
-    else if (nModify1 == 9) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_1_USE_PER_DAY); }
-    else if (nModify1 == 10) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_2_USES_PER_DAY); }
-    else if (nModify1 == 11) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_3_USES_PER_DAY); }
+    if (modify_12 < 2) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_SINGLE_USE); }
+    else if (modify_12 == 2) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_5_CHARGES_PER_USE); }
+    else if (modify_12 == 3) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_4_CHARGES_PER_USE); }
+    else if (modify_12 == 4) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_3_CHARGES_PER_USE); }
+    else if (modify_12 == 5) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_2_CHARGES_PER_USE); }
+    else if (modify_12 == 6) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_1_CHARGE_PER_USE); }
+    else if (modify_12 == 7) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_1_CHARGE_PER_USE); }
+    else if (modify_12 == 8) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_1_CHARGE_PER_USE); }
+    else if (modify_12 == 9) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_1_USE_PER_DAY); }
+    else if (modify_12 == 10) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_2_USES_PER_DAY); }
+    else if (modify_12 == 11) { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_3_USES_PER_DAY); }
     else { SetLocalInt(oPC, "enchsptimes", IP_CONST_CASTSPELL_NUMUSES_5_USES_PER_DAY); }
 
     int nWhatSpell = GetLocalInt(oPC, "whatspell");
@@ -739,10 +725,6 @@ void main()
     }
     ////////////////////////////////////////////////////////////////////////////////
 
-    itemproperty uAmmo = ItemPropertyUnlimitedAmmo(GetLocalInt(oPC, "enchulammo"));
-    itemproperty rExtra = ItemPropertyExtraRangeDamageType(GetLocalInt(oPC, "enchmelee"));
-    itemproperty featModR = ItemPropertyBonusFeat(GetLocalInt(oPC, "enchfeatr"));
-    itemproperty propMassive = ItemPropertyMassiveCritical(GetLocalInt(oPC, "enchdambon"));
     itemproperty propRegen = ItemPropertyRegeneration(GetLocalInt(oPC, "enchatmod"));
     itemproperty propRegenV = ItemPropertyVampiricRegeneration(GetLocalInt(oPC, "enchatmod"));
     itemproperty propLight = ItemPropertyLight(GetLocalInt(oPC, "enchbright"), GetLocalInt(oPC, "enchcolor"));
@@ -753,60 +735,11 @@ void main()
         GetLocalInt(oPC, "enchonhit"),
         GetLocalInt(oPC, "enchonhitsv"),
         GetLocalInt(oPC, "enchonhitdur"));
-    itemproperty propSpell = ItemPropertyOnHitCastSpell(GetLocalInt(oPC, "enchspell"), nLevel);
-    itemproperty meleeMod = ItemPropertyExtraMeleeDamageType(GetLocalInt(oPC, "enchmelee"));
+    itemproperty propSpell = ItemPropertyOnHitCastSpell(GetLocalInt(oPC, "enchspell"), level);
     itemproperty enhanceBon = ItemPropertyEnhancementBonus(GetLocalInt(oPC, "enchatmod"));
-    itemproperty enhanceAln = ItemPropertyEnhancementBonusVsAlign(
-        GetLocalInt(oPC, "enchalign"),
-        GetLocalInt(oPC, "enchatmod"));
-    itemproperty enhanceRac = ItemPropertyEnhancementBonusVsRace(
-        GetLocalInt(oPC, "enchrace"),
-        GetLocalInt(oPC, "enchatmod"));
-    itemproperty enhanceSAl = ItemPropertyEnhancementBonusVsSAlign(
-        GetLocalInt(oPC, "enchalign"),
-        GetLocalInt(oPC, "enchatmod"));
-    itemproperty damageMod = ItemPropertyDamageBonus(GetLocalInt(oPC, "enchdamtyp"), GetLocalInt(oPC, "enchdambon"));
-    itemproperty damageModA = ItemPropertyDamageBonusVsAlign(
-        GetLocalInt(oPC, "enchalign"),
-        GetLocalInt(oPC, "enchdamtyp"),
-        GetLocalInt(oPC, "enchdambon"));
-    itemproperty damageModRace = ItemPropertyDamageBonusVsRace(
-        GetLocalInt(oPC, "enchrace"),
-        GetLocalInt(oPC, "enchdamtyp"),
-        GetLocalInt(oPC, "enchdambon"));
-    itemproperty damageModSA = ItemPropertyDamageBonusVsSAlign(
-        GetLocalInt(oPC, "enchsalign"),
-        GetLocalInt(oPC, "enchdamtyp"),
-        GetLocalInt(oPC, "enchdambon"));
-    itemproperty featMod = ItemPropertyBonusFeat(GetLocalInt(oPC, "enchfeat"));
     itemproperty attackMod = ItemPropertyAttackBonus(GetLocalInt(oPC, "enchatmod"));
-    itemproperty attackRace = ItemPropertyAttackBonusVsAlign(
-        GetLocalInt(oPC, "enchrace"),
-        GetLocalInt(oPC, "enchatmod"));
-    itemproperty attackAlign = ItemPropertyAttackBonusVsRace(
-        GetLocalInt(oPC, "enchalign"),
-        GetLocalInt(oPC, "enchatmod"));
-    itemproperty attackSAlign = ItemPropertyAttackBonusVsSAlign(
-        GetLocalInt(oPC, "enchsalign"),
-        GetLocalInt(oPC, "enchatmod"));
-    itemproperty abilityMod = ItemPropertyAbilityBonus(
-        GetLocalInt(oPC, "enchability"),
-        GetLocalInt(oPC, "enchabiplus"));
     itemproperty propCast = ItemPropertyCastSpell(GetLocalInt(oPC, "enchcast"), GetLocalInt(oPC, "enchsptimes"));
 
-    SetItemCharges(oWeapon, 50);
-
-    //Add Ability Mod
-    {
-        int nRandom = d100(1);
-        if (nRandom > 90) { IPSafeAddItemProperty(oWeapon, abilityMod); }
-    }
-
-    //Add A Massive Critical
-    {
-        int nRandom = d100(1);
-        if (nRandom > 80) { IPSafeAddItemProperty(oWeapon, propMassive); }
-    }
 
     //Add Regeneration
     {
@@ -839,27 +772,6 @@ void main()
         (GetLocalString(oPC, "enchant") == "ench_cbow") ||
         (GetLocalString(oPC, "enchant") == "ench_lcbow"))
     {
-        //Add Unlimited Ammo
-        {
-            int nRandom = d100(1);
-            if (nRandom > 94) { IPSafeAddItemProperty(oWeapon, uAmmo); }
-        }
-
-        //Add Bonus Feat
-        {
-            int nRandom = d100(1);
-            if (nRandom > 90) { IPSafeAddItemProperty(oWeapon, featModR); }
-        }
-
-        //Add Range Damage
-        if (nMelee != 5)
-        {
-            {
-                int nRandom = d100(1);
-                if (nRandom > 90) { IPSafeAddItemProperty(oWeapon, rExtra); }
-            }
-        }
-
         //Add Special
         {
             int nRandom = d100(1);
@@ -872,26 +784,12 @@ void main()
     //IF NOT A RANGED WEAPON//
     else
     {
-        //Add Bonus Feat
-        {
-            int nRandom = d100(1);
-            if (nRandom > 90) { IPSafeAddItemProperty(oWeapon, featMod); }
-        }
 
         //Add On Hit Bonus
         {
             int nRandom = d100(1);
             if (nRandom > 90) { IPSafeAddItemProperty(oWeapon, propSpell); }
             else if ((nRandom > 80) && (nRandom < 91)) { IPSafeAddItemProperty(oWeapon, onhitBon); }
-        }
-
-        //Add Melee Damage
-        if (nMelee != 5)
-        {
-            {
-                int nRandom = d100(1);
-                if (nRandom > 90) { IPSafeAddItemProperty(oWeapon, meleeMod); }
-            }
         }
 
         //Add Enchancement Bonus
@@ -902,16 +800,6 @@ void main()
             // else if ((nRandom > 90) && (nRandom < 96)) { IPSafeAddItemProperty(oWeapon, enhanceAln); }
             // else if ((nRandom > 85) && (nRandom < 91)) { IPSafeAddItemProperty(oWeapon, enhanceRac); }
             // else if ((nRandom > 80) && (nRandom < 86)) { IPSafeAddItemProperty(oWeapon, enhanceSAl); }
-        }
-
-        //Add Damage Modifier
-        {
-            int nRandom = d100(1);
-            if (nRandom > 90) { IPSafeAddItemProperty(oWeapon, damageMod); }
-            // if (nRandom > 95) { IPSafeAddItemProperty(oWeapon, damageMod); }
-            // else if ((nRandom > 90) && (nRandom < 96)) { IPSafeAddItemProperty(oWeapon, damageModA); }
-            // else if ((nRandom > 85) && (nRandom < 91)) { IPSafeAddItemProperty(oWeapon, damageModRace); }
-            // else if ((nRandom > 80) && (nRandom < 86)) { IPSafeAddItemProperty(oWeapon, damageModSA); }
         }
 
         //Add Special
@@ -926,7 +814,6 @@ void main()
 
 
     //If no properties are added...add an attack modifier
-    if (nMelee != 5)
     {
         if (GetIsItemPropertyValid(GetFirstItemProperty(oWeapon)) == FALSE)
         {
@@ -936,26 +823,13 @@ void main()
 
     //Delete all the variable used
     DeleteLocalString(oPC, "enchant");
-    DeleteLocalInt(oPC, "enchability");
-    DeleteLocalInt(oPC, "enchalign");
-    DeleteLocalInt(oPC, "enchrace");
-    DeleteLocalInt(oPC, "enchsalign");
-    DeleteLocalInt(oPC, "enchfeat");
-    DeleteLocalInt(oPC, "enchdambon");
-    DeleteLocalInt(oPC, "enchdamtyp");
-    DeleteLocalInt(oPC, "enchmelee");
     DeleteLocalInt(oPC, "enchonhit");
     DeleteLocalInt(oPC, "enchonhitsv");
     DeleteLocalInt(oPC, "enchonhitdur");
     DeleteLocalInt(oPC, "enchbright");
     DeleteLocalInt(oPC, "enchcolor");
     DeleteLocalInt(oPC, "enchspell");
-    DeleteLocalInt(oPC, "enchabiplus");
-    DeleteLocalInt(oPC, "enchabiplus");
     DeleteLocalInt(oPC, "enchatmod");
-    DeleteLocalInt(oPC, "enchfeatr");
-    DeleteLocalInt(oPC, "enchulammo");
-    DeleteLocalInt(oPC, "enchantwep");
     SetIdentified(oWeapon, FALSE);
-    SetLocalInt(oWeapon, "req_level", nLevel);
+    SetLocalInt(oWeapon, "req_level", level);
 }

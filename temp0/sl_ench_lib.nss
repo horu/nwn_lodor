@@ -214,113 +214,113 @@ void sl_ench_CreateWepList()
         return;
     }
 
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_bsword");
-    sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_sickl");
+    // sl_array_PushbackStr(sl_ench_wep_list, "ench_bsword"); // Enchanted Bastard Sword
+    // sl_array_PushbackInt(sl_ench_wep_type_list, 1);
+    //
+    // sl_array_PushbackStr(sl_ench_wep_list, "ench_sickl"); // Enchanted Sickle
+    // sl_array_PushbackInt(sl_ench_wep_type_list, 3);
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_haxe"); // Enchanted Handaxe
     sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_haxe");
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_gaxe"); // Enchanted Greataxe
     sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_baxe");
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_baxe"); // Enchanted Battleaxe
     sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_dagger");
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_dagger"); // Enchanted Dagger
     sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_gsword");
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_gsword"); // Enchanted Greatsword
     sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_lsword");
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_lsword"); // Enchanted Longsword
     sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_katana");
+    //
+    // sl_array_PushbackStr(sl_ench_wep_list, "ench_katana"); // Enchanted Katana
+    // sl_array_PushbackInt(sl_ench_wep_type_list, 1);
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_rapier"); // Enchanted Rapier
     sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_rapier");
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_scim"); // Enchanted Scimitar
     sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_scim");
-    sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_ssword");
-    sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_halb");
+    //
+    // sl_array_PushbackStr(sl_ench_wep_list, "ench_ssword"); // Enchanted Short Sword
+    // sl_array_PushbackInt(sl_ench_wep_type_list, 1);
+    //
+    // sl_array_PushbackStr(sl_ench_wep_list, "ench_halb"); // Enchanted Halberd
+    // sl_array_PushbackInt(sl_ench_wep_type_list, 3);
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_scyt"); // Enchanted Scythe
     sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_scyt");
+    //
+    // sl_array_PushbackStr(sl_ench_wep_list, "ench_spear"); // Enchanted Spear
+    // sl_array_PushbackInt(sl_ench_wep_type_list, 4);
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_kama"); // Enchanted Kama
     sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_spear");
-    sl_array_PushbackInt(sl_ench_wep_type_list, 4);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_kama");
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_kukri"); // Enchanted Kukri
     sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_kukri");
-    sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_dmace");
+    //
+    // sl_array_PushbackStr(sl_ench_wep_list, "ench_dmace"); // Enchanted Dire Mace
+    // sl_array_PushbackInt(sl_ench_wep_type_list, 2);
+    //
+    // sl_array_PushbackStr(sl_ench_wep_list, "ench_daxe"); // Enchanted Double Axe
+    // sl_array_PushbackInt(sl_ench_wep_type_list, 3);
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_qstf"); // Enchanted Quarterstaff
     sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_daxe");
-    sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_qstf");
-    sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_dsword");
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_dsword"); // Enchanted Two-Bladed Sword
     sl_array_PushbackInt(sl_ench_wep_type_list, 1);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_club");
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_club"); // Enchanted Club
     sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_lflail");
+    //
+    // sl_array_PushbackStr(sl_ench_wep_list, "ench_lflail"); // Enchanted Light Flail
+    // sl_array_PushbackInt(sl_ench_wep_type_list, 2);
+    //
+    // sl_array_PushbackStr(sl_ench_wep_list, "ench_hflail"); // Enchanted Heavy Flail
+    // sl_array_PushbackInt(sl_ench_wep_type_list, 2);
+    //
+    // sl_array_PushbackStr(sl_ench_wep_list, "ench_hamm"); // Enchanted Light Hammer
+    // sl_array_PushbackInt(sl_ench_wep_type_list, 2);
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_whamm"); // Enchanted Warhammer
     sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_hflail");
+    //
+    // sl_array_PushbackStr(sl_ench_wep_list, "ench_mace"); // Enchanted Mace
+    // sl_array_PushbackInt(sl_ench_wep_type_list, 2);
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_mstar"); // Enchanted Morningstar
     sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_hamm");
-    sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_whamm");
-    sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_mace");
-    sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_mstar");
-    sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_gaxe");
-    sl_array_PushbackInt(sl_ench_wep_type_list, 3);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_whip");
-    sl_array_PushbackInt(sl_ench_wep_type_list, 5);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_sling");
-    sl_array_PushbackInt(sl_ench_wep_type_list, 6);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_sbow");
+    //
+    // sl_array_PushbackStr(sl_ench_wep_list, "ench_whip"); // Enchanted Whip
+    // sl_array_PushbackInt(sl_ench_wep_type_list, 5);
+    //
+    // sl_array_PushbackStr(sl_ench_wep_list, "ench_sling"); // Enchanted Sling
+    // sl_array_PushbackInt(sl_ench_wep_type_list, 6);
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_sbow"); // Enchanted Shortbow
     sl_array_PushbackInt(sl_ench_wep_type_list, 7);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_lbow");
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_lbow"); // Enchanted Longbow
     sl_array_PushbackInt(sl_ench_wep_type_list, 7);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_cbow");
+    //
+    // sl_array_PushbackStr(sl_ench_wep_list, "ench_cbow"); // Enchanted Heavy Crossbow
+    // sl_array_PushbackInt(sl_ench_wep_type_list, 7);
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "ench_lcbow"); // Enchanted Light Crossbow
     sl_array_PushbackInt(sl_ench_wep_type_list, 7);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_lcbow");
-    sl_array_PushbackInt(sl_ench_wep_type_list, 7);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "sl_ench_gloves");
+    //
+    sl_array_PushbackStr(sl_ench_wep_list, "sl_ench_gloves"); // Enchanted Gloves
     sl_array_PushbackInt(sl_ench_wep_type_list, 2);
-
-    sl_array_PushbackStr(sl_ench_wep_list, "ench_dwaxe");
-    sl_array_PushbackInt(sl_ench_wep_type_list, 3);
+    //
+    // sl_array_PushbackStr(sl_ench_wep_list, "ench_dwaxe");
+    // sl_array_PushbackInt(sl_ench_wep_type_list, 3);
 
     PrintString("[ench] Created ench wep list: " +
         IntToString(sl_array_Size(sl_ench_wep_list)) + "/" +

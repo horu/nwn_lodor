@@ -59,15 +59,11 @@ void add_ench_items(object store)
     int level;
     for (level = 2; level <= 10; level += 2)
     {
-        add_ench_item(store, 4, level);
-        add_ench_item(store, 6, level);
-        add_ench_item(store, 8, level);
-        add_ench_item(store, 12, level);
-        add_ench_item(store, 14, level);
-        add_ench_item(store, 15, level);
-        add_ench_item(store, 27, level);
-        add_ench_item(store, 31, level);
-        add_ench_item(store, 34, level);
+        int wep_index;
+        for (wep_index = 0; wep_index < wep_list_size; wep_index++)
+        {
+            add_ench_item(store, wep_index, level);
+        }
     }
 }
 

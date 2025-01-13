@@ -14,7 +14,8 @@ void main()
     NWNX_Events_SubscribeEvent(NWNX_ON_STORE_REQUEST_BUY_BEFORE, "sl_on_buy");
     //NWNX_Events_SubscribeEvent(NWNX_ON_ITEM_EQUIP_BEFORE, "sl_on_test_event");
 
-    ExecuteScript("sl_store_ench", OBJECT_SELF);
+    // Take a long time
+    DelayCommand(1.0, ExecuteScript("sl_store_ench", OBJECT_SELF));
 
     // Put the Bosses & Special Creatures on the Map.
     CreateObject(OBJECT_TYPE_CREATURE, "ld_drub", GetLocation(GetWaypointByTag("drub_spawn")));

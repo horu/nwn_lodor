@@ -1,4 +1,84 @@
 // This checks a number of variables to determine what store to open for the PC.
+
+#include "nwnx_store"
+
+int sl_GetMarkUp(int level)
+{
+    if (level < 3)
+    {
+        return 350 - level * 50;
+    }
+    return 275 - level * 25;
+}
+
+int sl_GetMarkDown(int level)
+{
+    if (level < 7)
+    {
+        return 15 + level * 5;
+    }
+    return level * 10 - 15;
+}
+
+int sl_GetMaxBuyPrice(int level)
+{
+    return 320 + level * 20;
+}
+
+object sl_CreateStore(string base_store_tag, int level)
+{
+    string store_tag = base_store_tag + IntToString(level);
+
+    object base_store = GetObjectByTag(base_store_tag);
+    if (base_store == OBJECT_INVALID)
+    {
+        PrintString("[store] Can not create base store: " + base_store_tag);
+        return OBJECT_INVALID;
+    }
+
+    object store = CopyObject(base_store, GetLocation(base_store), OBJECT_INVALID, store_tag);
+    NWNX_Store_SetMarkUp(store, sl_GetMarkUp(level));
+    NWNX_Store_SetMarkDown(store, sl_GetMarkDown(level));
+    SetStoreIdentifyCost(store, sl_GetMarkUp(level));
+    SetStoreMaxBuyPrice(store, sl_GetMaxBuyPrice(level));
+
+    PrintString("[store] Created store: " + store_tag + "."
+        + " mark up: " + IntToString(NWNX_Store_GetMarkUp(store))
+        + " mark down: " + IntToString(NWNX_Store_GetMarkDown(store))
+        + " identify: " + IntToString(GetStoreIdentifyCost(store))
+        + " max buy: " + IntToString(GetStoreMaxBuyPrice(store))
+        );
+
+    return store;
+}
+
+int sl_GetStoreLevel(int feel)
+{
+    if ((feel > 0) && (feel < 3)) { return 2; }
+    else if ((feel > 2) && (feel < 5)) { return 3; }
+    else if ((feel > 4) && (feel < 7)) { return 4; }
+    else if ((feel > 6) && (feel < 9)) { return 5; }
+    else if ((feel > 8) && (feel < 11)) { return 6; }
+    else if ((feel > 10) && (feel < 13)) { return 7; }
+    else if ((feel > 12) && (feel < 18)) { return 8; }
+    else if (feel > 17) { return 9; }
+
+    return 1;
+}
+
+object sl_GetStore(string base_store_tag, int feel)
+{
+    int level = sl_GetStoreLevel(feel);
+    string store_tag = base_store_tag + IntToString(level);
+    object store = GetObjectByTag(store_tag);
+    if (store == OBJECT_INVALID)
+    {
+        store = sl_CreateStore(base_store_tag, level);
+    }
+
+    return store;
+}
+
 void main()
 {
     object oPC = GetPCSpeaker();
@@ -183,51 +263,8 @@ void main()
     {
         int nRace = GetLocalInt(oPC, "nHalfling");
         int nFeel = nRace + nTotal;
-        if (nFeel == 0)
-        {
-            object oStore = GetObjectByTag("dragforge1");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 0) && (nFeel < 3))
-        {
-            object oStore = GetObjectByTag("dragforge2");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 2) && (nFeel < 5))
-        {
-            object oStore = GetObjectByTag("dragforge3");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 4) && (nFeel < 7))
-        {
-            object oStore = GetObjectByTag("dragforge4");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 6) && (nFeel < 9))
-        {
-            object oStore = GetObjectByTag("dragforge5");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 8) && (nFeel < 11))
-        {
-            object oStore = GetObjectByTag("dragforge6");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 10) && (nFeel < 13))
-        {
-            object oStore = GetObjectByTag("dragforge7");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 12) && (nFeel < 18))
-        {
-            object oStore = GetObjectByTag("dragforge8");
-            OpenStore(oStore, oPC);
-        }
-        else if (nFeel > 17)
-        {
-            object oStore = GetObjectByTag("dragforge9");
-            OpenStore(oStore, oPC);
-        }
+        object oStore = sl_GetStore("dragforge", nFeel);
+        OpenStore(oStore, oPC);
     }
 
     // This is for the Thicket Tavern (Brushwood Store)
@@ -652,51 +689,8 @@ void main()
     {
         int nRace = GetLocalInt(oPC, "nHuman");
         int nFeel = nRace + nTotal;
-        if (nFeel == 0)
-        {
-            object oStore = GetObjectByTag("dragforge1");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 0) && (nFeel < 3))
-        {
-            object oStore = GetObjectByTag("dragforge2");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 2) && (nFeel < 5))
-        {
-            object oStore = GetObjectByTag("dragforge3");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 4) && (nFeel < 7))
-        {
-            object oStore = GetObjectByTag("dragforge4");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 6) && (nFeel < 9))
-        {
-            object oStore = GetObjectByTag("dragforge5");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 8) && (nFeel < 11))
-        {
-            object oStore = GetObjectByTag("dragforge6");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 10) && (nFeel < 13))
-        {
-            object oStore = GetObjectByTag("dragforge7");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 12) && (nFeel < 18))
-        {
-            object oStore = GetObjectByTag("dragforge8");
-            OpenStore(oStore, oPC);
-        }
-        else if (nFeel > 17)
-        {
-            object oStore = GetObjectByTag("dragforge9");
-            OpenStore(oStore, oPC);
-        }
+        object oStore = sl_GetStore("dragforge", nFeel);
+        OpenStore(oStore, oPC);
     }
 
     // This is for Barbley's Goods (Aldur Store)
@@ -1276,51 +1270,8 @@ void main()
     {
         int nRace = GetLocalInt(oPC, "nDwarf");
         int nFeel = nRace + nTotal;
-        if (nFeel == 0)
-        {
-            object oStore = GetObjectByTag("dragforge1");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 0) && (nFeel < 3))
-        {
-            object oStore = GetObjectByTag("dragforge2");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 2) && (nFeel < 5))
-        {
-            object oStore = GetObjectByTag("dragforge3");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 4) && (nFeel < 7))
-        {
-            object oStore = GetObjectByTag("dragforge4");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 6) && (nFeel < 9))
-        {
-            object oStore = GetObjectByTag("dragforge5");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 8) && (nFeel < 11))
-        {
-            object oStore = GetObjectByTag("dragforge6");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 10) && (nFeel < 13))
-        {
-            object oStore = GetObjectByTag("dragforge7");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 12) && (nFeel < 18))
-        {
-            object oStore = GetObjectByTag("dragforge8");
-            OpenStore(oStore, oPC);
-        }
-        else if (nFeel > 17)
-        {
-            object oStore = GetObjectByTag("dragforge9");
-            OpenStore(oStore, oPC);
-        }
+        object oStore = sl_GetStore("dragforge", nFeel);
+        OpenStore(oStore, oPC);
     }
 
     // This is for The Druid's Drink (Vegnar Store)
@@ -1462,57 +1413,13 @@ void main()
     {
         int nRace = GetLocalInt(oPC, "nDrow");
         int nFeel = nRace + nTotal;
-        if (nFeel == 0)
-        {
-            object oStore = GetObjectByTag("dragforge1");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 0) && (nFeel < 3))
-        {
-            object oStore = GetObjectByTag("dragforge2");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 2) && (nFeel < 5))
-        {
-            object oStore = GetObjectByTag("dragforge3");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 4) && (nFeel < 7))
-        {
-            object oStore = GetObjectByTag("dragforge4");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 6) && (nFeel < 9))
-        {
-            object oStore = GetObjectByTag("dragforge5");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 8) && (nFeel < 11))
-        {
-            object oStore = GetObjectByTag("dragforge6");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 10) && (nFeel < 13))
-        {
-            object oStore = GetObjectByTag("dragforge7");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 12) && (nFeel < 18))
-        {
-            object oStore = GetObjectByTag("dragforge8");
-            OpenStore(oStore, oPC);
-        }
-        else if (nFeel > 17)
-        {
-            object oStore = GetObjectByTag("dragforge9");
-            OpenStore(oStore, oPC);
-        }
-
-        else
+        if (nFeel < 0)
         {
             string sSayThis = "Sorry little one.  My wares are too big for you to use.";
             SpeakString(sSayThis);
         }
+        object oStore = sl_GetStore("dragforge", nFeel);
+        OpenStore(oStore, oPC);
     }
 
     // This is for the Provision Store (Drow Store)
@@ -1780,51 +1687,8 @@ void main()
     {
         int nRace = GetLocalInt(oPC, "nElf");
         int nFeel = nRace + nTotal;
-        if (nFeel == 0)
-        {
-            object oStore = GetObjectByTag("dragforge1");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 0) && (nFeel < 3))
-        {
-            object oStore = GetObjectByTag("dragforge2");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 2) && (nFeel < 5))
-        {
-            object oStore = GetObjectByTag("dragforge3");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 4) && (nFeel < 7))
-        {
-            object oStore = GetObjectByTag("dragforge4");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 6) && (nFeel < 9))
-        {
-            object oStore = GetObjectByTag("dragforge5");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 8) && (nFeel < 11))
-        {
-            object oStore = GetObjectByTag("dragforge6");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 10) && (nFeel < 13))
-        {
-            object oStore = GetObjectByTag("dragforge7");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 12) && (nFeel < 18))
-        {
-            object oStore = GetObjectByTag("dragforge8");
-            OpenStore(oStore, oPC);
-        }
-        else if (nFeel > 17)
-        {
-            object oStore = GetObjectByTag("dragforge9");
-            OpenStore(oStore, oPC);
-        }
+        object oStore = sl_GetStore("dragforge", nFeel);
+        OpenStore(oStore, oPC);
     }
 
     // This is for Forest's Friend (Faraldor Store)
@@ -2144,51 +2008,8 @@ void main()
     {
         int nRace = GetLocalInt(oPC, "nHalforc");
         int nFeel = nRace + nTotal;
-        if (nFeel == 0)
-        {
-            object oStore = GetObjectByTag("dragforge1");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 0) && (nFeel < 3))
-        {
-            object oStore = GetObjectByTag("dragforge2");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 2) && (nFeel < 5))
-        {
-            object oStore = GetObjectByTag("dragforge3");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 4) && (nFeel < 7))
-        {
-            object oStore = GetObjectByTag("dragforge4");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 6) && (nFeel < 9))
-        {
-            object oStore = GetObjectByTag("dragforge5");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 8) && (nFeel < 11))
-        {
-            object oStore = GetObjectByTag("dragforge6");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 10) && (nFeel < 13))
-        {
-            object oStore = GetObjectByTag("dragforge7");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 12) && (nFeel < 18))
-        {
-            object oStore = GetObjectByTag("dragforge8");
-            OpenStore(oStore, oPC);
-        }
-        else if (nFeel > 17)
-        {
-            object oStore = GetObjectByTag("dragforge9");
-            OpenStore(oStore, oPC);
-        }
+        object oStore = sl_GetStore("dragforge", nFeel);
+        OpenStore(oStore, oPC);
     }
 
     // This is for the Grogor Tavern
@@ -2373,51 +2194,8 @@ void main()
     {
         int nRace = GetLocalInt(oPC, "nGnome");
         int nFeel = nRace + nTotal;
-        if (nFeel == 0)
-        {
-            object oStore = GetObjectByTag("dragforge1");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 0) && (nFeel < 3))
-        {
-            object oStore = GetObjectByTag("dragforge2");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 2) && (nFeel < 5))
-        {
-            object oStore = GetObjectByTag("dragforge3");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 4) && (nFeel < 7))
-        {
-            object oStore = GetObjectByTag("dragforge4");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 6) && (nFeel < 9))
-        {
-            object oStore = GetObjectByTag("dragforge5");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 8) && (nFeel < 11))
-        {
-            object oStore = GetObjectByTag("dragforge6");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 10) && (nFeel < 13))
-        {
-            object oStore = GetObjectByTag("dragforge7");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 12) && (nFeel < 18))
-        {
-            object oStore = GetObjectByTag("dragforge8");
-            OpenStore(oStore, oPC);
-        }
-        else if (nFeel > 17)
-        {
-            object oStore = GetObjectByTag("dragforge9");
-            OpenStore(oStore, oPC);
-        }
+        object oStore = sl_GetStore("dragforge", nFeel);
+        OpenStore(oStore, oPC);
     }
 
     // This is for the Dedry Herbalist
@@ -2737,51 +2515,8 @@ void main()
     {
         int nRace = GetLocalInt(oPC, "nDuergar");
         int nFeel = nRace + nTotal;
-        if (nFeel == 0)
-        {
-            object oStore = GetObjectByTag("dragforge1");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 0) && (nFeel < 3))
-        {
-            object oStore = GetObjectByTag("dragforge2");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 2) && (nFeel < 5))
-        {
-            object oStore = GetObjectByTag("dragforge3");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 4) && (nFeel < 7))
-        {
-            object oStore = GetObjectByTag("dragforge4");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 6) && (nFeel < 9))
-        {
-            object oStore = GetObjectByTag("dragforge5");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 8) && (nFeel < 11))
-        {
-            object oStore = GetObjectByTag("dragforge6");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 10) && (nFeel < 13))
-        {
-            object oStore = GetObjectByTag("dragforge7");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 12) && (nFeel < 18))
-        {
-            object oStore = GetObjectByTag("dragforge8");
-            OpenStore(oStore, oPC);
-        }
-        else if (nFeel > 17)
-        {
-            object oStore = GetObjectByTag("dragforge9");
-            OpenStore(oStore, oPC);
-        }
+        object oStore = sl_GetStore("dragforge", nFeel);
+        OpenStore(oStore, oPC);
     }
 
     // This is for Duergar Mage
@@ -3049,51 +2784,8 @@ void main()
     {
         int nRace = GetLocalInt(oPC, "nSylvan");
         int nFeel = nRace + nTotal;
-        if (nFeel == 0)
-        {
-            object oStore = GetObjectByTag("dragforge1");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 0) && (nFeel < 3))
-        {
-            object oStore = GetObjectByTag("dragforge2");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 2) && (nFeel < 5))
-        {
-            object oStore = GetObjectByTag("dragforge3");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 4) && (nFeel < 7))
-        {
-            object oStore = GetObjectByTag("dragforge4");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 6) && (nFeel < 9))
-        {
-            object oStore = GetObjectByTag("dragforge5");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 8) && (nFeel < 11))
-        {
-            object oStore = GetObjectByTag("dragforge6");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 10) && (nFeel < 13))
-        {
-            object oStore = GetObjectByTag("dragforge7");
-            OpenStore(oStore, oPC);
-        }
-        else if ((nFeel > 12) && (nFeel < 18))
-        {
-            object oStore = GetObjectByTag("dragforge8");
-            OpenStore(oStore, oPC);
-        }
-        else if (nFeel > 17)
-        {
-            object oStore = GetObjectByTag("dragforge9");
-            OpenStore(oStore, oPC);
-        }
+        object oStore = sl_GetStore("dragforge", nFeel);
+        OpenStore(oStore, oPC);
     }
 
     // This is for the Sprite Mage Store

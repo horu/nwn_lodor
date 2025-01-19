@@ -1,4 +1,5 @@
 #include "x2_inc_itemprop"
+#include "nwnx_item"
 
 void sl_AddFoodToPouch(object oItem, object oPC)
 {
@@ -39,6 +40,11 @@ void main()
 
     // Add food to puch
     sl_AddFoodToPouch(oItem, oPC);
+
+    if (oItem != OBJECT_INVALID && NWNX_Item_GetMinEquipLevel(oItem) > 40)
+    {
+        NWNX_Item_SetMinEquipLevelOverride(oItem, 40);
+    }
 
     if (GetRacialType(oPC) == IP_CONST_RACIALTYPE_FEY)
     {

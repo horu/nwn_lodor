@@ -12,7 +12,8 @@ void main()
     NWNX_Events_SubscribeEvent(NWNX_ON_PLACEABLE_CLOSE_AFTER, "sl_on_plac_close");
     NWNX_Events_SubscribeEvent(NWNX_ON_STORE_REQUEST_SELL_BEFORE, "sl_on_sell");
     NWNX_Events_SubscribeEvent(NWNX_ON_STORE_REQUEST_BUY_BEFORE, "sl_on_buy");
-    //NWNX_Events_SubscribeEvent(NWNX_ON_ITEM_EQUIP_BEFORE, "sl_on_test_event");
+    NWNX_Events_SubscribeEvent(NWNX_ON_ITEM_USE_LORE_AFTER, "sl_on_identify");
+    NWNX_Events_SubscribeEvent(NWNX_ON_ITEM_PAY_TO_IDENTIFY_AFTER, "sl_on_identify");
 
     // Take a long time
     DelayCommand(1.0, ExecuteScript("sl_store_ench", OBJECT_SELF));

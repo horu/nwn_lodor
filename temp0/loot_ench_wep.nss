@@ -31,19 +31,16 @@ int GetDamageBonus(int choice)
 
 int GetDamageType()
 {
-    int choice = d12(1);
+    int choice = Random(8) + 1;
     if (choice == 1)       { return IP_CONST_DAMAGETYPE_ACID; }
-    else if (choice == 2)  { return IP_CONST_DAMAGETYPE_BLUDGEONING; }
+    else if (choice == 2)  { return IP_CONST_DAMAGETYPE_SONIC; }
     else if (choice == 3)  { return IP_CONST_DAMAGETYPE_COLD; }
     else if (choice == 4)  { return IP_CONST_DAMAGETYPE_DIVINE; }
     else if (choice == 5)  { return IP_CONST_DAMAGETYPE_ELECTRICAL; }
     else if (choice == 6)  { return IP_CONST_DAMAGETYPE_FIRE; }
     else if (choice == 7)  { return IP_CONST_DAMAGETYPE_MAGICAL; }
     else if (choice == 8)  { return IP_CONST_DAMAGETYPE_NEGATIVE; }
-    else if (choice == 9)  { return IP_CONST_DAMAGETYPE_PIERCING; }
-    else if (choice == 10) { return IP_CONST_DAMAGETYPE_POSITIVE; }
-    else if (choice == 11) { return IP_CONST_DAMAGETYPE_SLASHING; }
-    else if (choice == 12) { return IP_CONST_DAMAGETYPE_SONIC; }
+    else if (choice == 9)  { return IP_CONST_DAMAGETYPE_POSITIVE; }
 
     return 0;
 }
@@ -117,10 +114,45 @@ int GetAmmo()
     return 0;
 }
 
+int GetLightBrightness()
+{
+    int choice = d4(1);
+    if (choice == 1)       { return IP_CONST_LIGHTBRIGHTNESS_DIM; }
+    else if (choice == 2)  { return IP_CONST_LIGHTBRIGHTNESS_LOW; }
+    else if (choice == 3)  { return IP_CONST_LIGHTBRIGHTNESS_NORMAL; }
+    else if (choice == 4)  { return IP_CONST_LIGHTBRIGHTNESS_BRIGHT; }
+
+    return 0;
+}
+
+int GetLightColor()
+{
+    int choice = d8(1);
+    if (choice == 1) { return IP_CONST_LIGHTCOLOR_BLUE; }
+    else if (choice == 2) { return IP_CONST_LIGHTCOLOR_GREEN; }
+    else if (choice == 3) { return IP_CONST_LIGHTCOLOR_ORANGE; }
+    else if (choice == 4) { return IP_CONST_LIGHTCOLOR_PURPLE; }
+    else if (choice == 5) { return IP_CONST_LIGHTCOLOR_RED; }
+    else if (choice == 6) { return IP_CONST_LIGHTCOLOR_WHITE; }
+    else if (choice == 7) { return IP_CONST_LIGHTCOLOR_YELLOW; }
+    else if (choice == 8) { return IP_CONST_LIGHTCOLOR_WHITE; }
+
+    return 0;
+}
+
+itemproperty GetSpecialBonus()
+{
+    int choice = d3(1);
+    if (choice == 1) { return ItemPropertyFreeAction(); }
+    else if (choice == 2) { return ItemPropertyHolyAvenger(); }
+
+    return ItemPropertyHaste();
+}
+
 void main()
 {
     object oPC = OBJECT_SELF;
-    object oWeapon = GetLocalObject(oPC, "sl_loot_item");
+    object weapon = GetLocalObject(oPC, "sl_loot_item");
     int level = GetLocalInt(oPC, "sl_loot_level");
 
     int modify_12 = level / 3;
@@ -130,80 +162,31 @@ void main()
     int modify_20 = level / 2;
     if (modify_20 < 1) { modify_20 = 1; }
     if (modify_20 > 20) { modify_20 = 20; }
-    SetLocalInt(oPC, "enchatmod", modify_20);
 
-    SetItemCharges(oWeapon, 50);
-
-    //Select an ability modifier////////////////////////////////////////////////////
-    if (d100(1) <= chance)
-    {
-        int ability = d6(1) - 1;
-        itemproperty prop = ItemPropertyAbilityBonus(ability, modify_12);
-        IPSafeAddItemProperty(oWeapon, prop);
-    }
-
-    //Select a Feat Bonus///////////////////////////////////////////////////////////
-    if (d100(1) <= chance)
-    {
-        itemproperty prop = ItemPropertyBonusFeat(GetBonusFeat(level, IPGetIsRangedWeapon(oWeapon)));
-        IPSafeAddItemProperty(oWeapon, prop);
-    }
-
-    //Add A Massive Critical
-    if (d100(1) <= chance)
-    {
-        itemproperty prop = ItemPropertyMassiveCritical(GetDamageBonus(modify_20));
-        IPSafeAddItemProperty(oWeapon, prop);
-    }
-
-    //Add Damage Modifier
-    if (d100(1) <= chance)
-    {
-        itemproperty prop = ItemPropertyDamageBonus(GetDamageType(), GetDamageBonus(modify_20));
-        IPSafeAddItemProperty(oWeapon, prop);
-    }
-
-    //Set the Extra Damage Bonus///////////////////////////////////////////////////////////
-    if (d100(1) <= chance)
-    {
-        itemproperty prop = ItemPropertyExtraRangeDamageType(GetExtraDamage());
-        IPSafeAddItemProperty(oWeapon, prop);
-    }
-    if (d100(1) <= chance)
-    {
-        itemproperty prop = ItemPropertyExtraMeleeDamageType(GetExtraDamage());
-        IPSafeAddItemProperty(oWeapon, prop);
-    }
-
-    //Select the unlimited ammo if any//////////////////////////////////////////////
-    if (d100(1) <= chance)
-    {
-        itemproperty prop = ItemPropertyUnlimitedAmmo(GetAmmo());
-        IPSafeAddItemProperty(oWeapon, prop);
-    }
+    SetItemCharges(weapon, 50);
 
     //Set the On Hit Properties/////////////////////////////////////////////////////
     {
-        int nRandom = d20(1);
-        if (nRandom == 1) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_ABILITYDRAIN); }
-        else if (nRandom == 2) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_BLINDNESS); }
-        else if (nRandom == 3) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_CONFUSION); }
-        else if (nRandom == 4) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_DAZE); }
-        else if (nRandom == 5) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_DEAFNESS); }
-        else if (nRandom == 6) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_DISEASE); }
-        else if (nRandom == 7) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_DOOM); }
-        else if (nRandom == 8) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_FEAR); }
-        else if (nRandom == 9) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_HOLD); }
-        else if (nRandom == 10) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_ITEMPOISON); }
-        else if (nRandom == 11) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_SILENCE); }
-        else if (nRandom == 12) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_SLEEP); }
-        else if (nRandom == 13) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_SLOW); }
-        else if (nRandom == 14) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_STUN); }
-        else if (nRandom == 15) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_VORPAL); }
-        else if (nRandom == 16) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_WOUNDING); }
-        else if (nRandom == 17) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_DISPELMAGIC); }
-        else if (nRandom == 18) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_GREATERDISPEL); }
-        else if (nRandom == 19) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_LEVELDRAIN); }
+        int choice = d20(1);
+        if (choice == 1) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_ABILITYDRAIN); }
+        else if (choice == 2) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_BLINDNESS); }
+        else if (choice == 3) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_CONFUSION); }
+        else if (choice == 4) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_DAZE); }
+        else if (choice == 5) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_DEAFNESS); }
+        else if (choice == 6) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_DISEASE); }
+        else if (choice == 7) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_DOOM); }
+        else if (choice == 8) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_FEAR); }
+        else if (choice == 9) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_HOLD); }
+        else if (choice == 10) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_ITEMPOISON); }
+        else if (choice == 11) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_SILENCE); }
+        else if (choice == 12) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_SLEEP); }
+        else if (choice == 13) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_SLOW); }
+        else if (choice == 14) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_STUN); }
+        else if (choice == 15) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_VORPAL); }
+        else if (choice == 16) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_WOUNDING); }
+        else if (choice == 17) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_DISPELMAGIC); }
+        else if (choice == 18) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_GREATERDISPEL); }
+        else if (choice == 19) { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_LEVELDRAIN); }
         else { SetLocalInt(oPC, "enchonhit", IP_CONST_ONHIT_KNOCK); }
     }
 
@@ -229,84 +212,62 @@ void main()
         (GetLocalInt(oPC, "enchonhit") == IP_CONST_ONHIT_STUN))
     {
         {
-            int nRandom = d6(1);
-            if (nRandom == 1) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ONHIT_DURATION_10_PERCENT_4_ROUNDS); }
-            else if (nRandom == 2) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ONHIT_DURATION_10_PERCENT_4_ROUNDS); }
-            else if (nRandom == 3) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ONHIT_DURATION_25_PERCENT_3_ROUNDS); }
-            else if (nRandom == 4) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ONHIT_DURATION_5_PERCENT_5_ROUNDS); }
-            else if (nRandom == 5) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ONHIT_DURATION_50_PERCENT_2_ROUNDS); }
+            int choice = d6(1);
+            if (choice == 1) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ONHIT_DURATION_10_PERCENT_4_ROUNDS); }
+            else if (choice == 2) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ONHIT_DURATION_10_PERCENT_4_ROUNDS); }
+            else if (choice == 3) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ONHIT_DURATION_25_PERCENT_3_ROUNDS); }
+            else if (choice == 4) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ONHIT_DURATION_5_PERCENT_5_ROUNDS); }
+            else if (choice == 5) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ONHIT_DURATION_50_PERCENT_2_ROUNDS); }
             else { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ONHIT_DURATION_75_PERCENT_1_ROUND); }
         }
     }
     else if (GetLocalInt(oPC, "enchonhit") == IP_CONST_ONHIT_ABILITYDRAIN)
     {
         {
-            int nRandom = d6(1);
-            if (nRandom == 1) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ABILITY_STR); }
-            else if (nRandom == 2) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ABILITY_DEX); }
-            else if (nRandom == 3) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ABILITY_CON); }
-            else if (nRandom == 4) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ABILITY_INT); }
-            else if (nRandom == 5) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ABILITY_WIS); }
-            else if (nRandom == 6) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ABILITY_CHA); }
+            int choice = d6(1);
+            if (choice == 1) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ABILITY_STR); }
+            else if (choice == 2) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ABILITY_DEX); }
+            else if (choice == 3) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ABILITY_CON); }
+            else if (choice == 4) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ABILITY_INT); }
+            else if (choice == 5) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ABILITY_WIS); }
+            else if (choice == 6) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_ABILITY_CHA); }
         }
     }
     else if (GetLocalInt(oPC, "enchonhit") == IP_CONST_ONHIT_DISEASE)
     {
         {
-            int nRandom = d6(3);
-            if (nRandom == 3) { SetLocalInt(oPC, "enchonhitdur", DISEASE_BLINDING_SICKNESS); }
-            else if (nRandom == 4) { SetLocalInt(oPC, "enchonhitdur", DISEASE_BURROW_MAGGOTS); }
-            else if (nRandom == 5) { SetLocalInt(oPC, "enchonhitdur", DISEASE_CACKLE_FEVER); }
-            else if (nRandom == 6) { SetLocalInt(oPC, "enchonhitdur", DISEASE_DEMON_FEVER); }
-            else if (nRandom == 7) { SetLocalInt(oPC, "enchonhitdur", DISEASE_DEVIL_CHILLS); }
-            else if (nRandom == 8) { SetLocalInt(oPC, "enchonhitdur", DISEASE_DREAD_BLISTERS); }
-            else if (nRandom == 9) { SetLocalInt(oPC, "enchonhitdur", DISEASE_FILTH_FEVER); }
-            else if (nRandom == 10) { SetLocalInt(oPC, "enchonhitdur", DISEASE_GHOUL_ROT); }
-            else if (nRandom == 11) { SetLocalInt(oPC, "enchonhitdur", DISEASE_MINDFIRE); }
-            else if (nRandom == 12) { SetLocalInt(oPC, "enchonhitdur", DISEASE_MUMMY_ROT); }
-            else if (nRandom == 13) { SetLocalInt(oPC, "enchonhitdur", DISEASE_RED_ACHE); }
-            else if (nRandom == 14) { SetLocalInt(oPC, "enchonhitdur", DISEASE_SHAKES); }
-            else if (nRandom == 15) { SetLocalInt(oPC, "enchonhitdur", DISEASE_SLIMY_DOOM); }
-            else if (nRandom == 16) { SetLocalInt(oPC, "enchonhitdur", DISEASE_SOLDIER_SHAKES); }
-            else if (nRandom == 17) { SetLocalInt(oPC, "enchonhitdur", DISEASE_ZOMBIE_CREEP); }
-            else if (nRandom == 18) { SetLocalInt(oPC, "enchonhitdur", DISEASE_VERMIN_MADNESS); }
+            int choice = d6(3);
+            if (choice == 3) { SetLocalInt(oPC, "enchonhitdur", DISEASE_BLINDING_SICKNESS); }
+            else if (choice == 4) { SetLocalInt(oPC, "enchonhitdur", DISEASE_BURROW_MAGGOTS); }
+            else if (choice == 5) { SetLocalInt(oPC, "enchonhitdur", DISEASE_CACKLE_FEVER); }
+            else if (choice == 6) { SetLocalInt(oPC, "enchonhitdur", DISEASE_DEMON_FEVER); }
+            else if (choice == 7) { SetLocalInt(oPC, "enchonhitdur", DISEASE_DEVIL_CHILLS); }
+            else if (choice == 8) { SetLocalInt(oPC, "enchonhitdur", DISEASE_DREAD_BLISTERS); }
+            else if (choice == 9) { SetLocalInt(oPC, "enchonhitdur", DISEASE_FILTH_FEVER); }
+            else if (choice == 10) { SetLocalInt(oPC, "enchonhitdur", DISEASE_GHOUL_ROT); }
+            else if (choice == 11) { SetLocalInt(oPC, "enchonhitdur", DISEASE_MINDFIRE); }
+            else if (choice == 12) { SetLocalInt(oPC, "enchonhitdur", DISEASE_MUMMY_ROT); }
+            else if (choice == 13) { SetLocalInt(oPC, "enchonhitdur", DISEASE_RED_ACHE); }
+            else if (choice == 14) { SetLocalInt(oPC, "enchonhitdur", DISEASE_SHAKES); }
+            else if (choice == 15) { SetLocalInt(oPC, "enchonhitdur", DISEASE_SLIMY_DOOM); }
+            else if (choice == 16) { SetLocalInt(oPC, "enchonhitdur", DISEASE_SOLDIER_SHAKES); }
+            else if (choice == 17) { SetLocalInt(oPC, "enchonhitdur", DISEASE_ZOMBIE_CREEP); }
+            else if (choice == 18) { SetLocalInt(oPC, "enchonhitdur", DISEASE_VERMIN_MADNESS); }
         }
     }
     else if (GetLocalInt(oPC, "enchonhit") == IP_CONST_ONHIT_DISEASE)
     {
         {
-            int nRandom = d6(1);
-            if (nRandom == 1) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_POISON_1D2_CHADAMAGE); }
-            else if (nRandom == 2) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_POISON_1D2_CONDAMAGE); }
-            else if (nRandom == 3) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_POISON_1D2_DEXDAMAGE); }
-            else if (nRandom == 4) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_POISON_1D2_INTDAMAGE); }
-            else if (nRandom == 5) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_POISON_1D2_STRDAMAGE); }
-            else if (nRandom == 6) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_POISON_1D2_WISDAMAGE); }
+            int choice = d6(1);
+            if (choice == 1) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_POISON_1D2_CHADAMAGE); }
+            else if (choice == 2) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_POISON_1D2_CONDAMAGE); }
+            else if (choice == 3) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_POISON_1D2_DEXDAMAGE); }
+            else if (choice == 4) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_POISON_1D2_INTDAMAGE); }
+            else if (choice == 5) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_POISON_1D2_STRDAMAGE); }
+            else if (choice == 6) { SetLocalInt(oPC, "enchonhitdur", IP_CONST_POISON_1D2_WISDAMAGE); }
         }
     }
     else { SetLocalInt(oPC, "enchonhitdur", 0); }
-    ////////////////////////////////////////////////////////////////////////////////
-
-    //Set the light level///////////////////////////////////////////////////////////
-    {
-        int nRandom = d4(1);
-        if (nRandom == 1) { SetLocalInt(oPC, "enchbright", IP_CONST_LIGHTBRIGHTNESS_DIM); }
-        else if (nRandom == 2) { SetLocalInt(oPC, "enchbright", IP_CONST_LIGHTBRIGHTNESS_LOW); }
-        else if (nRandom == 3) { SetLocalInt(oPC, "enchbright", IP_CONST_LIGHTBRIGHTNESS_NORMAL); }
-        else if (nRandom == 4) { SetLocalInt(oPC, "enchbright", IP_CONST_LIGHTBRIGHTNESS_BRIGHT); }
-    }
-
-    {
-        int nRandom = d8(1);
-        if (nRandom == 1) { SetLocalInt(oPC, "enchcolor", IP_CONST_LIGHTCOLOR_BLUE); }
-        else if (nRandom == 2) { SetLocalInt(oPC, "enchcolor", IP_CONST_LIGHTCOLOR_GREEN); }
-        else if (nRandom == 3) { SetLocalInt(oPC, "enchcolor", IP_CONST_LIGHTCOLOR_ORANGE); }
-        else if (nRandom == 4) { SetLocalInt(oPC, "enchcolor", IP_CONST_LIGHTCOLOR_PURPLE); }
-        else if (nRandom == 5) { SetLocalInt(oPC, "enchcolor", IP_CONST_LIGHTCOLOR_RED); }
-        else if (nRandom == 6) { SetLocalInt(oPC, "enchcolor", IP_CONST_LIGHTCOLOR_WHITE); }
-        else if (nRandom == 7) { SetLocalInt(oPC, "enchcolor", IP_CONST_LIGHTCOLOR_YELLOW); }
-        else if (nRandom == 8) { SetLocalInt(oPC, "enchcolor", IP_CONST_LIGHTCOLOR_WHITE); }
-    }
     ////////////////////////////////////////////////////////////////////////////////
 
     //Cast Spell////////////////////////////////////////////////////////////////////
@@ -671,154 +632,176 @@ void main()
 
     //Setup the On Hit Cast Spells//////////////////////////////////////////////////
     {
-        int nRandom = d8(7);
-        if (nRandom == 7) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_ACID_FOG); }
-        else if (nRandom == 8) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_BALL_LIGHTNING); }
-        else if (nRandom == 9) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_BLINDNESS_AND_DEAFNESS); }
-        else if (nRandom == 10) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_CALL_LIGHTNING); }
-        else if (nRandom == 11) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_CHAIN_LIGHTNING); }
-        else if (nRandom == 12) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_CLOUDKILL); }
-        else if (nRandom == 13) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_COMBUST); }
-        else if (nRandom == 14) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_CONFUSION); }
-        else if (nRandom == 15) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_CONTAGION); }
-        else if (nRandom == 16) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_CRUMBLE); }
-        else if (nRandom == 17) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_DARKNESS); }
-        else if (nRandom == 18) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_DAZE); }
-        else if (nRandom == 19) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_DESTRUCTION); }
-        else if (nRandom == 20) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_DISPEL_MAGIC); }
-        else if (nRandom == 21) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_DOOM); }
-        else if (nRandom == 22) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_DROWN); }
-        else if (nRandom == 23) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_EARTHQUAKE); }
-        else if (nRandom == 24) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_ELECTRIC_JOLT); }
-        else if (nRandom == 25) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_ENERGY_DRAIN); }
-        else if (nRandom == 26) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_ENTANGLE); }
-        else if (nRandom == 27) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_FEAR); }
-        else if (nRandom == 28) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_FEEBLEMIND); }
-        else if (nRandom == 29) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_FIRE_STORM); }
-        else if (nRandom == 30) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_FIREBALL); }
-        else if (nRandom == 31) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_FIREBRAND); }
-        else if (nRandom == 32) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_FLAME_STRIKE); }
-        else if (nRandom == 33) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_FLESH_TO_STONE); }
-        else if (nRandom == 34) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_FREEZE); }
-        else if (nRandom == 35) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_GHOUL_TOUCH); }
-        else if (nRandom == 36) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_GREATER_DISPELLING); }
-        else if (nRandom == 37) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_HARM); }
-        else if (nRandom == 38) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_ICE_STORM); }
-        else if (nRandom == 39) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_IMPLOSION); }
-        else if (nRandom == 40) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_INFERNO); }
-        else if (nRandom == 41) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_LESSER_DISPEL); }
-        else if (nRandom == 42) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_LIGHTNING_BOLT); }
-        else if (nRandom == 43) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_METEOR_SWARM); }
-        else if (nRandom == 44) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_MIND_FOG); }
-        else if (nRandom == 45) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_NEGATIVE_ENERGY_BURST); }
-        else if (nRandom == 46) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_POISON); }
-        else if (nRandom == 47) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_SCARE); }
-        else if (nRandom == 48) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_SILENCE); }
-        else if (nRandom == 49) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_SLEEP); }
-        else if (nRandom == 50) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_SLOW); }
-        else if (nRandom == 51) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_SOUND_BURST); }
-        else if (nRandom == 52) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_STONEHOLD); }
-        else if (nRandom == 53) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_SUNBURST); }
-        else if (nRandom == 54) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_VAMPIRIC_TOUCH); }
-        else if (nRandom == 55) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_WEB); }
-        else if (nRandom == 56) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_WOUNDING_WHISPERS); }
+        int choice = d8(7);
+        if (choice == 7) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_ACID_FOG); }
+        else if (choice == 8) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_BALL_LIGHTNING); }
+        else if (choice == 9) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_BLINDNESS_AND_DEAFNESS); }
+        else if (choice == 10) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_CALL_LIGHTNING); }
+        else if (choice == 11) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_CHAIN_LIGHTNING); }
+        else if (choice == 12) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_CLOUDKILL); }
+        else if (choice == 13) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_COMBUST); }
+        else if (choice == 14) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_CONFUSION); }
+        else if (choice == 15) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_CONTAGION); }
+        else if (choice == 16) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_CRUMBLE); }
+        else if (choice == 17) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_DARKNESS); }
+        else if (choice == 18) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_DAZE); }
+        else if (choice == 19) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_DESTRUCTION); }
+        else if (choice == 20) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_DISPEL_MAGIC); }
+        else if (choice == 21) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_DOOM); }
+        else if (choice == 22) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_DROWN); }
+        else if (choice == 23) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_EARTHQUAKE); }
+        else if (choice == 24) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_ELECTRIC_JOLT); }
+        else if (choice == 25) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_ENERGY_DRAIN); }
+        else if (choice == 26) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_ENTANGLE); }
+        else if (choice == 27) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_FEAR); }
+        else if (choice == 28) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_FEEBLEMIND); }
+        else if (choice == 29) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_FIRE_STORM); }
+        else if (choice == 30) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_FIREBALL); }
+        else if (choice == 31) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_FIREBRAND); }
+        else if (choice == 32) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_FLAME_STRIKE); }
+        else if (choice == 33) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_FLESH_TO_STONE); }
+        else if (choice == 34) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_FREEZE); }
+        else if (choice == 35) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_GHOUL_TOUCH); }
+        else if (choice == 36) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_GREATER_DISPELLING); }
+        else if (choice == 37) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_HARM); }
+        else if (choice == 38) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_ICE_STORM); }
+        else if (choice == 39) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_IMPLOSION); }
+        else if (choice == 40) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_INFERNO); }
+        else if (choice == 41) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_LESSER_DISPEL); }
+        else if (choice == 42) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_LIGHTNING_BOLT); }
+        else if (choice == 43) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_METEOR_SWARM); }
+        else if (choice == 44) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_MIND_FOG); }
+        else if (choice == 45) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_NEGATIVE_ENERGY_BURST); }
+        else if (choice == 46) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_POISON); }
+        else if (choice == 47) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_SCARE); }
+        else if (choice == 48) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_SILENCE); }
+        else if (choice == 49) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_SLEEP); }
+        else if (choice == 50) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_SLOW); }
+        else if (choice == 51) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_SOUND_BURST); }
+        else if (choice == 52) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_STONEHOLD); }
+        else if (choice == 53) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_SUNBURST); }
+        else if (choice == 54) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_VAMPIRIC_TOUCH); }
+        else if (choice == 55) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_WEB); }
+        else if (choice == 56) { SetLocalInt(oPC, "enchspell", IP_CONST_ONHIT_CASTSPELL_WOUNDING_WHISPERS); }
     }
     ////////////////////////////////////////////////////////////////////////////////
 
-    itemproperty propRegen = ItemPropertyRegeneration(GetLocalInt(oPC, "enchatmod"));
-    itemproperty propRegenV = ItemPropertyVampiricRegeneration(GetLocalInt(oPC, "enchatmod"));
-    itemproperty propLight = ItemPropertyLight(GetLocalInt(oPC, "enchbright"), GetLocalInt(oPC, "enchcolor"));
-    itemproperty propHaste = ItemPropertyHaste();
-    itemproperty propFreed = ItemPropertyFreeAction();
-    itemproperty propHolyA = ItemPropertyHolyAvenger();
     itemproperty onhitBon = ItemPropertyOnHitProps(
         GetLocalInt(oPC, "enchonhit"),
         GetLocalInt(oPC, "enchonhitsv"),
         GetLocalInt(oPC, "enchonhitdur"));
     itemproperty propSpell = ItemPropertyOnHitCastSpell(GetLocalInt(oPC, "enchspell"), level);
-    itemproperty enhanceBon = ItemPropertyEnhancementBonus(GetLocalInt(oPC, "enchatmod"));
-    itemproperty attackMod = ItemPropertyAttackBonus(GetLocalInt(oPC, "enchatmod"));
     itemproperty propCast = ItemPropertyCastSpell(GetLocalInt(oPC, "enchcast"), GetLocalInt(oPC, "enchsptimes"));
 
-
-    //Add Regeneration
     {
-        int nRandom = d100(1);
-        if (nRandom > 90) { IPSafeAddItemProperty(oWeapon, propRegen); }
-        else if ((nRandom > 80) && (nRandom < 91)) { IPSafeAddItemProperty(oWeapon, propRegenV); }
-    }
-
-    //Add Light
-    {
-        int nRandom = d100(1);
-        if (nRandom > 90) { IPSafeAddItemProperty(oWeapon, propLight); }
-    }
-
-    //Add Attack Modifier
-    {
-        int nRandom = d100(1);
-        if (nRandom > 90) { IPSafeAddItemProperty(oWeapon, attackMod); }
-        // if (nRandom > 95) { IPSafeAddItemProperty(oWeapon, attackMod); }
-        // else if ((nRandom > 90) && (nRandom < 96)) { IPSafeAddItemProperty(oWeapon, attackAlign); }
-        // else if ((nRandom > 85) && (nRandom < 91)) { IPSafeAddItemProperty(oWeapon, attackRace); }
-        // else if ((nRandom > 80) && (nRandom < 86)) { IPSafeAddItemProperty(oWeapon, attackSAlign); }
-    }
-
-
-    //IF A RANGED WEAPON//
-    if ((GetLocalString(oPC, "enchant") == "ench_sling") ||
-        (GetLocalString(oPC, "enchant") == "ench_sbow") ||
-        (GetLocalString(oPC, "enchant") == "ench_lbow") ||
-        (GetLocalString(oPC, "enchant") == "ench_cbow") ||
-        (GetLocalString(oPC, "enchant") == "ench_lcbow"))
-    {
-        //Add Special
-        {
-            int nRandom = d100(1);
-            if (nRandom > 95) { IPSafeAddItemProperty(oWeapon, propHaste); }
-            else if ((nRandom > 89) && (nRandom < 96)) { IPSafeAddItemProperty(oWeapon, propFreed); }
-        }
-    }
-
-
-    //IF NOT A RANGED WEAPON//
-    else
-    {
-
         //Add On Hit Bonus
         {
-            int nRandom = d100(1);
-            if (nRandom > 90) { IPSafeAddItemProperty(oWeapon, propSpell); }
-            else if ((nRandom > 80) && (nRandom < 91)) { IPSafeAddItemProperty(oWeapon, onhitBon); }
-        }
-
-        //Add Enchancement Bonus
-        {
-            int nRandom = d100(1);
-            if (nRandom > 90) { IPSafeAddItemProperty(oWeapon, enhanceBon); }
-            // if (nRandom > 95) { IPSafeAddItemProperty(oWeapon, enhanceBon); }
-            // else if ((nRandom > 90) && (nRandom < 96)) { IPSafeAddItemProperty(oWeapon, enhanceAln); }
-            // else if ((nRandom > 85) && (nRandom < 91)) { IPSafeAddItemProperty(oWeapon, enhanceRac); }
-            // else if ((nRandom > 80) && (nRandom < 86)) { IPSafeAddItemProperty(oWeapon, enhanceSAl); }
+            int choice = d100(1);
+            if (choice > 90) { IPSafeAddItemProperty(weapon, propSpell); }
+            else if ((choice > 80) && (choice < 91)) { IPSafeAddItemProperty(weapon, onhitBon); }
         }
 
         //Add Special
         {
-            int nRandom = d100(1);
-            if (nRandom > 95) { IPSafeAddItemProperty(oWeapon, propHaste); }
-            else if ((nRandom > 90) && (nRandom < 96)) { IPSafeAddItemProperty(oWeapon, propFreed); }
-            else if ((nRandom > 85) && (nRandom < 91)) { IPSafeAddItemProperty(oWeapon, propHolyA); }
-            else if ((nRandom > 79) && (nRandom < 86)) { IPSafeAddItemProperty(oWeapon, propCast); }
+            int choice = d100(1);
+            if ((choice > 79) && (choice < 86)) { IPSafeAddItemProperty(weapon, propCast); }
         }
     }
 
-
-    //If no properties are added...add an attack modifier
+    //Select an ability modifier////////////////////////////////////////////////////
+    if (d100(1) <= chance)
     {
-        if (GetIsItemPropertyValid(GetFirstItemProperty(oWeapon)) == FALSE)
-        {
-            IPSafeAddItemProperty(oWeapon, attackMod);
-        }
+        int ability = d6(1) - 1;
+        itemproperty prop = ItemPropertyAbilityBonus(ability, modify_12);
+        IPSafeAddItemProperty(weapon, prop);
+    }
+
+    //Select a Feat Bonus///////////////////////////////////////////////////////////
+    if (d100(1) <= chance)
+    {
+        itemproperty prop = ItemPropertyBonusFeat(GetBonusFeat(level, IPGetIsRangedWeapon(weapon)));
+        IPSafeAddItemProperty(weapon, prop);
+    }
+
+    //Add A Massive Critical
+    if (d100(1) <= chance)
+    {
+        itemproperty prop = ItemPropertyMassiveCritical(GetDamageBonus(modify_20));
+        IPSafeAddItemProperty(weapon, prop);
+    }
+
+    //Add Damage Modifier
+    if (d100(1) <= chance)
+    {
+        itemproperty prop = ItemPropertyDamageBonus(GetDamageType(), GetDamageBonus(modify_20));
+        IPSafeAddItemProperty(weapon, prop);
+    }
+
+    if (d100(1) <= chance)
+    {
+        itemproperty prop = ItemPropertyKeen();
+        IPSafeAddItemProperty(weapon, prop);
+    }
+
+    //Set the Extra Damage Bonus///////////////////////////////////////////////////////////
+    if (d100(1) <= chance)
+    {
+        itemproperty prop = ItemPropertyExtraRangeDamageType(GetExtraDamage());
+        IPSafeAddItemProperty(weapon, prop);
+    }
+    if (d100(1) <= chance)
+    {
+        itemproperty prop = ItemPropertyExtraMeleeDamageType(GetExtraDamage());
+        IPSafeAddItemProperty(weapon, prop);
+    }
+
+    //Select the unlimited ammo if any//////////////////////////////////////////////
+    if (d100(1) <= chance)
+    {
+        itemproperty prop = ItemPropertyUnlimitedAmmo(GetAmmo());
+        IPSafeAddItemProperty(weapon, prop);
+    }
+
+    if (d100(1) <= chance)
+    {
+        itemproperty prop = ItemPropertyMaxRangeStrengthMod(modify_20);
+        IPSafeAddItemProperty(weapon, prop);
+    }
+
+    //Set the light level///////////////////////////////////////////////////////////
+    if (d100(1) <= chance)
+    {
+        itemproperty prop = ItemPropertyLight(GetLightBrightness(), GetLightColor());
+        IPSafeAddItemProperty(weapon, prop);
+    }
+
+    if (d100(1) <= chance)
+    {
+        itemproperty prop = ItemPropertyRegeneration(modify_20);
+        IPSafeAddItemProperty(weapon, prop);
+    }
+    else if (d100(1) <= chance)
+    {
+        itemproperty prop = ItemPropertyVampiricRegeneration(modify_20);
+        IPSafeAddItemProperty(weapon, prop);
+    }
+
+    if (d100(1) <= chance)
+    {
+        itemproperty prop = GetSpecialBonus();
+        IPSafeAddItemProperty(weapon, prop);
+    }
+
+    if (d100(1) <= chance)
+    {
+        itemproperty prop = ItemPropertyEnhancementBonus(modify_20);
+        IPSafeAddItemProperty(weapon, prop);
+    }
+    else if (d100(1) <= chance || !GetIsItemPropertyValid(GetFirstItemProperty(weapon)))
+    {
+        //If no properties are added...add an attack modifier
+        itemproperty prop = ItemPropertyAttackBonus(modify_20);
+        IPSafeAddItemProperty(weapon, prop);
     }
 
     //Delete all the variable used
@@ -826,10 +809,7 @@ void main()
     DeleteLocalInt(oPC, "enchonhit");
     DeleteLocalInt(oPC, "enchonhitsv");
     DeleteLocalInt(oPC, "enchonhitdur");
-    DeleteLocalInt(oPC, "enchbright");
-    DeleteLocalInt(oPC, "enchcolor");
     DeleteLocalInt(oPC, "enchspell");
-    DeleteLocalInt(oPC, "enchatmod");
-    SetIdentified(oWeapon, FALSE);
-    SetLocalInt(oWeapon, "req_level", level);
+    SetIdentified(weapon, FALSE);
+    SetLocalInt(weapon, "req_level", level);
 }

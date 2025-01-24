@@ -1,7 +1,8 @@
 // This creates dynamic magical weapons
 #include "x2_inc_itemprop"
 
-const int chance = 10;
+const int chance = 20;
+const int chance_on_hit = 10;
 
 int GetDamageBonus(int choice)
 {
@@ -147,6 +148,33 @@ itemproperty GetSpecialBonus()
     else if (choice == 2) { return ItemPropertyHolyAvenger(); }
 
     return ItemPropertyHaste();
+}
+
+int GetOnHitProp()
+{
+    int choice = d20(1);
+    if (choice == 1) { return IP_CONST_ONHIT_ABILITYDRAIN; }
+    else if (choice == 2) { return IP_CONST_ONHIT_BLINDNESS; }
+    else if (choice == 3) { return IP_CONST_ONHIT_CONFUSION; }
+    else if (choice == 4) { return IP_CONST_ONHIT_DAZE; }
+    else if (choice == 5) { return IP_CONST_ONHIT_DEAFNESS; }
+    else if (choice == 6) { return IP_CONST_ONHIT_DISEASE; }
+    else if (choice == 7) { return IP_CONST_ONHIT_DOOM; }
+    else if (choice == 8) { return IP_CONST_ONHIT_FEAR; }
+    else if (choice == 9) { return IP_CONST_ONHIT_HOLD; }
+    else if (choice == 10) { return IP_CONST_ONHIT_ITEMPOISON; }
+    else if (choice == 11) { return IP_CONST_ONHIT_SILENCE; }
+    else if (choice == 12) { return IP_CONST_ONHIT_SLEEP; }
+    else if (choice == 13) { return IP_CONST_ONHIT_SLOW; }
+    else if (choice == 14) { return IP_CONST_ONHIT_STUN; }
+    else if (choice == 15) { return IP_CONST_ONHIT_VORPAL; }
+    else if (choice == 16) { return IP_CONST_ONHIT_WOUNDING; }
+    else if (choice == 17) { return IP_CONST_ONHIT_DISPELMAGIC; }
+    else if (choice == 18) { return IP_CONST_ONHIT_GREATERDISPEL; }
+    else if (choice == 19) { return IP_CONST_ONHIT_LEVELDRAIN; }
+    else { return IP_CONST_ONHIT_KNOCK; }
+
+    return 0;
 }
 
 void main()
@@ -686,26 +714,18 @@ void main()
     }
     ////////////////////////////////////////////////////////////////////////////////
 
-    itemproperty onhitBon = ItemPropertyOnHitProps(
-        GetLocalInt(oPC, "enchonhit"),
-        GetLocalInt(oPC, "enchonhitsv"),
-        GetLocalInt(oPC, "enchonhitdur"));
-    itemproperty propSpell = ItemPropertyOnHitCastSpell(GetLocalInt(oPC, "enchspell"), level);
-    itemproperty propCast = ItemPropertyCastSpell(GetLocalInt(oPC, "enchcast"), GetLocalInt(oPC, "enchsptimes"));
-
+    if (d100(1) <= chance_on_hit)
     {
-        //Add On Hit Bonus
-        {
-            int choice = d100(1);
-            if (choice > 90) { IPSafeAddItemProperty(weapon, propSpell); }
-            else if ((choice > 80) && (choice < 91)) { IPSafeAddItemProperty(weapon, onhitBon); }
-        }
-
-        //Add Special
-        {
-            int choice = d100(1);
-            if ((choice > 79) && (choice < 86)) { IPSafeAddItemProperty(weapon, propCast); }
-        }
+        itemproperty prop = ItemPropertyOnHitProps(
+            GetLocalInt(oPC, "enchonhit"),
+            GetLocalInt(oPC, "enchonhitsv"),
+            GetLocalInt(oPC, "enchonhitdur"));
+        IPSafeAddItemProperty(weapon, prop);
+    }
+    else if (d100(1) <= chance_on_hit)
+    {
+        itemproperty prop = ItemPropertyOnHitCastSpell(GetLocalInt(oPC, "enchspell"), level);
+        IPSafeAddItemProperty(weapon, prop);
     }
 
     //Select an ability modifier////////////////////////////////////////////////////
@@ -789,6 +809,11 @@ void main()
     if (d100(1) <= chance)
     {
         itemproperty prop = GetSpecialBonus();
+        IPSafeAddItemProperty(weapon, prop);
+    }
+    else if (d100(1) <= chance)
+    {
+        itemproperty prop = ItemPropertyCastSpell(GetLocalInt(oPC, "enchcast"), GetLocalInt(oPC, "enchsptimes"));;
         IPSafeAddItemProperty(weapon, prop);
     }
 

@@ -174,9 +174,6 @@ void main()
             object oBook = CreateItemOnObject("journal", oPC, 1); // Make A Journal
             object oFood = CreateItemOnObject("food_pouch", oPC, 1); // Make A Food Pouch
             object oWater = CreateItemOnObject("lodoc_waterem", oPC, 1); // Make A Water Pouch
-            SetDroppableFlag(GetItemPossessedBy(oPC, "faction_report"), FALSE);
-            SetDroppableFlag(GetItemPossessedBy(oPC, "food_pouch"), FALSE);
-            SetDroppableFlag(GetItemPossessedBy(oPC, "lodoc_waterem"), FALSE);
             SetLocalInt(oFood, "food", 5);
             SetLocalInt(oWater, "water", 5);
 

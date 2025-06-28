@@ -1,15 +1,19 @@
 #include "sl_ench_lib"
 #include "x2_inc_itemprop"
 
+int max_level = 14;
+
 int get_damage_type(int level)
 {
     switch (level)
     {
         case 2: return IP_CONST_DAMAGETYPE_FIRE;
         case 4: return IP_CONST_DAMAGETYPE_COLD;
-        case 6: return IP_CONST_DAMAGETYPE_ACID;
-        case 8: return IP_CONST_DAMAGETYPE_SONIC;
-        case 10: return IP_CONST_DAMAGETYPE_MAGICAL;
+        case 6: return IP_CONST_DAMAGETYPE_SONIC;
+        case 8: return IP_CONST_DAMAGETYPE_MAGICAL;
+        case 10: return IP_CONST_DAMAGETYPE_POSITIVE;
+        case 12: return IP_CONST_DAMAGETYPE_NEGATIVE;
+        case 14: return IP_CONST_DAMAGETYPE_DIVINE;
     }
     return IP_CONST_DAMAGETYPE_FIRE;
 }
@@ -23,6 +27,8 @@ int get_damage_bonues(int level)
         case 6: return IP_CONST_DAMAGEBONUS_1d8;
         case 8: return IP_CONST_DAMAGEBONUS_1d10;
         case 10: return IP_CONST_DAMAGEBONUS_1d12;
+        case 12: return IP_CONST_DAMAGEBONUS_2d8;
+        case 14: return IP_CONST_DAMAGEBONUS_2d10;
     }
     return IP_CONST_DAMAGEBONUS_1d4;
 }
@@ -57,7 +63,7 @@ void add_ench_items(object store)
 {
     int wep_list_size = sl_ench_GetWepListSize();
     int level;
-    for (level = 2; level <= 10; level += 2)
+    for (level = 2; level <= max_level; level += 2)
     {
         int wep_index;
         for (wep_index = 0; wep_index < wep_list_size; wep_index++)

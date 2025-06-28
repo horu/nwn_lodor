@@ -174,6 +174,7 @@ void sl_storage_SellToStore(object store, object pc, object item)
 
     if (!GetDroppableFlag(item))
     {
+        FloatingTextStringOnCreature("You can not store special items.", pc, FALSE);
         return;
     }
 

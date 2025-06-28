@@ -31,6 +31,7 @@ void main()
     // Treasure Section for the NPC
     // Runs the appropriate treasure script for the NPC
     ExecuteScript("loot_town_npc", OBJECT_SELF);
+    ExecuteScript("sl_npc_custom", OBJECT_SELF);
 
     //float fFacing = GetFacing(GetNextWalkWayPoint(OBJECT_SELF));
     //SetFacing(fFacing);

@@ -8,6 +8,8 @@ void main()
     // sl: set random time on load.
     SetTime(Random(24), 0, 0, 0);
 
+    PrintString("Current difficulty level: " + IntToString(GetGameDifficulty()));
+
     NWNX_Damage_SetAttackEventScript("sl_on_attack");
     NWNX_Events_SubscribeEvent(NWNX_ON_PLACEABLE_CLOSE_AFTER, "sl_on_plac_close");
     NWNX_Events_SubscribeEvent(NWNX_ON_STORE_REQUEST_SELL_BEFORE, "sl_on_sell");

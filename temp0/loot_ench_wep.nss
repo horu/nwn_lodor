@@ -1,9 +1,6 @@
 // This creates dynamic magical weapons
 #include "x2_inc_itemprop"
 
-const int chance = 20;
-const int chance_on_hit = 10;
-
 int GetDamageBonus(int choice)
 {
     if (choice <= 1)       { return IP_CONST_DAMAGEBONUS_1; }
@@ -182,6 +179,9 @@ void main()
     object oPC = OBJECT_SELF;
     object weapon = GetLocalObject(oPC, "sl_loot_item");
     int level = GetLocalInt(oPC, "sl_loot_level");
+    int improve_only = GetLocalInt(oPC, "sl_loot_improve_only");
+    int chance = GetLocalInt(oPC, "sl_loot_prop_chance");
+    int chance_on_hit = chance / 4;
 
     int modify_12 = level / 3;
     if (modify_12 < 1) { modify_12 = 1; }
@@ -191,7 +191,10 @@ void main()
     if (modify_20 < 1) { modify_20 = 1; }
     if (modify_20 > 20) { modify_20 = 20; }
 
-    SetItemCharges(weapon, 50);
+    if (!improve_only)
+    {
+        SetItemCharges(weapon, 50);
+    }
 
     //Set the On Hit Properties/////////////////////////////////////////////////////
     {
@@ -822,15 +825,25 @@ void main()
         itemproperty prop = ItemPropertyEnhancementBonus(modify_20);
         IPSafeAddItemProperty(weapon, prop);
     }
-    else if (d100(1) <= chance || !GetIsItemPropertyValid(GetFirstItemProperty(weapon)))
+    else if (d100(1) <= chance)
+    {
+        itemproperty prop = ItemPropertyAttackBonus(modify_20);
+        IPSafeAddItemProperty(weapon, prop);
+    }
+
+    if (!improve_only && !GetIsItemPropertyValid(GetFirstItemProperty(weapon)))
     {
         //If no properties are added...add an attack modifier
+        modify_20 -= d6(1);
+        if (modify_20 <= 0)
+        {
+            modify_20 = 1;
+        }
         itemproperty prop = ItemPropertyAttackBonus(modify_20);
         IPSafeAddItemProperty(weapon, prop);
     }
 
     //Delete all the variable used
-    DeleteLocalString(oPC, "enchant");
     DeleteLocalInt(oPC, "enchonhit");
     DeleteLocalInt(oPC, "enchonhitsv");
     DeleteLocalInt(oPC, "enchonhitdur");

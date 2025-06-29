@@ -1,19 +1,23 @@
 #!/bin/bash
 
+print_log() {
+    echo -e "\n ==================== $1";
+}
+
 current_sens=$(defaults read -g com.apple.trackpad.scaling)
 set_sens() {
     local sens=$1
     if [ $sens == $current_sens ]; then
         return 0
     fi
-    echo $(date) set sens $sens;
+    print_log "$(date) set sens $sens"
     defaults write -g com.apple.trackpad.scaling $sens
     /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
     current_sens=$sens
 }
 
 nwn_dir="$(realpath ~/Documents/nwn)"
-echo $(date) nwn dir: $nwn_dir
+print_log "$(date) nwn dir: $nwn_dir"
 
 module_file="$nwn_dir/modules/lodor.mod"
 current_module_mtime=$(stat -f %m $module_file)
@@ -23,7 +27,7 @@ check_module_mtime() {
     if [ $mtime != $current_module_mtime ]; then
         current_module_mtime=$mtime
         check_iterations=15
-        echo $(date) module changed
+        print_log "$(date) module changed"
     fi
 
     if [ $check_iterations -ge 1 ]; then
@@ -37,10 +41,10 @@ check_module_mtime() {
 }
 
 start_nwserver() {
-    echo $(date) nwserver starting...
+    print_log "$(date) nwserver starting..."
 
     if [ "$(docker ps | grep nwserver)" != "" ]; then
-        echo $(date) nwserver already started
+        print_log "$(date) nwserver already started"
         return 0
     fi
 
@@ -75,41 +79,55 @@ start_nwserver() {
         --platform=linux/amd64 \
         -d \
         ghcr.io/nwnxee/unified:0efe7e6
-    echo $(date) nwserver started
+    print_log "$(date) nwserver started"
 }
 
 stop_nwserver() {
-    echo $(date) nwserver stopping...
+    print_log "$(date) nwserver stopping..."
     docker stop nwserver
-    echo $(date) nwserver stopped
+    print_log "$(date) nwserver stopped"
 }
 
 auto_commit_servervault() {
     cd $nwn_dir/servervault
     if [ "$(git diff)" != "" ]; then
-        echo $(date) auto commit
+        print_log "$(date) auto commit"
         git add .
         git commit -m "AUTO $(date)"
     fi
 }
 
-if [ "$1" == "--restart" ]; then
-    current_module_mtime=0
-elif [ "$1" == "--stop" ]; then
-    stop_nwserver
-    exit 0
-else
-    start_nwserver
-fi
+print_logs() {
+    while true; do
+        docker logs -f nwserver | sed 's/\[ServerLogRedirector.cpp:29\]//g';
+        sleep 1;
+    done
+}
 
+print_pid=0
+trap "print_log $print_pid; kill $print_pid; exit" SIGINT SIGTERM EXIT
+
+for arg in "$@"; do
+    if [ "$arg" == "--restart" ]; then
+        current_module_mtime=0
+    elif [ "$arg" == "--stop" ]; then
+        stop_nwserver
+        exit 0
+    elif [ "$arg" == "--logs" ]; then
+        print_logs &
+        print_pid=$!
+    fi
+done
+
+start_nwserver
 while true; do
     # Change trackpad sens when resolution is changed
     is_native=$(screenresolution get 2>&1 | grep Display | grep 1512x982x32)
     if [ "$is_native" != "" ]; then
-        #echo $(date) native;
+        #print_log "$(date) native"
         set_sens "1"
     else
-        #echo $(date) no native;
+        #print_log "$(date) no native"
         set_sens "2.5"
     fi
 

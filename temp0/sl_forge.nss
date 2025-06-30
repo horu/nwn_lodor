@@ -98,10 +98,14 @@ void sl_forge_Process(object forge, object pc)
     }
 
     int level = GetHitDice(pc);
+    level = level/2 + Random(level/2 + 1);
 
-    sl_loot_ImproveWeapon(forge, item, level, chance);
+    // sl_forge_DistroyGems(forge);
+    item = sl_loot_ImproveWeapon(forge, item, level, chance);
+    // SetItemCursedFlag(item, TRUE);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_WORD), forge);
 
-    OpenInventory(forge, pc);
+    AssignCommand(pc, ActionInteractObject(forge));
 }
 
 void main()

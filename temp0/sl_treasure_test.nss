@@ -23,6 +23,7 @@ void main()
     int sl_chance = StringToInt(GetLocalString(oPC, "sl_pc_chat_msg"));
     SetLocalObject(OBJECT_SELF, "sl_loot_opener", oPC);
     SetLocalInt(OBJECT_SELF, "sl_loot_chance", sl_chance);
+    SetLocalInt(OBJECT_SELF, "sl_loot_boss", 1);
     SetLocalInt(OBJECT_SELF, "sl_loot_type", 1); // wep only
     ExecuteScript("sl_loot_ench", OBJECT_SELF);
     SetLocalObject(OBJECT_SELF, "sl_loot_opener", oPC);

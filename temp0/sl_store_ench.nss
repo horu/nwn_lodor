@@ -56,7 +56,7 @@ void add_ench_item(object store, int index, int level)
     object item = sl_ench_CreateWep(store, index);
     SetInfiniteFlag(item, TRUE);
     add_ench_wep_props(item, level);
-    PrintString("[store_ench] Create wep lvl " + IntToString(level) + "/" + IntToString(index));
+    PrintString("[sl_store_ench] Create wep lvl " + IntToString(level) + "/" + IntToString(index));
 }
 
 void add_ench_items(object store)
@@ -78,9 +78,9 @@ void main()
     object store = GetObjectByTag("dragforge");
     if (store == OBJECT_INVALID)
     {
-        PrintString("[store_ench] ERROR: Not found store dragforge.");
+        PrintString("[sl_store_ench] ERROR: Not found store dragforge.");
         return;
     }
-    PrintString("[store_ench] Create wep for dragforge");
+    PrintString("[sl_store_ench] Create wep for dragforge");
     add_ench_items(store);
 }

@@ -8,7 +8,7 @@ void sl_loot_PrintToLog(object holder)
 {
     object item = GetLocalObject(holder, "sl_loot_item");
     object opener = GetLocalObject(holder, "sl_loot_opener");
-    string msg = "[ench] " + IntToString(item != OBJECT_INVALID);
+    string msg = "[sl_ench] " + IntToString(item != OBJECT_INVALID);
 
     msg += ": hold " + GetTag(holder);
     msg += ", race " + IntToString(GetRacialType(holder));
@@ -192,8 +192,9 @@ void sl_loot_OverrideReqLevel(object holder)
 }
 
 
-void sl_loot_ImproveWeapon(object holder, object item, int level, int prop_chance)
+object sl_loot_ImproveWeapon(object holder, object item, int level, int prop_chance)
 {
+    item = sl_ench_ModifyAppr(item);
     SetLocalObject(holder, "sl_loot_item", item);
     SetLocalInt(holder, "sl_loot_level", level);
     SetLocalInt(holder, "sl_loot_prop_chance", prop_chance);
@@ -201,4 +202,5 @@ void sl_loot_ImproveWeapon(object holder, object item, int level, int prop_chanc
     ExecuteScript("loot_ench_wep", holder);
     sl_loot_PrintToLog(holder);
     sl_loot_ClearHolder(holder);
+    return item;
 }

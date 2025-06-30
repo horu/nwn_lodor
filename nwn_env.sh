@@ -99,7 +99,7 @@ auto_commit_servervault() {
 
 print_logs() {
     while true; do
-        docker logs -f nwserver | sed 's/\[ServerLogRedirector.cpp:29\]//g';
+        docker logs -f nwserver | sed 's/\[NWNX_ServerLogRedirector\] \[ServerLogRedirector.cpp:29\] (Server)//g';
         sleep 1;
     done
 }

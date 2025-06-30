@@ -28,7 +28,7 @@ void main()
     int new_area_level = area_level_sum / area_level_count;
     if (area_level != new_area_level)
     {
-        PrintString("[" + GetName(area) + "] Set area loot level "
+        PrintString("[sl_ench] [" + GetName(area) + "] Set area loot level "
             + IntToString(new_area_level) +
             " (" + IntToString(area_level_sum) + "/" + IntToString(area_level_count) + ")" );
     }

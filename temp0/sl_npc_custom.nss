@@ -22,7 +22,7 @@ void main()
     NWNX_Creature_SetSkillRank(npc, skill, rank_base);
     int new_rank = GetSkillRank(skill, npc, TRUE);
     int new_rank_full = GetSkillRank(skill, npc, FALSE);
-    PrintString("[" + GetName(npc) + "](" + IntToString(level) + ") Set skill "
+    PrintString("[sl_npc] [" + GetName(npc) + " " + IntToString(level) + "] Set disc skill "
         + IntToString(rank) + "/" + IntToString(rank_full) + " to "
         + IntToString(new_rank) + "/" + IntToString(new_rank_full));
 }

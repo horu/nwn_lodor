@@ -200,7 +200,7 @@ void sl_ench_CreateArmList()
     sl_array_PushbackStr(sl_ench_arm_list, "sl_ench_cloak");
     sl_array_PushbackStr(sl_ench_arm_list, "sl_ench_ring");
 
-    PrintString("[ench] Created ench arm list: " + IntToString(sl_array_Size(sl_ench_arm_list)));
+    PrintString("[sl_ench] Created ench arm list: " + IntToString(sl_array_Size(sl_ench_arm_list)));
 }
 
 void sl_ench_CreateWepList()
@@ -248,7 +248,7 @@ void sl_ench_CreateWepList()
     sl_array_PushbackStr(sl_ench_wep_list, "sl_ench_gloves"); // Enchanted Gloves
     // sl_array_PushbackStr(sl_ench_wep_list, "ench_dwaxe");
 
-    PrintString("[ench] Created ench wep list: " + IntToString(sl_array_Size(sl_ench_wep_list)));
+    PrintString("[sl_ench] Created ench wep list: " + IntToString(sl_array_Size(sl_ench_wep_list)));
 }
 
 int sl_ench_GetWepListSize()

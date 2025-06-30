@@ -1,6 +1,7 @@
 // Generate random ench device.
 #include "sl_array_lib"
 #include "sl_ench_lib"
+#include "sl_ench_wep_lib"
 #include "nwnx_itemprop"
 #include "nwnx_item"
 
@@ -61,7 +62,71 @@ void sl_loot_ClearHolder(object holder)
     DeleteLocalInt(holder, "sl_loot_type");
     DeleteLocalInt(holder, "sl_loot_boss");
     DeleteLocalInt(holder, "sl_loot_prop_chance");
-    DeleteLocalInt(holder, "sl_loot_improve_only");
+}
+
+void sl_loot_AddWeaponProperties(object weapon, int level, int chance)
+{
+    int has_on_hit = 0;
+    int has_regen = 0;
+    int has_special = 0;
+    int has_ench = 0;
+    int index;
+    for (index = 0; index < sl_ench_wep_GetWeaponPropertyTypeListSize(); index++)
+    {
+        if (chance < d100(1))
+        {
+            continue;
+        }
+
+        int property_type = sl_ench_wep_GetWeaponPropertyType(index);
+        if (property_type == ITEM_PROPERTY_ON_HIT_PROPERTIES || property_type == ITEM_PROPERTY_ONHITCASTSPELL)
+        {
+            if (25 < d100(1) || has_on_hit)
+            {
+                continue;
+            }
+            has_on_hit = 1;
+        }
+
+        if (property_type == ITEM_PROPERTY_REGENERATION || property_type == ITEM_PROPERTY_REGENERATION_VAMPIRIC)
+        {
+            if (has_regen)
+            {
+                continue;
+            }
+            has_regen = 1;
+        }
+
+        if (sl_ench_wep_IsWeaponSpecialBonus(property_type) || property_type == ITEM_PROPERTY_CAST_SPELL)
+        {
+            if (has_special)
+            {
+                continue;
+            }
+            has_special = 1;
+        }
+
+        if (property_type == ITEM_PROPERTY_ATTACK_BONUS || property_type == ITEM_PROPERTY_ENHANCEMENT_BONUS)
+        {
+            if (has_ench)
+            {
+                continue;
+            }
+            has_ench = 1;
+        }
+
+        sl_ench_wep_AddItemProperty(weapon, property_type, level);
+    }
+
+    if (!GetIsItemPropertyValid(GetFirstItemProperty(weapon)))
+    {
+        //If no properties are added...add an attack modifier
+        int att_level = Random(level) + 1;
+        sl_ench_wep_AddItemProperty(weapon, ITEM_PROPERTY_ATTACK_BONUS, att_level);
+    }
+
+    SetIdentified(weapon, FALSE);
+    SetLocalInt(weapon, "req_level", level);
 }
 
 void sl_loot_CreateEnchWep(object holder)
@@ -71,7 +136,7 @@ void sl_loot_CreateEnchWep(object holder)
     object item = sl_ench_CreateWep(holder, random);
     SetLocalObject(holder, "sl_loot_item", item);
 
-    ExecuteScript("loot_ench_wep", holder);
+    sl_loot_AddWeaponProperties(item, GetLocalInt(holder, "sl_loot_level"), GetLocalInt(holder, "sl_loot_prop_chance"));
 }
 
 void sl_loot_CreateEnchArm(object holder)
@@ -194,12 +259,12 @@ void sl_loot_OverrideReqLevel(object holder)
 
 object sl_loot_ImproveWeapon(object holder, object item, int level, int prop_chance)
 {
+    //TODO:
     item = sl_ench_ModifyAppr(item);
+    sl_loot_AddWeaponProperties(item, level, prop_chance);
     SetLocalObject(holder, "sl_loot_item", item);
     SetLocalInt(holder, "sl_loot_level", level);
     SetLocalInt(holder, "sl_loot_prop_chance", prop_chance);
-    SetLocalInt(holder, "sl_loot_improve_only", 1);
-    ExecuteScript("loot_ench_wep", holder);
     sl_loot_PrintToLog(holder);
     sl_loot_ClearHolder(holder);
     return item;

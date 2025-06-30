@@ -1,7 +1,7 @@
 // This creates dynamic magical weapons
 
 #include "x2_inc_itemprop"
-#include "nwnx_itemprop"
+#include "sl_array_lib"
 
 int sl_ench_wep_GetAbility()
 {
@@ -712,6 +712,64 @@ int sl_ench_wep_GetOnHitCastSpell()
     return 0;
 }
 
+const string sl_ench_wep_prop_list = "sl_ench_wep_prop";
+void sl_ench_wep_CreateWeaponPropertyTypeList()
+{
+    // Create list if empty
+    if (sl_array_Size(sl_ench_wep_prop_list))
+    {
+        return;
+    }
+
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_ATTACK_BONUS);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_ENHANCEMENT_BONUS);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_DAMAGE_BONUS);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_ON_HIT_PROPERTIES);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_ONHITCASTSPELL);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_CAST_SPELL);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_ABILITY_BONUS);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_BONUS_FEAT);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_LIGHT);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_MASSIVE_CRITICALS);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_EXTRA_MELEE_DAMAGE_TYPE);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_REGENERATION);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_REGENERATION_VAMPIRIC);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_KEEN);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_HASTE);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_FREEDOM_OF_MOVEMENT);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_HOLY_AVENGER);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_UNLIMITED_AMMUNITION);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_MIGHTY);
+    sl_array_PushbackInt(sl_ench_wep_prop_list, ITEM_PROPERTY_EXTRA_RANGED_DAMAGE_TYPE);
+
+    PrintString("[sl_ench_wep] Created ench wep prop list: " + IntToString(sl_array_Size(sl_ench_wep_prop_list)));
+}
+
+int sl_ench_wep_GetWeaponPropertyTypeListSize()
+{
+    sl_ench_wep_CreateWeaponPropertyTypeList();
+    return sl_array_Size(sl_ench_wep_prop_list);
+}
+
+int sl_ench_wep_GetWeaponPropertyType(int index)
+{
+    sl_ench_wep_CreateWeaponPropertyTypeList();
+    return sl_array_AtInt(sl_ench_wep_prop_list, index);
+}
+
+int sl_ench_wep_IsWeaponSpecialBonus(int property_type)
+{
+    switch (property_type)
+    {
+    case ITEM_PROPERTY_KEEN:
+    case ITEM_PROPERTY_HASTE:
+    case ITEM_PROPERTY_FREEDOM_OF_MOVEMENT:
+    case ITEM_PROPERTY_HOLY_AVENGER:
+        return TRUE;
+    }
+    return FALSE;
+}
+
 itemproperty sl_ench_wep_ItemPropertyOnHitProps(int level)
 {
     int on_hit_prop = sl_ench_wep_GetOnHitProp();
@@ -733,46 +791,52 @@ itemproperty sl_ench_wep_GetItemProperty(int property_type, int level, int is_ra
 
     switch (property_type)
     {
+    case ITEM_PROPERTY_ATTACK_BONUS:
+        return ItemPropertyAttackBonus(modify_20);
+    case ITEM_PROPERTY_ENHANCEMENT_BONUS:
+        return ItemPropertyEnhancementBonus(modify_20);
+    case ITEM_PROPERTY_DAMAGE_BONUS:
+        return ItemPropertyDamageBonus(sl_ench_wep_GetDamageType(), sl_ench_wep_GetDamageBonus(modify_20));
+
     case ITEM_PROPERTY_ON_HIT_PROPERTIES:
         return sl_ench_wep_ItemPropertyOnHitProps(level);
     case ITEM_PROPERTY_ONHITCASTSPELL:
         return ItemPropertyOnHitCastSpell(sl_ench_wep_GetOnHitCastSpell(), level);
+    case ITEM_PROPERTY_CAST_SPELL:
+        return ItemPropertyCastSpell(sl_ench_wep_GetCastSpell(level), sl_ench_wep_GetCastSpellNum(modify_12));
+
     case ITEM_PROPERTY_ABILITY_BONUS:
         return ItemPropertyAbilityBonus(sl_ench_wep_GetAbility(), modify_12);
     case ITEM_PROPERTY_BONUS_FEAT:
         return ItemPropertyBonusFeat(sl_ench_wep_GetBonusFeat(level, is_ranged));
-    case ITEM_PROPERTY_MASSIVE_CRITICALS:
-        return ItemPropertyMassiveCritical(sl_ench_wep_GetDamageBonus(modify_20));
-    case ITEM_PROPERTY_DAMAGE_BONUS:
-        return ItemPropertyDamageBonus(sl_ench_wep_GetDamageType(), sl_ench_wep_GetDamageBonus(modify_20));
-    case ITEM_PROPERTY_KEEN:
-        return ItemPropertyKeen();
-    case ITEM_PROPERTY_EXTRA_RANGED_DAMAGE_TYPE:
-        return ItemPropertyExtraRangeDamageType(sl_ench_wep_GetExtraDamage());
-    case ITEM_PROPERTY_EXTRA_MELEE_DAMAGE_TYPE:
-        return ItemPropertyExtraMeleeDamageType(sl_ench_wep_GetExtraDamage());
-    case ITEM_PROPERTY_UNLIMITED_AMMUNITION:
-        return ItemPropertyUnlimitedAmmo(sl_ench_wep_GetAmmo());
-    case ITEM_PROPERTY_MIGHTY:
-        return ItemPropertyMaxRangeStrengthMod(modify_20);
     case ITEM_PROPERTY_LIGHT:
         return ItemPropertyLight(sl_ench_wep_GetLightBrightness(), sl_ench_wep_GetLightColor());
+
+    case ITEM_PROPERTY_MASSIVE_CRITICALS:
+        return ItemPropertyMassiveCritical(sl_ench_wep_GetDamageBonus(modify_20));
+    case ITEM_PROPERTY_EXTRA_MELEE_DAMAGE_TYPE:
+        return ItemPropertyExtraMeleeDamageType(sl_ench_wep_GetExtraDamage());
+
     case ITEM_PROPERTY_REGENERATION:
         return ItemPropertyRegeneration(modify_20);
     case ITEM_PROPERTY_REGENERATION_VAMPIRIC:
         return ItemPropertyVampiricRegeneration(modify_20);
+
+    case ITEM_PROPERTY_KEEN:
+        return ItemPropertyKeen();
     case ITEM_PROPERTY_HASTE:
         return ItemPropertyHaste();
     case ITEM_PROPERTY_FREEDOM_OF_MOVEMENT:
         return ItemPropertyFreeAction();
     case ITEM_PROPERTY_HOLY_AVENGER:
         return ItemPropertyHolyAvenger();
-    case ITEM_PROPERTY_CAST_SPELL:
-        return ItemPropertyCastSpell(sl_ench_wep_GetCastSpell(level), sl_ench_wep_GetCastSpellNum(modify_12));
-    case ITEM_PROPERTY_ENHANCEMENT_BONUS:
-        return ItemPropertyEnhancementBonus(modify_20);
-    case ITEM_PROPERTY_ATTACK_BONUS:
-        return ItemPropertyAttackBonus(modify_20);
+
+    case ITEM_PROPERTY_UNLIMITED_AMMUNITION:
+        return ItemPropertyUnlimitedAmmo(sl_ench_wep_GetAmmo());
+    case ITEM_PROPERTY_MIGHTY:
+        return ItemPropertyMaxRangeStrengthMod(modify_20);
+    case ITEM_PROPERTY_EXTRA_RANGED_DAMAGE_TYPE:
+        return ItemPropertyExtraRangeDamageType(sl_ench_wep_GetExtraDamage());
     }
 
     return GetFirstItemProperty(OBJECT_INVALID);
@@ -787,4 +851,9 @@ void sl_ench_wep_AddItemProperty(object weapon, int property_type, int level)
 
     itemproperty prop = sl_ench_wep_GetItemProperty(property_type, level, IPGetIsRangedWeapon(weapon));
     IPSafeAddItemProperty(weapon, prop);
+}
+
+int sl_ench_wep_HasItemProperty(object weapon, int property_type)
+{
+    return FALSE;
 }

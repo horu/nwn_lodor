@@ -18,7 +18,7 @@ void main()
     NWNX_Events_SubscribeEvent(NWNX_ON_ITEM_PAY_TO_IDENTIFY_AFTER, "sl_on_identify");
 
     // Take a long time
-    DelayCommand(1.0, ExecuteScript("sl_store_ench", OBJECT_SELF));
+    //DelayCommand(1.0, ExecuteScript("sl_store_ench", OBJECT_SELF));
 
     // Put the Bosses & Special Creatures on the Map.
     CreateObject(OBJECT_TYPE_CREATURE, "ld_drub", GetLocation(GetWaypointByTag("drub_spawn")));

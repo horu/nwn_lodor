@@ -30,7 +30,7 @@ void main()
     SetListeningPatterns();
     ActionRandomWalk();
 
-    ExecuteScript("sl_area_loot_lvl", OBJECT_SELF);
+    ExecuteScript("sl_loot_area", OBJECT_SELF);
     ExecuteScript("sl_npc_custom", OBJECT_SELF);
     sl_loot_CreateRandomItemNormal(OBJECT_SELF);
     NWNX_Creature_SetCorpseDecayTime(OBJECT_SELF, 500);

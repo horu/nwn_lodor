@@ -53,8 +53,7 @@ void sl_loot_PrintToLog(struct sl_loot_CreateParams params, object item, int cha
     itemproperty prop = GetFirstItemProperty(item);
     while (GetIsItemPropertyValid(prop))
     {
-        struct NWNX_IPUnpacked unpacked = NWNX_ItemProperty_UnpackIP(prop);
-        msg += " " + unpacked.sID;
+        msg += " " + IntToString(GetItemPropertyType(prop));
 
         prop = GetNextItemProperty(item);
     }

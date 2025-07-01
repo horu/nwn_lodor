@@ -712,6 +712,116 @@ int sl_ench_wep_GetOnHitCastSpell()
     return 0;
 }
 
+string sl_ench_wep_ItemPropertyTypeToString(int nType)
+{
+    switch (nType)
+    {
+        case ITEM_PROPERTY_ABILITY_BONUS: return "AB";
+        case ITEM_PROPERTY_AC_BONUS: return "AC";
+        case ITEM_PROPERTY_AC_BONUS_VS_ALIGNMENT_GROUP: return "ACvAG";
+        case ITEM_PROPERTY_AC_BONUS_VS_DAMAGE_TYPE: return "ACvDT";
+        case ITEM_PROPERTY_AC_BONUS_VS_RACIAL_GROUP: return "ACvRG";
+        case ITEM_PROPERTY_AC_BONUS_VS_SPECIFIC_ALIGNMENT: return "ACvSA";
+        case ITEM_PROPERTY_ENHANCEMENT_BONUS: return "E";
+        case ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_ALIGNMENT_GROUP: return "EvAG";
+        case ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_RACIAL_GROUP: return "EvRG";
+        case ITEM_PROPERTY_ENHANCEMENT_BONUS_VS_SPECIFIC_ALIGNEMENT: return "EvSA";
+        case ITEM_PROPERTY_DECREASED_ENHANCEMENT_MODIFIER: return "-E";
+        case ITEM_PROPERTY_BASE_ITEM_WEIGHT_REDUCTION: return "WR";
+        case ITEM_PROPERTY_BONUS_FEAT: return "BF";
+        case ITEM_PROPERTY_BONUS_SPELL_SLOT_OF_LEVEL_N: return "BSSL";
+        case ITEM_PROPERTY_CAST_SPELL: return "CS";
+        case ITEM_PROPERTY_DAMAGE_BONUS: return "DB";
+        case ITEM_PROPERTY_DAMAGE_BONUS_VS_ALIGNMENT_GROUP: return "DBvAG";
+        case ITEM_PROPERTY_DAMAGE_BONUS_VS_RACIAL_GROUP: return "DBvRG";
+        case ITEM_PROPERTY_DAMAGE_BONUS_VS_SPECIFIC_ALIGNMENT: return "DBvSA";
+        case ITEM_PROPERTY_IMMUNITY_DAMAGE_TYPE: return "IDT";
+        case ITEM_PROPERTY_DECREASED_DAMAGE: return "-DMG";
+        case ITEM_PROPERTY_DAMAGE_REDUCTION: return "DR";
+        case ITEM_PROPERTY_DAMAGE_RESISTANCE: return "DRes";
+        case ITEM_PROPERTY_DAMAGE_VULNERABILITY: return "DV";
+        case ITEM_PROPERTY_DARKVISION: return "DV";
+        case ITEM_PROPERTY_DECREASED_ABILITY_SCORE: return "-AS";
+        case ITEM_PROPERTY_DECREASED_AC: return "-AC";
+        case ITEM_PROPERTY_DECREASED_SKILL_MODIFIER: return "-SKL";
+        case ITEM_PROPERTY_ENHANCED_CONTAINER_REDUCED_WEIGHT: return "CRW";
+        case ITEM_PROPERTY_EXTRA_MELEE_DAMAGE_TYPE: return "EMD";
+        case ITEM_PROPERTY_EXTRA_RANGED_DAMAGE_TYPE: return "ERD";
+        case ITEM_PROPERTY_HASTE: return "H";
+        case ITEM_PROPERTY_HOLY_AVENGER: return "HA";
+        case ITEM_PROPERTY_IMMUNITY_MISCELLANEOUS: return "IMM";
+        case ITEM_PROPERTY_IMPROVED_EVASION: return "IE";
+        case ITEM_PROPERTY_SPELL_RESISTANCE: return "SR";
+        case ITEM_PROPERTY_SAVING_THROW_BONUS: return "STB";
+        case ITEM_PROPERTY_SAVING_THROW_BONUS_SPECIFIC: return "STB+";
+        case ITEM_PROPERTY_KEEN: return "K";
+        case ITEM_PROPERTY_LIGHT: return "L";
+        case ITEM_PROPERTY_MIGHTY: return "M";
+        case ITEM_PROPERTY_MIND_BLANK: return "MB";
+        case ITEM_PROPERTY_NO_DAMAGE: return "ND";
+        case ITEM_PROPERTY_ON_HIT_PROPERTIES: return "OHP";
+        case ITEM_PROPERTY_DECREASED_SAVING_THROWS: return "-ST";
+        case ITEM_PROPERTY_DECREASED_SAVING_THROWS_SPECIFIC: return "-ST+";
+        case ITEM_PROPERTY_REGENERATION: return "R";
+        case ITEM_PROPERTY_SKILL_BONUS: return "SB";
+        case ITEM_PROPERTY_IMMUNITY_SPECIFIC_SPELL: return "ISS";
+        case ITEM_PROPERTY_IMMUNITY_SPELL_SCHOOL: return "ISSCH";
+        case ITEM_PROPERTY_THIEVES_TOOLS: return "TT";
+        case ITEM_PROPERTY_ATTACK_BONUS: return "A";
+        case ITEM_PROPERTY_ATTACK_BONUS_VS_ALIGNMENT_GROUP: return "AvAG";
+        case ITEM_PROPERTY_ATTACK_BONUS_VS_RACIAL_GROUP: return "AvRG";
+        case ITEM_PROPERTY_ATTACK_BONUS_VS_SPECIFIC_ALIGNMENT: return "AvSA";
+        case ITEM_PROPERTY_DECREASED_ATTACK_MODIFIER: return "-A";
+        case ITEM_PROPERTY_UNLIMITED_AMMUNITION: return "UA";
+        case ITEM_PROPERTY_USE_LIMITATION_ALIGNMENT_GROUP: return "UL:AG";
+        case ITEM_PROPERTY_USE_LIMITATION_CLASS: return "UL:CL";
+        case ITEM_PROPERTY_USE_LIMITATION_RACIAL_TYPE: return "UL:RT";
+        case ITEM_PROPERTY_USE_LIMITATION_SPECIFIC_ALIGNMENT: return "UL:SA";
+        case ITEM_PROPERTY_USE_LIMITATION_TILESET: return "UL:TS";
+        case ITEM_PROPERTY_REGENERATION_VAMPIRIC: return "RV";
+        case ITEM_PROPERTY_TRAP: return "T";
+        case ITEM_PROPERTY_TRUE_SEEING: return "TS";
+        case ITEM_PROPERTY_ON_MONSTER_HIT: return "OnMH";
+        case ITEM_PROPERTY_TURN_RESISTANCE: return "TR";
+        case ITEM_PROPERTY_MASSIVE_CRITICALS: return "MC";
+        case ITEM_PROPERTY_FREEDOM_OF_MOVEMENT: return "FoM";
+        case ITEM_PROPERTY_POISON: return "P";
+        case ITEM_PROPERTY_MONSTER_DAMAGE: return "MDMG";
+        case ITEM_PROPERTY_IMMUNITY_SPELLS_BY_LEVEL: return "ISL";
+        case ITEM_PROPERTY_SPECIAL_WALK: return "SpWalk";
+        case ITEM_PROPERTY_HEALERS_KIT: return "HK";
+        case ITEM_PROPERTY_WEIGHT_INCREASE: return "+W";
+        case ITEM_PROPERTY_ONHITCASTSPELL: return "OHC";
+        case ITEM_PROPERTY_VISUALEFFECT: return "VFX";
+        case ITEM_PROPERTY_ARCANE_SPELL_FAILURE: return "ASF";
+        case ITEM_PROPERTY_MATERIAL: return "Mat";
+        case ITEM_PROPERTY_QUALITY: return "Q";
+        case ITEM_PROPERTY_ADDITIONAL: return "Add";
+    }
+    return "UNK(" + IntToString(nType) + ")";
+}
+
+string sl_ench_wep_ItemPropertiesToString(object item)
+{
+    string msg;
+    itemproperty prop = GetFirstItemProperty(item);
+    while (GetIsItemPropertyValid(prop))
+    {
+        int type = GetItemPropertyType(prop);
+        int value = GetItemPropertyCostTableValue(prop);
+
+        msg += sl_ench_wep_ItemPropertyTypeToString(type);
+        if (value > 0)
+        {
+            msg += IntToString(value);
+        }
+        msg += " ";
+
+        prop = GetNextItemProperty(item);
+    }
+    return msg;
+}
+
 const string sl_ench_wep_prop_list = "sl_ench_wep_prop";
 void sl_ench_wep_CreateWeaponPropertyTypeList()
 {

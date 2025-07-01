@@ -20,6 +20,25 @@ struct sl_loot_CreateParams
     int loot_level;
 };
 
+void sl_loot_CreateRandomItemBoss(
+    object holder,
+    object loot_opener = OBJECT_INVALID,
+    int item_type = sl_loot_ITEM_TYPE_RANDOM);
+
+void sl_loot_CreateRandomItemNormal(
+    object holder,
+    object loot_opener = OBJECT_INVALID,
+    int item_type = sl_loot_ITEM_TYPE_RANDOM);
+
+void sl_loot_CreateRandomItemSpecial(
+    object holder,
+    object loot_opener = OBJECT_INVALID,
+    int item_type = sl_loot_ITEM_TYPE_RANDOM,
+    int chance = 100);
+
+
+//Impl
+
 void sl_loot_PrintToLog(struct sl_loot_CreateParams params, object item, int chance_roll)
 {
     string msg = "[sl_loot] " + IntToString(item != OBJECT_INVALID);
@@ -48,15 +67,8 @@ void sl_loot_PrintToLog(struct sl_loot_CreateParams params, object item, int cha
         msg += ", open OI";
     }
 
-    msg += ", prop:";
+    msg += ", prop: " + sl_ench_wep_ItemPropertiesToString(item);
 
-    itemproperty prop = GetFirstItemProperty(item);
-    while (GetIsItemPropertyValid(prop))
-    {
-        msg += " " + IntToString(GetItemPropertyType(prop));
-
-        prop = GetNextItemProperty(item);
-    }
     PrintString(msg);
 }
 

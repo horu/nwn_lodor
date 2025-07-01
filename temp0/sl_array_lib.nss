@@ -11,6 +11,7 @@ void sl_array_SetStr(string tag, int index, string element, object obj = OBJECT_
 int sl_array_AtInt(string tag, int index, object obj = OBJECT_INVALID);
 void sl_array_PushbackInt(string tag, int element, object obj = OBJECT_INVALID);
 int sl_array_FindInt(string tag, int element, object obj = OBJECT_INVALID);
+void sl_array_SetInt(string tag, int index, int element, object obj = OBJECT_INVALID);
 
 float sl_array_AtFlt(string tag, int index, object obj = OBJECT_INVALID);
 void sl_array_PushbackFlt(string tag, float element, object obj = OBJECT_INVALID);
@@ -115,6 +116,11 @@ void sl_array_SetStr(string tag, int index, string element, object obj = OBJECT_
     }
 
     sl_array_SetElement(tag, index, element, obj);
+}
+
+void sl_array_SetInt(string tag, int index, int element, object obj = OBJECT_INVALID)
+{
+    sl_array_SetStr(tag, index, IntToString(element), obj);
 }
 
 

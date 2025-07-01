@@ -1,4 +1,4 @@
-#include "sl_loot_ench_lib"
+#include "sl_loot_lib"
 
 int sl_forge_IsGem(object item)
 {

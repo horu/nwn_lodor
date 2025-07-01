@@ -1,5 +1,5 @@
 // Generate random ench device.
-#include "sl_loot_ench_lib"
+#include "sl_loot_lib"
 
 void main()
 {

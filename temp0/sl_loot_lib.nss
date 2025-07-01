@@ -121,7 +121,6 @@ void sl_loot_AddWeaponProperties(object weapon, int level, int prop_chance)
         sl_ench_wep_AddItemProperty(weapon, ITEM_PROPERTY_ATTACK_BONUS, att_level);
     }
 
-    SetIdentified(weapon, FALSE);
     SetLocalInt(weapon, "req_level", level);
 }
 
@@ -132,6 +131,7 @@ object sl_loot_CreateEnchWep(object holder, int loot_level, int prop_chance)
     object item = sl_ench_CreateWep(holder, random);
 
     sl_loot_AddWeaponProperties(item, loot_level, prop_chance);
+    SetIdentified(item, FALSE);
     return item;
 }
 

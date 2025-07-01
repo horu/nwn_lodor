@@ -5,7 +5,7 @@ void main()
     object oTomb = GetObjectByTag(sTag);
     int pc_gold = GetGold(oPC);
 
-    int lost_gold = pc_gold / d20(1);
+    int lost_gold = pc_gold;
     AssignCommand(oTomb, TakeGoldFromCreature(lost_gold, oPC, FALSE));
     DelayCommand(3.0, FloatingTextStringOnCreature("Lost gold " + IntToString(lost_gold), oPC, FALSE));
 

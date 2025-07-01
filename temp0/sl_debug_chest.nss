@@ -3,6 +3,7 @@
 #include "nwnx_itemprop"
 #include "nwnx_item"
 #include "sl_loot_lib"
+#include "sl_debug_lib"
 
 struct sl_loot_CreateParams sl_test_Parse(string msg, object pc)
 {
@@ -26,19 +27,17 @@ struct sl_loot_CreateParams sl_test_Parse(string msg, object pc)
 void main()
 {
     object oPC = GetLastOpenedBy();
-    SetLocalInt(OBJECT_SELF, "opened", 1);
 
-    object oItem = GetFirstItemInInventory(OBJECT_SELF);
-    while (GetIsObjectValid(oItem))
+    if (!sl_debug_Enabled(oPC))
     {
-        if (GetTag(oItem) == "sl_debug_helm")
-        {
-            NWNX_Item_SetMinEquipLevelOverride(oItem, 1);
-        }
-        oItem = GetNextItemInInventory(OBJECT_SELF);
+        return;
     }
 
-    // sl DEBUG:
+    SetLocalInt(OBJECT_SELF, "opened", 1);
+
+    object debug_helm = CreateItemOnObject("sl_debug_helm", OBJECT_SELF, 1);
+    NWNX_Item_SetMinEquipLevelOverride(debug_helm, 1);
+
     struct sl_loot_CreateParams params = sl_test_Parse(GetLocalString(oPC, "sl_pc_chat_msg"), oPC);
     if (params.chance == 0)
     {
@@ -56,5 +55,12 @@ void main()
         sl_loot_CreateRandomItem(params);
         params.item_type = sl_loot_ITEM_TYPE_ARM;
         sl_loot_CreateRandomItem(params);
+    }
+
+    object item = GetFirstItemInInventory(OBJECT_SELF);
+    while (GetIsObjectValid(item))
+    {
+        SetIdentified(item, TRUE);
+        item = GetNextItemInInventory(OBJECT_SELF);
     }
 }

@@ -2,6 +2,7 @@
 #include "sl_array_lib"
 #include "sl_ench_lib"
 #include "sl_ench_wep_lib"
+#include "sl_ench_arm_lib"
 #include "nwnx_itemprop"
 #include "nwnx_item"
 
@@ -158,7 +159,7 @@ void sl_loot_CreateEnchArm(object holder)
         SetLocalInt(holder, "sl_loot_level", GetLocalInt(holder, "sl_loot_level") / 2);
     }
 
-    ExecuteScript("loot_ench_arm", holder);
+    sl_ench_AddArmorProperties(item, GetLocalInt(holder, "sl_loot_level"));
 }
 
 int sl_loot_GetChance(object holder)

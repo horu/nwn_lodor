@@ -6,14 +6,26 @@
 #include "nwnx_itemprop"
 #include "nwnx_item"
 
-void sl_loot_PrintToLog(object holder)
-{
-    object item = GetLocalObject(holder, "sl_loot_item");
-    object opener = GetLocalObject(holder, "sl_loot_opener");
-    string msg = "[sl_ench] " + IntToString(item != OBJECT_INVALID);
+const int sl_loot_ITEM_TYPE_RANDOM = 0;
+const int sl_loot_ITEM_TYPE_WEP = 1;
+const int sl_loot_ITEM_TYPE_ARM = 2;
 
-    msg += ": hold " + GetTag(holder);
-    msg += ", race " + IntToString(GetRacialType(holder));
+struct sl_loot_CreateParams
+{
+    object holder;
+    object loot_opener;
+    int item_type;
+    int chance;
+    int prop_chance;
+    int loot_level;
+};
+
+void sl_loot_PrintToLog(struct sl_loot_CreateParams params, object item, int chance_roll)
+{
+    string msg = "[sl_loot] " + IntToString(item != OBJECT_INVALID);
+
+    msg += ": hold " + GetTag(params.holder);
+    msg += ", race " + IntToString(GetRacialType(params.holder));
     if (item != OBJECT_INVALID)
     {
         msg += ", item " + GetTag(item);
@@ -22,17 +34,14 @@ void sl_loot_PrintToLog(object holder)
     {
         msg += ", item OI";
     }
-    msg += ", lvl " + IntToString(GetLocalInt(holder, "sl_loot_level"));
-    //msg += ", req " + IntToString(GetLocalInt(holder, "sl_loot_req_level"));
-    msg += ", ch " + IntToString(GetLocalInt(holder, "sl_loot_chance_roll"));
-    msg += "/" + IntToString(GetLocalInt(holder, "sl_loot_chance"));
-    msg += ", type " + IntToString(GetLocalInt(holder, "sl_loot_type"));
-    msg += ", boss " + IntToString(GetLocalInt(holder, "sl_loot_boss"));
-    msg += ", p_ch " + IntToString(GetLocalInt(holder, "sl_loot_prop_chance"));
-    if (opener != OBJECT_INVALID)
+    msg += ", lvl " + IntToString(params.loot_level);
+    msg += ", ch " + IntToString(chance_roll);
+    msg += "/" + IntToString(params.chance);
+    msg += ", type " + IntToString(params.item_type);
+    msg += ", p_ch " + IntToString(params.prop_chance);
+    if (params.loot_opener != OBJECT_INVALID)
     {
-        string name = GetName(opener);
-        msg += ", open " + name;
+        msg += ", open " + GetName(params.loot_opener);
     }
     else
     {
@@ -52,20 +61,7 @@ void sl_loot_PrintToLog(object holder)
     PrintString(msg);
 }
 
-void sl_loot_ClearHolder(object holder)
-{
-    DeleteLocalObject(holder, "sl_loot_item");
-    DeleteLocalObject(holder, "sl_loot_opener");
-    DeleteLocalInt(holder, "sl_loot_level");
-    DeleteLocalInt(holder, "sl_loot_req_level");
-    DeleteLocalInt(holder, "sl_loot_chance_roll");
-    DeleteLocalInt(holder, "sl_loot_chance");
-    DeleteLocalInt(holder, "sl_loot_type");
-    DeleteLocalInt(holder, "sl_loot_boss");
-    DeleteLocalInt(holder, "sl_loot_prop_chance");
-}
-
-void sl_loot_AddWeaponProperties(object weapon, int level, int chance)
+void sl_loot_AddWeaponProperties(object weapon, int level, int prop_chance)
 {
     int has_on_hit = 0;
     int has_regen = 0;
@@ -74,7 +70,7 @@ void sl_loot_AddWeaponProperties(object weapon, int level, int chance)
     int index;
     for (index = 0; index < sl_ench_wep_GetWeaponPropertyTypeListSize(); index++)
     {
-        if (chance < d100(1))
+        if (prop_chance < d100(1))
         {
             continue;
         }
@@ -130,23 +126,22 @@ void sl_loot_AddWeaponProperties(object weapon, int level, int chance)
     SetLocalInt(weapon, "req_level", level);
 }
 
-void sl_loot_CreateEnchWep(object holder)
+object sl_loot_CreateEnchWep(object holder, int loot_level, int prop_chance)
 {
     int random = Random(sl_ench_GetWepListSize());
 
     object item = sl_ench_CreateWep(holder, random);
-    SetLocalObject(holder, "sl_loot_item", item);
 
-    sl_loot_AddWeaponProperties(item, GetLocalInt(holder, "sl_loot_level"), GetLocalInt(holder, "sl_loot_prop_chance"));
+    sl_loot_AddWeaponProperties(item, loot_level, prop_chance);
+    return item;
 }
 
-void sl_loot_CreateEnchArm(object holder)
+object sl_loot_CreateEnchArm(object holder, int loot_level)
 {
     int random = Random(sl_ench_GetArmListSize());
 
     object item = sl_ench_CreateArm(holder, random);
     SetLocalString(holder, "enchant", GetTag(item));
-    SetLocalObject(holder, "sl_loot_item", item);
 
     // Decrease lvl
     int base_type = GetBaseItemType(item);
@@ -156,23 +151,15 @@ void sl_loot_CreateEnchArm(object holder)
         base_type != BASE_ITEM_LARGESHIELD &&
         base_type != BASE_ITEM_TOWERSHIELD)
     {
-        SetLocalInt(holder, "sl_loot_level", GetLocalInt(holder, "sl_loot_level") / 2);
+        loot_level = loot_level / 2;
     }
 
-    sl_ench_AddArmorProperties(item, GetLocalInt(holder, "sl_loot_level"));
+    sl_ench_AddArmorProperties(item, loot_level);
+    return item;
 }
 
-int sl_loot_GetChance(object holder)
+int sl_loot_GetChance(object holder, object loot_opener, int level, int boss)
 {
-    int chance = GetLocalInt(holder, "sl_loot_chance");
-    if (chance)
-    {
-        // For special loot
-        return chance;
-    }
-
-    int level = GetLocalInt(holder, "sl_loot_level");
-    object loot_opener = GetLocalObject(holder, "sl_loot_opener");
     if (loot_opener != OBJECT_INVALID)
     {
         // Container. Old value 2+2%
@@ -194,7 +181,7 @@ int sl_loot_GetChance(object holder)
         return 0;
     }
 
-    if (GetLocalInt(holder, "sl_loot_boss"))
+    if (boss)
     {
         //return 50 - level;
         return 50 - level / 2;
@@ -202,12 +189,6 @@ int sl_loot_GetChance(object holder)
 
     //return 3 - level / 15;
     return 4;
-}
-
-int sl_loot_IsCreatureLoot(object holder)
-{
-    object opener = GetLocalObject(holder, "sl_loot_opener");
-    return opener == OBJECT_INVALID;
 }
 
 int sl_loot_GetLevel(object creature)
@@ -220,9 +201,9 @@ int sl_loot_GetLevel(object creature)
     return level;
 }
 
-int sl_loot_GetLootLevel(object holder)
+int sl_loot_GetLootLevel(object holder, object loot_opener)
 {
-    if (sl_loot_IsCreatureLoot(holder))
+    if (loot_opener == OBJECT_INVALID)
     {
         // holder is creature, not container.
         return sl_loot_GetLevel(holder);
@@ -238,15 +219,13 @@ int sl_loot_GetLootLevel(object holder)
     }
 
     // Use random level.
-    object opener = GetLocalObject(holder, "sl_loot_opener");
-    int opener_level = sl_loot_GetLevel(opener);
+    int opener_level = sl_loot_GetLevel(loot_opener);
     return opener_level - Random(opener_level);
 }
 
-void sl_loot_OverrideReqLevel(object holder)
+void sl_loot_OverrideReqLevel(object item, int level)
 {
-    object item = GetLocalObject(holder, "sl_loot_item");
-    int req_level = GetLocalInt(holder, "sl_loot_req_level");
+    int req_level = level;
 
     itemproperty prop = GetFirstItemProperty(item);
     while (GetIsItemPropertyValid(prop))
@@ -255,20 +234,94 @@ void sl_loot_OverrideReqLevel(object holder)
         prop = GetNextItemProperty(item);
     }
 
-    SetLocalInt(holder, "sl_loot_req_level", req_level);
     NWNX_Item_SetMinEquipLevelOverride(item, req_level);
 }
-
 
 object sl_loot_ImproveWeapon(object holder, object item, int level, int prop_chance)
 {
     //TODO:
     item = sl_ench_ModifyAppr(item);
     sl_loot_AddWeaponProperties(item, level, prop_chance);
-    SetLocalObject(holder, "sl_loot_item", item);
-    SetLocalInt(holder, "sl_loot_level", level);
-    SetLocalInt(holder, "sl_loot_prop_chance", prop_chance);
-    sl_loot_PrintToLog(holder);
-    sl_loot_ClearHolder(holder);
     return item;
+}
+
+void sl_loot_CreateRandomItem(struct sl_loot_CreateParams params)
+{
+    int chance_roll = d100(1);
+    object item = OBJECT_INVALID;
+    if (chance_roll <= params.chance)
+    {
+        if (params.item_type == sl_loot_ITEM_TYPE_RANDOM)
+        {
+            params.item_type = d2(1);
+        }
+
+        if (params.item_type == sl_loot_ITEM_TYPE_WEP)
+        {
+            item = sl_loot_CreateEnchWep(params.holder, params.loot_level, params.prop_chance);
+        }
+        else
+        {
+            item = sl_loot_CreateEnchArm(params.holder, params.loot_level);
+        }
+        SetLocalInt(params.loot_opener, "sl_loot_fail_count", 0);
+        //sl_loot_OverrideReqLevel(holder);
+    }
+    else
+    {
+        // Dinamic increase chance
+        int fail_count = GetLocalInt(params.loot_opener, "sl_loot_fail_count");
+        SetLocalInt(params.loot_opener, "sl_loot_fail_count", fail_count + 1);
+    }
+
+    sl_loot_PrintToLog(params, item, chance_roll);
+}
+
+void sl_loot_CreateRandomItemBoss(
+    object holder,
+    object loot_opener = OBJECT_INVALID,
+    int item_type = sl_loot_ITEM_TYPE_RANDOM)
+{
+    struct sl_loot_CreateParams params;
+    params.holder = holder;
+    params.loot_opener = loot_opener;
+    params.item_type = item_type;
+    params.loot_level = sl_loot_GetLootLevel(holder, loot_opener);
+    params.chance = sl_loot_GetChance(holder, loot_opener, params.loot_level, TRUE);
+    params.prop_chance = 30;
+
+    sl_loot_CreateRandomItem(params);
+}
+
+void sl_loot_CreateRandomItemNormal(
+    object holder,
+    object loot_opener = OBJECT_INVALID,
+    int item_type = sl_loot_ITEM_TYPE_RANDOM)
+{
+    struct sl_loot_CreateParams params;
+    params.holder = holder;
+    params.loot_opener = loot_opener;
+    params.item_type = item_type;
+    params.loot_level = sl_loot_GetLootLevel(holder, loot_opener);
+    params.chance = sl_loot_GetChance(holder, loot_opener, params.loot_level, FALSE);
+    params.prop_chance = 15;
+
+    sl_loot_CreateRandomItem(params);
+}
+
+void sl_loot_CreateRandomItemSpecial(
+    object holder,
+    object loot_opener = OBJECT_INVALID,
+    int item_type = sl_loot_ITEM_TYPE_RANDOM,
+    int chance = 100)
+{
+    struct sl_loot_CreateParams params;
+    params.holder = holder;
+    params.loot_opener = loot_opener;
+    params.item_type = item_type;
+    params.loot_level = sl_loot_GetLootLevel(holder, loot_opener);
+    params.chance = chance;
+    params.prop_chance = 15;
+
+    sl_loot_CreateRandomItem(params);
 }

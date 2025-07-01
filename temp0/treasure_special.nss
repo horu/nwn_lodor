@@ -1,5 +1,6 @@
 // Low Level Box Loot List
 #include "NW_O2_CONINCLUDE"
+#include "sl_loot_lib"
 
 void main()
 {
@@ -35,8 +36,7 @@ void main()
     object oLastOpener = GetLastOpener();
     SetLocalInt(OBJECT_SELF, "opened", 1);
 
-    SetLocalObject(OBJECT_SELF, "sl_loot_opener", oPC);
-    ExecuteScript("sl_loot_ench", OBJECT_SELF);
+    sl_loot_CreateRandomItemNormal(OBJECT_SELF, oPC);
 
     if (GetTag(OBJECT_SELF) == "chest_goodies")
     {
@@ -45,14 +45,8 @@ void main()
         GenerateMediumTreasure(oLastOpener, OBJECT_SELF);
         GenerateLowTreasure(oLastOpener, OBJECT_SELF);
         GenerateLowTreasure(oLastOpener, OBJECT_SELF);
-        SetLocalObject(OBJECT_SELF, "sl_loot_opener", oPC);
-        SetLocalInt(OBJECT_SELF, "sl_loot_chance", 100);
-        SetLocalInt(OBJECT_SELF, "sl_loot_type", 1); // wep only
-        ExecuteScript("sl_loot_ench", OBJECT_SELF);
-        SetLocalObject(OBJECT_SELF, "sl_loot_opener", oPC);
-        SetLocalInt(OBJECT_SELF, "sl_loot_chance", 100);
-        SetLocalInt(OBJECT_SELF, "sl_loot_type", 2); // arm only
-        ExecuteScript("sl_loot_ench", OBJECT_SELF);
+        sl_loot_CreateRandomItemSpecial(OBJECT_SELF, oPC, sl_loot_ITEM_TYPE_WEP);
+        sl_loot_CreateRandomItemSpecial(OBJECT_SELF, oPC, sl_loot_ITEM_TYPE_ARM);
     }
     else if (GetTag(OBJECT_SELF) == "qs1j_chest")
     {

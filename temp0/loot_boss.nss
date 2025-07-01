@@ -1,11 +1,10 @@
 // Loot script for med level humanoids
 #include "x0_i0_treasure"
+#include "sl_loot_lib"
 
 void main()
 {
-    // sl: add lodor loot for creatures
-    SetLocalInt(OBJECT_SELF, "sl_loot_boss", TRUE);
-    ExecuteScript("sl_loot_ench", OBJECT_SELF);
+    sl_loot_CreateRandomItemBoss(OBJECT_SELF);
 
     int nMinotaur = d10(1);
 

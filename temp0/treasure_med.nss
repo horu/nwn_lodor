@@ -1,5 +1,6 @@
 // Medium Level Box Loot List
 #include "x0_i0_treasure"
+#include "sl_loot_lib"
 
 void main()
 {
@@ -41,9 +42,8 @@ void main()
         SetLocalInt(OBJECT_SELF, "newloot2", 1); //Select a Reagent From
         ExecuteScript("loot_new_list", OBJECT_SELF);
     } //Lodor Specific Items
-    // sl:
-    SetLocalObject(OBJECT_SELF, "sl_loot_opener", oPC);
-    ExecuteScript("sl_loot_ench", OBJECT_SELF);
+
+    sl_loot_CreateRandomItemNormal(OBJECT_SELF, oPC);
 
     if (GetTag(OBJECT_SELF) == "miradir_crate")
     {

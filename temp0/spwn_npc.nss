@@ -3,6 +3,7 @@
 #include "x0_i0_treasure"
 #include "x2_inc_switches"
 #include "nwnx_creature"
+#include "sl_loot_lib"
 
 void main()
 {
@@ -30,8 +31,8 @@ void main()
     ActionRandomWalk();
 
     ExecuteScript("sl_area_loot_lvl", OBJECT_SELF);
-    ExecuteScript("sl_loot_ench", OBJECT_SELF);
     ExecuteScript("sl_npc_custom", OBJECT_SELF);
+    sl_loot_CreateRandomItemNormal(OBJECT_SELF);
     NWNX_Creature_SetCorpseDecayTime(OBJECT_SELF, 500);
 
     // Treasure Section for the NPC

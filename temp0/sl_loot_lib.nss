@@ -168,6 +168,11 @@ int sl_loot_GetChance(object holder, object loot_opener, int level, int boss)
         return fail_count + 24 - level / 4;
     }
 
+    if (boss)
+    {
+        return 50 - level / 2;
+    }
+
     // Creature
     int race = GetRacialType(holder);
     if (race == RACIAL_TYPE_ANIMAL ||
@@ -179,12 +184,6 @@ int sl_loot_GetChance(object holder, object loot_opener, int level, int boss)
     {
         // Filter animals and others.
         return 0;
-    }
-
-    if (boss)
-    {
-        //return 50 - level;
-        return 50 - level / 2;
     }
 
     //return 3 - level / 15;

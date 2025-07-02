@@ -1,140 +1,140 @@
 #include "sl_loot_lib"
 
-int sl_forge_IsGem(object item)
+int sl_forge_IsGem(object oItem)
 {
-    string tag = GetTag(item);
-    int tag_len = GetStringLength(tag);
-    string tag_sub = GetSubString(tag, 0, 9);
+    string sTag = GetTag(oItem);
+    int nTag = GetStringLength(sTag);
+    string sTagSub = GetSubString(sTag, 0, 9);
 
-    if (tag_sub == "NW_IT_GEM" && tag_len == 12)
+    if (sTagSub == "NW_IT_GEM" && nTag == 12)
     {
         return 1;
     }
     return 0;
 }
 
-int sl_forge_GetPoints(object gem_stack)
+int sl_forge_GetPoints(object oGems)
 {
-    return GetGoldPieceValue(gem_stack);
+    return GetGoldPieceValue(oGems);
 }
 
-object sl_forge_GetItemToImprove(object forge)
+object sl_forge_GetItemToImprove(object oForge)
 {
-    object item_to_improve = OBJECT_INVALID;
+    object oItemToImprove = OBJECT_INVALID;
 
-    object item = GetFirstItemInInventory(forge);
-    while (GetIsObjectValid(item))
+    object oItem = GetFirstItemInInventory(oForge);
+    while (GetIsObjectValid(oItem))
     {
-        if (!sl_forge_IsGem(item))
+        if (!sl_forge_IsGem(oItem))
         {
-            if (item_to_improve != OBJECT_INVALID)
+            if (oItemToImprove != OBJECT_INVALID)
             {
-                // One item to improve only.
+                // One oItem to improve only.
                 return OBJECT_INVALID;
             }
             // TODO: Check for weapon.
-            item_to_improve = item;
+            oItemToImprove = oItem;
         }
 
-        item = GetNextItemInInventory(forge);
+        oItem = GetNextItemInInventory(oForge);
     }
 
-    return item_to_improve;
+    return oItemToImprove;
 }
 
-int sl_forge_GetChance(object forge, object pc)
+int sl_forge_GetChance(object oForge, object oPC)
 {
-    int gem_points = 0;
+    int nPoints = 0;
 
-    object item = GetFirstItemInInventory(forge);
-    while (GetIsObjectValid(item))
+    object oItem = GetFirstItemInInventory(oForge);
+    while (GetIsObjectValid(oItem))
     {
-        if (sl_forge_IsGem(item))
+        if (sl_forge_IsGem(oItem))
         {
-            gem_points += sl_forge_GetPoints(item);
+            nPoints += sl_forge_GetPoints(oItem);
         }
 
-        item = GetNextItemInInventory(forge);
+        oItem = GetNextItemInInventory(oForge);
     }
 
-    int level = GetHitDice(pc);
+    int nLevel = GetHitDice(oPC);
 
-    int chance = gem_points / (level * 2) / 100;
-    if (chance > 75)
+    int nChance = nPoints / (nLevel * 2) / 100;
+    if (nChance > 75)
     {
         return 75;
     }
-    return chance;
+    return nChance;
 }
 
-void sl_forge_DistroyGems(object forge)
+void sl_forge_DestroyGems(object oForge)
 {
-    object item = GetFirstItemInInventory(forge);
-    while (GetIsObjectValid(item))
+    object oItem = GetFirstItemInInventory(oForge);
+    while (GetIsObjectValid(oItem))
     {
-        if (sl_forge_IsGem(item))
+        if (sl_forge_IsGem(oItem))
         {
-            DestroyObject(item);
+            DestroyObject(oItem);
         }
 
-        item = GetNextItemInInventory(forge);
+        oItem = GetNextItemInInventory(oForge);
     }
 }
 
-void sl_forge_Process(object forge, object pc)
+void sl_forge_Process(object oForge, object oPC)
 {
-    object item = sl_forge_GetItemToImprove(forge);
-    if (item == OBJECT_INVALID)
+    object oItem = sl_forge_GetItemToImprove(oForge);
+    if (oItem == OBJECT_INVALID)
     {
-        FloatingTextStringOnCreature("Can not process. Please put one item to improve.", pc, FALSE);
+        FloatingTextStringOnCreature("Can not process. Please put one item to improve.", oPC, FALSE);
         return;
     }
 
-    int chance = sl_forge_GetChance(forge, pc);
-    if (chance <= 0)
+    int nChance = sl_forge_GetChance(oForge, oPC);
+    if (nChance <= 0)
     {
-        FloatingTextStringOnCreature("Can not process. No chances to improve. Need gems.", pc, FALSE);
+        FloatingTextStringOnCreature("Can not process. No chances to improve. Need gems.", oPC, FALSE);
         return;
     }
 
-    int level = GetHitDice(pc);
-    level = level/2 + Random(level/2 + 1);
+    int nLevel = GetHitDice(oPC);
+    nLevel = nLevel/2 + Random(nLevel/2 + 1);
 
-    // sl_forge_DistroyGems(forge);
-    item = sl_loot_ImproveWeapon(forge, item, level, chance);
-    // SetItemCursedFlag(item, TRUE);
-    ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_WORD), forge);
+    // sl_forge_DestroyGems(oForge);
+    //oItem = sl_loot_ImproveWeapon(oForge, oItem, nLevel, nChance);
+    // SetItemCursedFlag(oItem, TRUE);
+    ApplyEffectToObject(DURATION_TYPE_INSTANT, EffectVisualEffect(VFX_FNF_WORD), oForge);
 
-    AssignCommand(pc, ActionInteractObject(forge));
+    AssignCommand(oPC, ActionInteractObject(oForge));
 }
 
 void main()
 {
-    object forge = OBJECT_SELF;
+    object oForge = OBJECT_SELF;
 
     if (GetScriptParam("sl_forge_action") == "check")
     {
-        object item = sl_forge_GetItemToImprove(forge);
-        if (item == OBJECT_INVALID)
+        object oItem = sl_forge_GetItemToImprove(oForge);
+        if (oItem == OBJECT_INVALID)
         {
             SetCustomToken(301, "Can not process. Please put one item to improve.");
             return;
         }
 
-        object pc = GetPCSpeaker();
-        int chance = sl_forge_GetChance(forge, pc);
-        string process_message = "Process. [Improve chance " + IntToString(chance) + "%]";
-        SetCustomToken(301, process_message);
+        object oPC = GetPCSpeaker();
+        int nChance = sl_forge_GetChance(oForge, oPC);
+        string sMessage = "Process. [Improve chanse " + IntToString(nChance) + "%]";
+        SetCustomToken(301, sMessage);
     }
     else if (GetScriptParam("sl_forge_action") == "process")
     {
-        object pc = GetPCSpeaker();
-        sl_forge_Process(forge, pc);
+        object oPC = GetPCSpeaker();
+        sl_forge_Process(oForge, oPC);
     }
     else
     {
         // Open action.
-        object pc = GetLastClosedBy();
-        AssignCommand(forge, ActionStartConversation(pc, "sl_forge"));
+        object oPC = GetLastClosedBy();
+        AssignCommand(oForge, ActionStartConversation(oPC, "sl_forge"));
     }
 }

@@ -233,14 +233,6 @@ int sl_loot_GetLootLevel(object holder, object loot_opener)
     return opener_level - Random(opener_level);
 }
 
-object sl_loot_ImproveWeapon(object holder, object item, int level, int prop_chance)
-{
-    //TODO:
-    item = sl_ench_ModifyAppr(item);
-    sl_loot_AddWeaponProperties(item, level, prop_chance);
-    return item;
-}
-
 void sl_loot_CreateRandomItem(struct sl_loot_CreateParams params)
 {
     int chance_roll = d100(1);

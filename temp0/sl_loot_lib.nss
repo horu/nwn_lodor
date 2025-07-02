@@ -233,20 +233,6 @@ int sl_loot_GetLootLevel(object holder, object loot_opener)
     return opener_level - Random(opener_level);
 }
 
-void sl_loot_OverrideReqLevel(object item, int level)
-{
-    int req_level = level;
-
-    itemproperty prop = GetFirstItemProperty(item);
-    while (GetIsItemPropertyValid(prop))
-    {
-        req_level += 1;
-        prop = GetNextItemProperty(item);
-    }
-
-    NWNX_Item_SetMinEquipLevelOverride(item, req_level);
-}
-
 object sl_loot_ImproveWeapon(object holder, object item, int level, int prop_chance)
 {
     //TODO:
@@ -275,7 +261,6 @@ void sl_loot_CreateRandomItem(struct sl_loot_CreateParams params)
             item = sl_loot_CreateEnchArm(params.holder, params.loot_level);
         }
         SetLocalInt(params.loot_opener, "sl_loot_fail_count", 0);
-        //sl_loot_OverrideReqLevel(holder);
     }
     else
     {

@@ -1,7 +1,9 @@
 
+const int sl_debug_available = TRUE;
+
 void sl_debug_Command(object pc, string msg)
 {
-    if (!TRUE) // sl_debug
+    if (!sl_debug_available)
     {
         return;
     }
@@ -30,7 +32,7 @@ void sl_debug_Command(object pc, string msg)
 
 int sl_debug_Enabled(object pc)
 {
-    if (!GetIsPC(pc))
+    if (!GetIsPC(pc) || !sl_debug_available)
     {
         return FALSE;
     }

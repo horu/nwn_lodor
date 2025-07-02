@@ -811,7 +811,7 @@ string sl_ench_wep_ItemPropertiesToString(object item)
         int value = GetItemPropertyCostTableValue(prop);
 
         msg += sl_ench_wep_ItemPropertyTypeToString(type);
-        if (value > 0)
+        if (value > 0 && value <= 99)
         {
             msg += IntToString(value);
         }

@@ -2,6 +2,7 @@
 #include "nwnx_item"
 #include "nwnx_creature"
 #include "sl_array_lib"
+#include "sl_ench_wep_lib"
 
 // Special item in player inventory to store variables.
 const string sl_storage_item_tag = "faction_report";
@@ -37,10 +38,15 @@ void sl_storage_Log(object pc, string msg)
     PrintString("[sl_storage] [" + name + "] " + msg);
 }
 
-void sl_storage_Log_error(object pc, string msg)
+void sl_storage_LogError(object pc, string msg)
 {
     sl_storage_Log(pc, msg);
     FloatingTextStringOnCreature("Storage error.", pc, FALSE);
+}
+
+string sl_storage_ItemInfo(object item)
+{
+    return "<" + GetTag(item) + "> " + sl_ench_wep_ItemPropertiesToString(item);
 }
 
 // Public
@@ -51,7 +57,7 @@ int sl_storage_AddItem(object item, object pc)
 
     sl_array_PushbackObj(sl_storage_array, item, storage_item);
     int storage_size = sl_array_Size(sl_storage_array, storage_item);
-    sl_storage_Log(pc, "Add storage item " + IntToString(storage_size) + ": " + GetTag(item));
+    sl_storage_Log(pc, "Add storage item " + IntToString(storage_size) + ": " + sl_storage_ItemInfo(item));
     return TRUE;
 }
 
@@ -62,13 +68,13 @@ int sl_storage_RemoveItem(object item, object pc)
     int index = sl_array_FindObj(sl_storage_array, item, storage_item);
     if (index == -1)
     {
-        sl_storage_Log_error(pc, "<" + GetTag(item) + "> Item not found to remove.");
+        sl_storage_LogError(pc, "Item not found to remove: " + sl_storage_ItemInfo(item));
         return FALSE;
     }
 
     sl_array_Erase(sl_storage_array, index, storage_item);
     int storage_size = sl_array_Size(sl_storage_array, storage_item);
-    sl_storage_Log(pc, "Remove storage item " + IntToString(storage_size) + ": " + GetTag(item));
+    sl_storage_Log(pc, "Remove storage item " + IntToString(storage_size) + ": " + sl_storage_ItemInfo(item));
     return TRUE;
 }
 
@@ -107,30 +113,35 @@ object sl_storage_CreateStore(object pc, string base_store_tag)
 {
     string store_tag = base_store_tag + "_" + GetName(pc);
     object store = GetObjectByTag(store_tag);
-    if (store == OBJECT_INVALID)
+    if (store != OBJECT_INVALID)
     {
-        sl_storage_Log(pc, "Create store: " + store_tag);
-        object base_store = GetObjectByTag(base_store_tag);
-        if (base_store == OBJECT_INVALID)
-        {
-            sl_storage_Log_error(pc, "Can not create base store: " + base_store_tag);
-            return OBJECT_INVALID;
-        }
-        object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
-        if (storage_item == OBJECT_INVALID)
-        {
-            sl_storage_Log_error(pc, "Not found storage item for pc: " + sl_storage_item_tag);
-            return OBJECT_INVALID;
-        }
-
-        store = CopyObject(base_store, GetLocation(base_store), OBJECT_INVALID, store_tag);
-        NWNX_Store_SetBlackMarketMarkDown(store, 0);
-        NWNX_Store_SetMarkDown(store, 0);
-        NWNX_Store_SetMarkUp(store, 1);
-        NWNX_Creature_SetMaxSellToStorePriceOverride(pc, store, 0);
-        FloatingTextStringOnCreature("It is free to use storage.", pc, FALSE);
+        sl_storage_ClearStore(store);
+        DestroyObject(store);
     }
+
+    // sl_storage_Log(pc, "Create store: " + store_tag);
+    object base_store = GetObjectByTag(base_store_tag);
+    if (base_store == OBJECT_INVALID)
+    {
+        sl_storage_LogError(pc, "Can not create base store: " + base_store_tag);
+        return OBJECT_INVALID;
+    }
+    object storage_item = GetItemPossessedBy(pc, sl_storage_item_tag);
+    if (storage_item == OBJECT_INVALID)
+    {
+        sl_storage_LogError(pc, "Not found storage item for pc: " + sl_storage_item_tag);
+        return OBJECT_INVALID;
+    }
+
+    store = CopyObject(base_store, GetLocation(base_store), OBJECT_INVALID, store_tag);
+    NWNX_Store_SetBlackMarketMarkDown(store, 0);
+    NWNX_Store_SetMarkDown(store, 0);
+    NWNX_Store_SetMarkUp(store, 1);
+    NWNX_Creature_SetMaxSellToStorePriceOverride(pc, store, 0);
+    // FloatingTextStringOnCreature("It is free to use storage.", pc, FALSE);
+
     sl_storage_ClearStore(store);
+    sl_storage_RestoreStore(store, pc);
 
     return store;
 }
@@ -152,7 +163,7 @@ void sl_storage_RestoreStore(object store, object pc)
         object restored_item = CopyItem(item, store, TRUE);
         if (restored_item == OBJECT_INVALID)
         {
-            sl_storage_Log_error(pc, "<" + GetTag(item) + "> CopyItem error.");
+            sl_storage_LogError(pc, "<" + GetTag(item) + "> CopyItem error.");
         }
         else
         {

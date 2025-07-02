@@ -68,9 +68,10 @@ void sl_array_Log(string tag, object obj, string msg)
 
 string sl_array_GetStrHash(string element)
 {
-    if (GetStringLength(element) > 32)
+    int len = GetStringLength(element);
+    if (len > 32)
     {
-        return IntToString(HashString(element));
+        return IntToHexString(HashString(element)) + "-" + IntToString(len);
     }
     return element;
 }

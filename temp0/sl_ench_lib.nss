@@ -9,22 +9,71 @@ object sl_ench_CreateArm(object holder, int index);
 
 /// Implementation
 ///
-int sl_ench_IsItArmor(object item)
+int sl_ench_IsWeapon(object oItem)
 {
-    int base_type = GetBaseItemType(item);
-    if (base_type == BASE_ITEM_HELMET ||
-        base_type == BASE_ITEM_ARMOR ||
-        base_type == BASE_ITEM_CLOAK ||
-        base_type == BASE_ITEM_AMULET ||
-        base_type == BASE_ITEM_SMALLSHIELD ||
-        base_type == BASE_ITEM_LARGESHIELD ||
-        base_type == BASE_ITEM_TOWERSHIELD ||
-        base_type == BASE_ITEM_BRACER ||
-        base_type == BASE_ITEM_RING ||
-        base_type == BASE_ITEM_BELT ||
-        base_type == BASE_ITEM_BOOTS ||
-        base_type == BASE_ITEM_GLOVES)
+    int nType = GetBaseItemType(oItem);
+
+    switch(nType)
     {
+    case BASE_ITEM_LONGSWORD:
+    case BASE_ITEM_BATTLEAXE:
+    case BASE_ITEM_CLUB:
+    case BASE_ITEM_DOUBLEAXE:
+    case BASE_ITEM_KUKRI:
+    case BASE_ITEM_GLOVES:
+    case BASE_ITEM_BASTARDSWORD:
+    case BASE_ITEM_LONGBOW:
+    case BASE_ITEM_SHORTBOW:
+    case BASE_ITEM_DAGGER:
+    case BASE_ITEM_GREATAXE:
+    case BASE_ITEM_GREATSWORD:
+    case BASE_ITEM_HANDAXE:
+    case BASE_ITEM_KATANA:
+    case BASE_ITEM_LIGHTCROSSBOW:
+    case BASE_ITEM_LIGHTFLAIL:
+    case BASE_ITEM_LIGHTHAMMER:
+    case BASE_ITEM_LIGHTMACE:
+    case BASE_ITEM_MORNINGSTAR:
+    case BASE_ITEM_QUARTERSTAFF:
+    case BASE_ITEM_RAPIER:
+    case BASE_ITEM_SCIMITAR:
+    case BASE_ITEM_SCYTHE:
+    case BASE_ITEM_SHORTSPEAR:
+    case BASE_ITEM_SHORTSWORD:
+    case BASE_ITEM_SHURIKEN:
+    case BASE_ITEM_SLING:
+    case BASE_ITEM_THROWINGAXE:
+    case BASE_ITEM_TWOBLADEDSWORD:
+    case BASE_ITEM_WARHAMMER:
+    case BASE_ITEM_HEAVYCROSSBOW:
+    case BASE_ITEM_KAMA:
+    case BASE_ITEM_SICKLE:
+    case BASE_ITEM_WHIP:
+    case BASE_ITEM_DIREMACE:
+    case BASE_ITEM_HALBERD:
+        return TRUE;
+    }
+    return FALSE;
+}
+
+int sl_ench_IsArmor(object oItem)
+{
+    int nType = GetBaseItemType(oItem);
+
+    switch(nType)
+    {
+    case BASE_ITEM_HELMET:
+    case BASE_ITEM_ARMOR:
+    case BASE_ITEM_CLOAK:
+    case BASE_ITEM_AMULET:
+    case BASE_ITEM_SMALLSHIELD:
+    case BASE_ITEM_LARGESHIELD:
+    case BASE_ITEM_TOWERSHIELD:
+    case BASE_ITEM_BRACER:
+    case BASE_ITEM_RING:
+    case BASE_ITEM_BELT:
+    case BASE_ITEM_BOOTS:
+    case BASE_ITEM_GLOVES:
         return TRUE;
     }
     return FALSE;
@@ -37,7 +86,7 @@ int sl_ench_GetApprType(object item)
     {
         return ITEM_APPR_TYPE_ARMOR_MODEL;
     }
-    if (sl_ench_IsItArmor(item))
+    if (sl_ench_IsArmor(item))
     {
         return ITEM_APPR_TYPE_SIMPLE_MODEL;
     }
@@ -52,7 +101,7 @@ int sl_ench_GetRandomApprModel(object item)
     {
         return Random(ITEM_APPR_ARMOR_NUM_MODELS);
     }
-    if (sl_ench_IsItArmor(item))
+    if (sl_ench_IsArmor(item))
     {
         return 0;
     }

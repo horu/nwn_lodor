@@ -101,20 +101,31 @@ auto_commit_servervault() {
 
 print_logs() {
     while true; do
+        echo Read logs
         docker logs -f nwserver | sed 's/\[NWNX_ServerLogRedirector\] \[ServerLogRedirector.cpp:29\] (Server)//g';
         sleep 1;
     done
 }
 
+stop_on_exit=0
 print_pid=0
-trap "print_log $print_pid; kill $print_pid; exit" SIGINT SIGTERM EXIT
+on_exit() {
+    if [ $stop_on_exit -eq 1 ]; then
+        stop_nwserver
+    fi
+    kill $print_pid
+    exit
+}
+
+trap on_exit SIGINT SIGTERM EXIT
 
 for arg in "$@"; do
     if [ "$arg" == "--restart" ]; then
         current_module_mtime=0
     elif [ "$arg" == "--stop" ]; then
-        stop_nwserver
-        exit 0
+        #stop_nwserver
+        #exit 0
+        stop_on_exit=1
     elif [ "$arg" == "--logs" ]; then
         print_logs &
         print_pid=$!

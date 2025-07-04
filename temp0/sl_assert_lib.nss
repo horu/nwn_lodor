@@ -2,7 +2,7 @@
 
 void sl_debug_Assert(int bCondition, string sMessage)
 {
-    if (bCondition || !sl_debug_available)
+    if (bCondition || !sl_debug_bAvailable)
     {
         return;
     }

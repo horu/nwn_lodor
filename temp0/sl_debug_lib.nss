@@ -1,4 +1,4 @@
-#include "sl_array_lib"
+#include "sl_json_lib"
 #include "sl_storage_lib"
 
 const int sl_debug_bAvailable = TRUE; // Globaly turn on/off debug abilities.
@@ -14,10 +14,9 @@ int sl_debug_Enabled(object oPC)
     return GetLocalInt(oFaction, "sl_debug_bEnabled");
 }
 
-const string sl_debug_aParsedArgs = "sl_debug_aParsedArgs";
-void sl_debug_ParseCommand(string sMsg)
+struct sl_json_Array sl_debug_ParseCommand(string sMsg)
 {
-    sl_array_Clear(sl_debug_aParsedArgs);
+    struct sl_json_Array aCommand = sl_json_CreateArray();
 
     int i;
     int begin = 0;
@@ -41,24 +40,26 @@ void sl_debug_ParseCommand(string sMsg)
         }
 
         string sValue = GetSubString(sMsg, begin, i - begin);
-        sl_array_PushbackStr(sl_debug_aParsedArgs, sValue);
+        sl_json_PushbackStr(aCommand, sValue);
         begin = 0;
     }
+
+    return aCommand;
 }
 
-string sl_debug_GetArgStr(int nIndex)
+string sl_debug_GetArgStr(struct sl_json_Array aCommand, int nIndex)
 {
-    return sl_array_AtStr(sl_debug_aParsedArgs, nIndex);
+    return sl_json_AtStr(aCommand, nIndex);
 }
 
-int sl_debug_GetArgInt(int nIndex)
+int sl_debug_GetArgInt(struct sl_json_Array aCommand, int nIndex)
 {
-    return StringToInt(sl_debug_GetArgStr(nIndex));
+    return StringToInt(sl_debug_GetArgStr(aCommand, nIndex));
 }
 
-string sl_debug_GetCommand()
+string sl_debug_GetCommandName(struct sl_json_Array aCommand)
 {
-    return sl_debug_GetArgStr(0);
+    return sl_debug_GetArgStr(aCommand, 0);
 }
 
 void sl_debug_Command(object oPC, string sMsg)
@@ -72,26 +73,26 @@ void sl_debug_Command(object oPC, string sMsg)
         return;
     }
 
-    sl_debug_ParseCommand(sMsg);
-    if (!sl_array_Size(sl_debug_aParsedArgs))
+    struct sl_json_Array aCommand = sl_debug_ParseCommand(sMsg);
+    if (!sl_json_Size(aCommand))
     {
         return;
     }
 
-    string sCommand = sl_debug_GetCommand();
-    if (sCommand == "test")
+    string sCommandName = sl_debug_GetCommandName(aCommand);
+    if (sCommandName == "test")
     {
         int i;
-        for (i = 1; i < sl_array_Size(sl_debug_aParsedArgs); i++)
+        for (i = 1; i < sl_json_Size(aCommand); i++)
         {
-            SendMessageToPC(oPC, sl_debug_GetArgStr(i));
+            SendMessageToPC(oPC, sl_debug_GetArgStr(aCommand, i));
         }
     }
-    else if (sCommand == "debug")
+    else if (sCommandName == "debug")
     {
         object oFaction = GetItemPossessedBy(oPC, "faction_report");
         string sLogMsg = "[sl_debug] " + GetName(oPC);
-        if (sl_debug_GetArgInt(1))
+        if (sl_debug_GetArgInt(aCommand, 1))
         {
             SetLocalInt(oFaction, "sl_debug_bEnabled", TRUE);
             sLogMsg += " -> ON";
@@ -110,26 +111,26 @@ void sl_debug_Command(object oPC, string sMsg)
         return;
     }
 
-    if (sCommand == "set")
+    if (sCommandName == "set")
     {
-        sCommand = sl_debug_GetArgStr(1);
-        if (sCommand == "xp")
+        sCommandName = sl_debug_GetArgStr(aCommand, 1);
+        if (sCommandName == "xp")
         {
-            int nExp = sl_debug_GetArgInt(2);
+            int nExp = sl_debug_GetArgInt(aCommand, 2);
             SetXP(oPC, nExp);
             FloatingTextStringOnCreature("Set xp " + IntToString(nExp), oPC);
         }
-        else if (sCommand == "gold")
+        else if (sCommandName == "gold")
         {
-            int nGold = sl_debug_GetArgInt(2);
+            int nGold = sl_debug_GetArgInt(aCommand, 2);
             GiveGoldToCreature(oPC, nGold);
             FloatingTextStringOnCreature("Set gold " + IntToString(nGold), oPC);
         }
     }
-    else if (sCommand == "reset")
+    else if (sCommandName == "reset")
     {
-        sCommand = sl_debug_GetArgStr(1);
-        if (sCommand == "inv")
+        sCommandName = sl_debug_GetArgStr(aCommand, 1);
+        if (sCommandName == "inv")
         {
             object oItem = GetFirstItemInInventory(oPC);
             while (GetIsObjectValid(oItem))
@@ -142,7 +143,7 @@ void sl_debug_Command(object oPC, string sMsg)
             }
             FloatingTextStringOnCreature("Reset inv", oPC);
         }
-        else if (sCommand == "storage")
+        else if (sCommandName == "storage")
         {
             sl_storage_Clear(oPC);
             FloatingTextStringOnCreature("Reset stor", oPC);
